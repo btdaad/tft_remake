@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 87c0c67eaf9572782aa752acbb6a84fc
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 135185
+  packageName: 2D Hex Sprites - Hexagonal Tile Setup
+  packageVersion: 1.11
+  assetPath: Assets/HexSpriteTiles_Setup/Scenes/SampleScene.unity
+  uploadId: 308277
