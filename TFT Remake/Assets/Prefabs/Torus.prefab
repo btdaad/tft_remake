@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6829029865936190826}
   - component: {fileID: 3198656041685197064}
   - component: {fileID: 8199253184841673130}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Torus
   m_TagString: Untagged
   m_Icon: {fileID: 0}

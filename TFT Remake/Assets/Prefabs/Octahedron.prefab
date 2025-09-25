@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6495679358285316875}
   - component: {fileID: 1756765046439028197}
   - component: {fileID: 8271070359448620194}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Octahedron
   m_TagString: Untagged
   m_Icon: {fileID: 0}

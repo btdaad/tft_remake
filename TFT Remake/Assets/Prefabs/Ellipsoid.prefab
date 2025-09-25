@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9067414934513125667}
   - component: {fileID: 8991340778897760577}
   - component: {fileID: 1064701461769713596}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ellipsoid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3814011140347408985}
   - component: {fileID: 4133274003648686556}
   - component: {fileID: 7983495775599963238}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Icosahedron
   m_TagString: Untagged
   m_Icon: {fileID: 0}

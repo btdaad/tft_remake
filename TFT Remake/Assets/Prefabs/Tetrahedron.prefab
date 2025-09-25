@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3944246416970108791}
   - component: {fileID: 805296941041163007}
   - component: {fileID: 5594142647546149421}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tetrahedron
   m_TagString: Untagged
   m_Icon: {fileID: 0}
