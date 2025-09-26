@@ -4,6 +4,8 @@ using System;
 
 public class BoardManager : MonoBehaviour
 {
+    private float MIN_BATTLEFIELD_Z = 0f;
+    private float MAX_BATTLEFIELD_Z = 5.25f;
     Vector3 _initUnitPos;
     Tilemap _playerBattlefield;
     Tilemap _playerBench;
@@ -51,64 +53,79 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private bool DropOnZone(Transform unitTransform, Vector3 unitPos, Tilemap zone)
+    private bool DropOnZone(Transform unitTransform, Vector3 unitPos, Tilemap boardZone)
     {
-        Vector3Int cellPos = zone.WorldToCell(unitPos);
+        Vector3Int cellPos = boardZone.WorldToCell(unitPos);
 
-        if (zone.cellBounds.Contains(cellPos) && zone.HasTile(cellPos))
+        if (boardZone.cellBounds.Contains(cellPos) && boardZone.HasTile(cellPos))
         {
-            Vector3 cellCenterPos = zone.GetCellCenterWorld(cellPos);
+            Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
             unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
-            PlaceOnBoard(unitTransform, cellPos, zone);
+            PlaceUnitOnBoard(unitTransform, cellPos, boardZone);
             return true;
         }
         return false;
     }
 
-    // Careful : the battlefield cell width coords go from -1 to 6 so the index of the 2nd dimension are incremented by 1
-    // Careful : the bench cell width coords go from -1 to 8 so the index of the 2nd dimension are incremented by 1
+    // Careful : the battlefield cell width coords go from -1 to 6 so the index on the x axis are incremented by 1
+    private (int, int) ToBattlefieldCoord(Vector3Int cellCoord)
+    {
+        return (cellCoord.x + 1, cellCoord.y);
+    }
 
-    // TODO : cannot go from bench to battlefield /!\ for player, bench z is < 0.
-    private void PlaceOnBoard(Transform unitTransform, Vector3Int cellPos, Tilemap zone)
+    // Careful : the bench cell width coords go from -1 to 8 so the index on the x axis are incremented by 1
+    private (int, int) ToBenchCoord(Vector3Int cellCoord)
+    {
+        return (cellCoord.x + 1, cellCoord.y == -1 ? 0 : 1);
+    }
+
+    private void PlaceUnitOnBoard(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
     {
         // get cell coords of the init position of the dropped unit
-        Vector3Int initUnitCell = zone.WorldToCell(_initUnitPos);
-        bool isInitUnitOnBattlefield = _initUnitPos.z >= 0 && _initUnitPos.z <= 5.25;
-        Debug.Log("isInitUnitOnBattlefield: " + isInitUnitOnBattlefield);
-            
-        if (zone == _playerBattlefield)
-        {
-            int yPos = cellPos.y;
-            int xPos = cellPos.x + 1;
+        Vector3Int initUnitCell = boardZone.WorldToCell(_initUnitPos);
+        bool isInitUnitOnBattlefield = _initUnitPos.z >= MIN_BATTLEFIELD_Z && _initUnitPos.z <= MAX_BATTLEFIELD_Z;
+        (int xInitCellPos, int yInitCellPos) = isInitUnitOnBattlefield ? ToBattlefieldCoord(initUnitCell) : ToBenchCoord(initUnitCell);
+        if (isInitUnitOnBattlefield)
+            Debug.Log("InitCellPos on battlefield: " + xInitCellPos + ", " + yInitCellPos);
+        else
+            Debug.Log("InitCellPos on bench: " + xInitCellPos + ", " + yInitCellPos);
 
+        if (boardZone == _playerBattlefield)
+        {
+            // Debug.Log("Drop on battlefield.");
+            // Debug.Log("Unit was on battlefield? " + isInitUnitOnBattlefield);
+            (int xPos, int yPos) = ToBattlefieldCoord(cellPos);
             // get unit on the drop cell
             Transform swapUnitTransform = _battlefield[yPos][xPos];
             // set battlefield cell of the dropped unit to the one on the drop cell
             if (isInitUnitOnBattlefield)
-                _battlefield[initUnitCell.y][initUnitCell.x + 1] = swapUnitTransform;
+                _battlefield[yInitCellPos][xInitCellPos] = swapUnitTransform;
             else
-                _bench[initUnitCell.y == -1 ? 0 : 1][initUnitCell.x + 1] = swapUnitTransform;
+                _bench[yInitCellPos][xInitCellPos] = swapUnitTransform;
 
             if (swapUnitTransform != null)
                 swapUnitTransform.position = _initUnitPos; // if the unit of the dropped cell exist, move its position
+
             _battlefield[yPos][xPos] = unitTransform; // move the dropped unit on the drop cell
-            DumpBoard(_battlefield);
+            // DumpBoard(_battlefield);
+            // DumpBoard(_bench);
         }
         else
         {
-            int yPos = cellPos.y == -1 ? 0 : 1;
-            int xPos = cellPos.x + 1;
-
+            // Debug.Log("Drop on bench.");
+            // Debug.Log("Unit was on battlefield? " + isInitUnitOnBattlefield);
+            (int xPos, int yPos) = ToBenchCoord(cellPos);
             Transform swapUnitTransform = _bench[yPos][xPos];
             if (isInitUnitOnBattlefield)
-                _battlefield[initUnitCell.y][initUnitCell.x + 1] = swapUnitTransform;
+                _battlefield[yInitCellPos][xInitCellPos] = swapUnitTransform;
             else
-                _bench[initUnitCell.y == -1 ? 0 : 1][initUnitCell.x + 1] = swapUnitTransform;
+                _bench[yInitCellPos][xInitCellPos] = swapUnitTransform;
 
             if (swapUnitTransform != null)
                 swapUnitTransform.position = _initUnitPos;
             _bench[yPos][xPos] = unitTransform;
-            DumpBoard(_bench);
+            // DumpBoard(_battlefield);
+            // DumpBoard(_bench);
         }
     }
 
