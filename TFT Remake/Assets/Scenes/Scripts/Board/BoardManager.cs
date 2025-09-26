@@ -73,6 +73,9 @@ public class BoardManager : MonoBehaviour
     {
         // get cell coords of the init position of the dropped unit
         Vector3Int initUnitCell = zone.WorldToCell(_initUnitPos);
+        bool isInitUnitOnBattlefield = _initUnitPos.z >= 0 && _initUnitPos.z <= 5.25;
+        Debug.Log("isInitUnitOnBattlefield: " + isInitUnitOnBattlefield);
+            
         if (zone == _playerBattlefield)
         {
             int yPos = cellPos.y;
@@ -81,7 +84,11 @@ public class BoardManager : MonoBehaviour
             // get unit on the drop cell
             Transform swapUnitTransform = _battlefield[yPos][xPos];
             // set battlefield cell of the dropped unit to the one on the drop cell
-            _battlefield[initUnitCell.y][initUnitCell.x + 1] = swapUnitTransform;
+            if (isInitUnitOnBattlefield)
+                _battlefield[initUnitCell.y][initUnitCell.x + 1] = swapUnitTransform;
+            else
+                _bench[initUnitCell.y == -1 ? 0 : 1][initUnitCell.x + 1] = swapUnitTransform;
+
             if (swapUnitTransform != null)
                 swapUnitTransform.position = _initUnitPos; // if the unit of the dropped cell exist, move its position
             _battlefield[yPos][xPos] = unitTransform; // move the dropped unit on the drop cell
@@ -93,7 +100,11 @@ public class BoardManager : MonoBehaviour
             int xPos = cellPos.x + 1;
 
             Transform swapUnitTransform = _bench[yPos][xPos];
-            _bench[initUnitCell.y == -1 ? 0 : 1][initUnitCell.x + 1] = swapUnitTransform;
+            if (isInitUnitOnBattlefield)
+                _battlefield[initUnitCell.y][initUnitCell.x + 1] = swapUnitTransform;
+            else
+                _bench[initUnitCell.y == -1 ? 0 : 1][initUnitCell.x + 1] = swapUnitTransform;
+
             if (swapUnitTransform != null)
                 swapUnitTransform.position = _initUnitPos;
             _bench[yPos][xPos] = unitTransform;
