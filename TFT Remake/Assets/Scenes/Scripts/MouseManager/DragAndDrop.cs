@@ -5,6 +5,7 @@ public class DragAndDrop : MonoBehaviour
 {
     [SerializeField] LayerMask mask;
     [SerializeField] float dragHeight = 0.0f;
+    [SerializeField] BoardManager boardManager;
     Camera _camera;
     Transform _unitTransform;
     float _unitHeight;
@@ -31,10 +32,14 @@ public class DragAndDrop : MonoBehaviour
                 _unitTransform = hit.transform;
                 _unitHeight = _unitTransform.position.y;
                 _unitDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
+
+                boardManager.OnDragUnit(_unitTransform);
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            boardManager.OnDropUnit(_unitTransform);
+            
             _unitTransform = null;
             _unitHeight = 0.0f;
             _unitDistanceFromCamera = 0.0f;
