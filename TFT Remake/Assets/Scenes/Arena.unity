@@ -568,7 +568,7 @@ GameObject:
   - component: {fileID: 205740356}
   m_Layer: 0
   m_Name: Player Side
-  m_TagString: Untagged
+  m_TagString: Player Battlefield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1145,6 +1145,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   dragHeight: 1
+  boardManager: {fileID: 2096859121}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,7 +1332,7 @@ GameObject:
   - component: {fileID: 611188225}
   m_Layer: 0
   m_Name: Player Side
-  m_TagString: Untagged
+  m_TagString: Player Bench
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1903,6 +1904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2096859119}
   - component: {fileID: 2096859120}
+  - component: {fileID: 2096859121}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -1948,6 +1950,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.89, y: 0.05, z: 7.94}
   m_Center: {x: 2.65, y: 0, z: 2.58}
+--- !u!114 &2096859121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096859118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e18a56d1d4a1b2db0adfd1f7b8ee7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoardManager
 --- !u!1001 &4823570910334616817
 PrefabInstance:
   m_ObjectHideFlags: 0
