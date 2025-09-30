@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a0e7da94f0d7823fa797ccdcf66f14c, type: 3}
-  m_Name: TrigonalStats
+  m_Name: HexagonalPrismStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
-  _cost: 1
+  _cost: 2
   _star: 0
   health:
-  - 0
-  - 0
-  - 0
+  - 650
+  - 1100
+  - 2100
   mana:
   - 0
-  - 0
+  - 50
   - 0
   attackDamage:
-  - 0
-  - 0
-  - 0
-  abilityPower: 0
-  armor: 0
-  magicResist: 0
-  attackSpeed: 0
-  critChance: 0
-  critDamage: 0
-  range: 0
+  - 55
+  - 75
+  - 110
+  abilityPower: 100
+  armor: 30
+  magicResist: 30
+  attackSpeed: 0.8
+  critChance: 25
+  critDamage: 140
+  range: 6

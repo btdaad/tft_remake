@@ -26,13 +26,15 @@ public class UnitStats : ScriptableObject
 
     [Header("Stats")]
     public float[] health = new float[3];
-    public float[] mana = new float[3];
+    public float[] mana = new float[2];
     public float[] attackDamage = new float[3];
     public float abilityPower;
     public float armor;
     public float magicResist;
     public float attackSpeed;
+    [Tooltip("in %")]
     public float critChance;
+    [Tooltip("in %")]
     public float critDamage;
     public int range;
 }

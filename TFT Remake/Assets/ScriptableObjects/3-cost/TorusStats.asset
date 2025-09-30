@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a0e7da94f0d7823fa797ccdcf66f14c, type: 3}
-  m_Name: TetrahedronStats
+  m_Name: TorusStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   _cost: 3
   _star: 0
@@ -26,10 +26,10 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  abilityPower: 0
-  armor: 0
-  magicResist: 0
-  attackSpeed: 0
-  critChance: 0
-  critDamage: 0
-  range: 0
+  abilityPower: 100
+  armor: 40
+  magicResist: 40
+  attackSpeed: 0.8
+  critChance: 25
+  critDamage: 140
+  range: 4
