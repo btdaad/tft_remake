@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 163894881917133412}
   - component: {fileID: 5758540604713245138}
   - component: {fileID: 3477507006171147676}
+  - component: {fileID: 5805554733394382411}
   m_Layer: 6
   m_Name: Pyramid
   m_TagString: Untagged
@@ -89,3 +90,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5805554733394382411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8992936054688810843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unit
+  stats: {fileID: 11400000, guid: eceabc331dcd10c03a983ca594cb6098, type: 2}

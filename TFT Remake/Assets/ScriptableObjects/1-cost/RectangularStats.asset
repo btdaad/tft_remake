@@ -21,7 +21,6 @@ MonoBehaviour:
   mana:
   - 0
   - 30
-  - 0
   attackDamage:
   - 50
   - 80

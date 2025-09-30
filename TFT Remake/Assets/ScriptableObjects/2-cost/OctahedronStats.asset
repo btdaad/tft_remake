@@ -21,7 +21,6 @@ MonoBehaviour:
   mana:
   - 20
   - 70
-  - 0
   attackDamage:
   - 45
   - 70
@@ -29,7 +28,7 @@ MonoBehaviour:
   abilityPower: 100
   armor: 50
   magicResist: 50
-  attackSpeed: 0
+  attackSpeed: 0.6
   critChance: 25
   critDamage: 140
   range: 1

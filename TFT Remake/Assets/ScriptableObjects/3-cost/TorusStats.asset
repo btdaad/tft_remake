@@ -15,17 +15,16 @@ MonoBehaviour:
   _cost: 3
   _star: 0
   health:
-  - 0
-  - 0
-  - 0
+  - 900
+  - 1620
+  - 2900
   mana:
-  - 0
-  - 0
-  - 0
+  - 40
+  - 120
   attackDamage:
-  - 0
-  - 0
-  - 0
+  - 50
+  - 75
+  - 130
   abilityPower: 100
   armor: 40
   magicResist: 40
