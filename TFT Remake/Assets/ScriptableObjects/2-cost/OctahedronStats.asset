@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a0e7da94f0d7823fa797ccdcf66f14c, type: 3}
   m_Name: OctahedronStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
-  _cost: 2
-  _star: 0
+  cost: 0
+  star: 0
+  traits: 050000000300000006000000
   health:
   - 850
   - 1530

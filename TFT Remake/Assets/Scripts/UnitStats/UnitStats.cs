@@ -20,9 +20,23 @@ public class UnitStats : ScriptableObject
         ThreeStar = 2,
         None = -1
     };
-    
-    public Cost _cost;
-    public Star _star;
+
+    public enum Trait
+    {
+        None,
+        Prism,
+        Oblong,
+        Sharp,
+        Cinqo,
+        DoubleQuatro,
+        Wobbly,
+        SoloBolo
+    }
+
+    public Cost cost;
+    public Star star;
+
+    public Trait[] traits = new Trait[3];
 
     [Header("Stats")]
     public float[] health = new float[3];
