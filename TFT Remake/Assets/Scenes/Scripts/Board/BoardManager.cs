@@ -2,6 +2,15 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 
+// Vocabulary note :
+// the "battlefield" : the game board part where active units are placed, where the fight happens
+// the "bench" : the game board part used to store passive units 
+// a "zone" : a part of the game board, usually either the battlefield or the bench
+
+// it is expected that a method mentionning "Zone" can handle both the battlefield and the bench
+// while "Board" represents the data structure (jagged array) actually used to store information (not the "physical" game board)
+// it is expected that a method mentionning "Board" handle both the battlefield and the bench data structures 
+
 public class BoardManager : MonoBehaviour
 {
     private float MIN_BATTLEFIELD_Z = 0f;
@@ -61,7 +70,7 @@ public class BoardManager : MonoBehaviour
         {
             Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
             unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
-            PlaceUnitOnBoard(unitTransform, cellPos, boardZone);
+            PlaceUnitOnZone(unitTransform, cellPos, boardZone);
             return true;
         }
         return false;
@@ -74,14 +83,13 @@ public class BoardManager : MonoBehaviour
     }
 
     // Careful : the bench cell width coords go from -1 to 8 so the index on the x axis are incremented by 1
-    private (int, int) ToBenchCoord(Vector3Int cellCoord, bool log = false)
+    // also, on the y axis it goes from -1 to 9 but all rows between 0 and 8 are useless so the y coordinates are either 0 or 1 to match the array index
+    private (int, int) ToBenchCoord(Vector3Int cellCoord)
     {
-        if (log)
-            Debug.Log("Cell coord: " + cellCoord + " => (" + (cellCoord.x + 1) + ", " + (cellCoord.y == -1 ? 0 : 1) + ")");
         return (cellCoord.x + 1, cellCoord.y == -1 ? 0 : 1);
     }
 
-    private void PlaceUnitOnBoard(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
+    private void PlaceUnitOnZone(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
     {
         // assess init unit zone depending on the z coord
         bool isInitUnitOnBattlefield = _initUnitPos.z >= MIN_BATTLEFIELD_Z && _initUnitPos.z <= MAX_BATTLEFIELD_Z;
@@ -92,35 +100,36 @@ public class BoardManager : MonoBehaviour
 
         if (boardZone == _playerBattlefield)
         {
-            (int xPos, int yPos) = ToBattlefieldCoord(cellPos);
-            // get unit on the drop cell
-            Transform swapUnitTransform = _battlefield[yPos][xPos];
-            // set cell of the dropped unit to the one on the drop cell
+            (int xPos, int yPos) = ToBattlefieldCoord(cellPos); // get grid coordinates for drop cell
+            Transform swapUnitTransform = _battlefield[yPos][xPos]; // get the unit on the drop cell
+
+            // set grid init cell to swap unit
             if (isInitUnitOnBattlefield)
                 _battlefield[yInitCellPos][xInitCellPos] = swapUnitTransform;
             else
                 _bench[yInitCellPos][xInitCellPos] = swapUnitTransform;
 
-            if (swapUnitTransform != null)
-                swapUnitTransform.position = _initUnitPos; // if the unit of the dropped cell exist, move its position
+            _battlefield[yPos][xPos] = unitTransform; // set grid drop cell to unit
 
-            _battlefield[yPos][xPos] = unitTransform; // move the dropped unit on the drop cell
+            if (swapUnitTransform != null)
+                swapUnitTransform.position = _initUnitPos; // if the swap unit exists, move its position
+
         }
         else
         {
             (int xPos, int yPos) = ToBenchCoord(cellPos);
             Transform swapUnitTransform = _bench[yPos][xPos];
+
             if (isInitUnitOnBattlefield)
                 _battlefield[yInitCellPos][xInitCellPos] = swapUnitTransform;
             else
                 _bench[yInitCellPos][xInitCellPos] = swapUnitTransform;
 
+            _bench[yPos][xPos] = unitTransform;
+
             if (swapUnitTransform != null)
                 swapUnitTransform.position = _initUnitPos;
-            _bench[yPos][xPos] = unitTransform;
         }
-        // DumpBoard(_battlefield);
-        // DumpBoard(_bench);
     }
 
     private void InitBoard(Tilemap tilemap, ref Transform[][] board, bool isBench)
