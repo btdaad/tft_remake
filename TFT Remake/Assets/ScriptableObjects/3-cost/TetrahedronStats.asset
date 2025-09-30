@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   cost: 0
   star: 0
-  traits: 040000000300000000000000
+  traits: 030000000000000000000000
   health:
   - 750
   - 1350
