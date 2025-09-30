@@ -22,14 +22,14 @@ public class BoardManager : MonoBehaviour
     Transform[][] _battlefield;
     Transform[][] _bench;
 
-    void Awake()
+    public event EventHandler MoveUnit = delegate {};
+
+    public void Init()
     {
+        // Debug.Log("BoardManager awakes.");
         _playerBattlefield = null;
         _playerBench = null;
-    }
 
-    void Start()
-    {
         _initUnitPos = Vector3.zero;
         Tilemap[] tilemaps = gameObject.GetComponentsInChildren<Tilemap>();
         foreach (Tilemap tilemap in tilemaps)
@@ -74,6 +74,11 @@ public class BoardManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public Transform[][] GetBattlefield()
+    {
+        return _battlefield;
     }
 
     // Careful : the battlefield cell width coords go from -1 to 6 so the index on the x axis are incremented by 1
@@ -140,7 +145,7 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < board.Length; i++)
             board[i] = new Transform[boardSize.x + 1];
     }
-    private void DumpBoard(Transform[][] board)
+    public void DumpBoard(Transform[][] board)
     {
         string str = "[";
         foreach (var row in board)
@@ -152,6 +157,8 @@ public class BoardManager : MonoBehaviour
             str += row[i];
             str += "]\n";
         }
+        if (str[str.Length - 1] == '\n')
+            str = str.Remove(str.Length - 1);
         Debug.Log(str + "]");
     }
 }
