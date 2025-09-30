@@ -74,30 +74,28 @@ public class BoardManager : MonoBehaviour
     }
 
     // Careful : the bench cell width coords go from -1 to 8 so the index on the x axis are incremented by 1
-    private (int, int) ToBenchCoord(Vector3Int cellCoord)
+    private (int, int) ToBenchCoord(Vector3Int cellCoord, bool log = false)
     {
+        if (log)
+            Debug.Log("Cell coord: " + cellCoord + " => (" + (cellCoord.x + 1) + ", " + (cellCoord.y == -1 ? 0 : 1) + ")");
         return (cellCoord.x + 1, cellCoord.y == -1 ? 0 : 1);
     }
 
     private void PlaceUnitOnBoard(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
     {
-        // get cell coords of the init position of the dropped unit
-        Vector3Int initUnitCell = boardZone.WorldToCell(_initUnitPos);
+        // assess init unit zone depending on the z coord
         bool isInitUnitOnBattlefield = _initUnitPos.z >= MIN_BATTLEFIELD_Z && _initUnitPos.z <= MAX_BATTLEFIELD_Z;
+
+        // get cell coords of the init position of the dropped unit, depending on the zone (battlefield of bench)
+        Vector3Int initUnitCell = isInitUnitOnBattlefield ? _playerBattlefield.WorldToCell(_initUnitPos) : _playerBench.WorldToCell(_initUnitPos);
         (int xInitCellPos, int yInitCellPos) = isInitUnitOnBattlefield ? ToBattlefieldCoord(initUnitCell) : ToBenchCoord(initUnitCell);
-        if (isInitUnitOnBattlefield)
-            Debug.Log("InitCellPos on battlefield: " + xInitCellPos + ", " + yInitCellPos);
-        else
-            Debug.Log("InitCellPos on bench: " + xInitCellPos + ", " + yInitCellPos);
 
         if (boardZone == _playerBattlefield)
         {
-            // Debug.Log("Drop on battlefield.");
-            // Debug.Log("Unit was on battlefield? " + isInitUnitOnBattlefield);
             (int xPos, int yPos) = ToBattlefieldCoord(cellPos);
             // get unit on the drop cell
             Transform swapUnitTransform = _battlefield[yPos][xPos];
-            // set battlefield cell of the dropped unit to the one on the drop cell
+            // set cell of the dropped unit to the one on the drop cell
             if (isInitUnitOnBattlefield)
                 _battlefield[yInitCellPos][xInitCellPos] = swapUnitTransform;
             else
@@ -107,13 +105,9 @@ public class BoardManager : MonoBehaviour
                 swapUnitTransform.position = _initUnitPos; // if the unit of the dropped cell exist, move its position
 
             _battlefield[yPos][xPos] = unitTransform; // move the dropped unit on the drop cell
-            // DumpBoard(_battlefield);
-            // DumpBoard(_bench);
         }
         else
         {
-            // Debug.Log("Drop on bench.");
-            // Debug.Log("Unit was on battlefield? " + isInitUnitOnBattlefield);
             (int xPos, int yPos) = ToBenchCoord(cellPos);
             Transform swapUnitTransform = _bench[yPos][xPos];
             if (isInitUnitOnBattlefield)
@@ -124,9 +118,9 @@ public class BoardManager : MonoBehaviour
             if (swapUnitTransform != null)
                 swapUnitTransform.position = _initUnitPos;
             _bench[yPos][xPos] = unitTransform;
-            // DumpBoard(_battlefield);
-            // DumpBoard(_bench);
         }
+        // DumpBoard(_battlefield);
+        // DumpBoard(_bench);
     }
 
     private void InitBoard(Tilemap tilemap, ref Transform[][] board, bool isBench)
