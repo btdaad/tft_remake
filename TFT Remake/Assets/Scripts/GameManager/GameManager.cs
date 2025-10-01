@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
     public static GameManager Instance { get { return _instance; } }
     BoardManager _boardManager;
+    UIManager _uiManager;
     Dictionary<UnitStats.Trait, List<Transform>> synergies = new Dictionary<UnitStats.Trait, List<Transform>>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,18 +23,38 @@ public class GameManager : MonoBehaviour
         Init();
     }
 
+    bool FindManager<T>(ref T manager) where T : UnityEngine.Object
+    {
+        T[] managers = FindObjectsByType<T>(FindObjectsSortMode.None);
+        if (managers == null || managers.Length == 0)
+        {
+            Debug.LogError("Could not find any " + nameof(T) + " script.");
+            return false;
+        }
+        else if (managers.Length > 1)
+            Debug.Log("Multiple " + nameof(T) + " scripts have been found.");
+        manager = managers[0];
+        return true;
+    }
+
     void Init()
     {
-        BoardManager[] boardManagers = FindObjectsByType<BoardManager>(FindObjectsSortMode.None);
-        if (boardManagers == null || boardManagers.Length == 0)
-        {
-            Debug.LogError("Could not find any Board Manager script.");
-            return;
-        }
-        else if (boardManagers.Length > 1)
-            Debug.Log("Multiple Board Manager scripts have been found.");
-        _boardManager = boardManagers[0];
-        _boardManager.Init();
+        bool findBoardManager = FindManager<BoardManager>(ref _boardManager);
+        if (findBoardManager)
+            _boardManager.Init();
+
+        bool findUIManager = FindManager<UIManager>(ref _uiManager);
+        if (findUIManager)
+            _uiManager.Init();
+    }
+    public BoardManager GetBoardManager()
+    {
+        return _boardManager;
+    }
+    
+    public UIManager GetUIManager()
+    {
+        return _uiManager;
     }
 
     // Update is called once per frame

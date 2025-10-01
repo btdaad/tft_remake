@@ -5,8 +5,10 @@ public class DragAndDrop : MonoBehaviour
 {
     [SerializeField] LayerMask mask;
     [SerializeField] float dragHeight = 0.0f;
-    [SerializeField] BoardManager boardManager;
     [SerializeField] float dragThresholdTime = 0.0f;
+    GameManager _gameManager;
+    BoardManager _boardManager;
+    UIManager _uiManager;
     Camera _camera;
     Transform _unitTransform;
     float _unitHeight;
@@ -15,6 +17,9 @@ public class DragAndDrop : MonoBehaviour
 
     void Start()
     {
+        _gameManager = GameManager.Instance;
+        _boardManager = _gameManager.GetBoardManager();
+        _uiManager = _gameManager.GetUIManager();
         _camera = Camera.main;
         _unitTransform = null;
         _unitHeight = 0.0f;
@@ -36,27 +41,26 @@ public class DragAndDrop : MonoBehaviour
                 _unitHeight = _unitTransform.position.y;
                 _unitDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
 
-                boardManager.OnDragUnit(_unitTransform);
+                _boardManager.OnDragUnit(_unitTransform);
 
                 _clickTime = Time.time;
             }
+            else
+                _uiManager.HideUnitDisplay();
         }
         else if (Input.GetMouseButtonUp(0))
         {
             if (Time.time - _clickTime < dragThresholdTime)
-            {
-                // Debug.Log("Click: " + (Time.time - _clickTime));
-                // simple click
-            }
+                _uiManager.ShowUnitDisplay(_unitTransform);
             else // drag
             {
-                boardManager.OnDropUnit(_unitTransform);
+                _boardManager.OnDropUnit(_unitTransform);
             }
             _unitTransform = null;
             _unitHeight = 0.0f;
             _unitDistanceFromCamera = 0.0f;
 
-            _clickTime = 0.0f; 
+            _clickTime = 0.0f;
         }
         else if (Time.time - _clickTime >= dragThresholdTime
                  && _unitTransform != null)
