@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
+    public UIDocument UIDoc;
+    private Label _healthLabel;
     private Canvas _unitDisplay = null;
     private RawImage _unitInfo = null;
     private RawImage _unitArt = null;
@@ -24,12 +27,14 @@ public class UIManager : MonoBehaviour
             Debug.LogError("Could not find Unit Art raw image.");
 
         _unitDisplay.gameObject.SetActive(false);
+        
+        _healthLabel = UIDoc.rootVisualElement.Q<Label>("HealthLabel");
+        _healthLabel.text = $"{500}/{500}";
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
 
     public void ShowUnitDisplay(Transform unit)
