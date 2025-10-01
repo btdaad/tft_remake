@@ -6,10 +6,12 @@ public class DragAndDrop : MonoBehaviour
     [SerializeField] LayerMask mask;
     [SerializeField] float dragHeight = 0.0f;
     [SerializeField] BoardManager boardManager;
+    [SerializeField] float dragThresholdTime = 0.0f;
     Camera _camera;
     Transform _unitTransform;
     float _unitHeight;
     float _unitDistanceFromCamera;
+    float _clickTime;
 
     void Start()
     {
@@ -17,6 +19,7 @@ public class DragAndDrop : MonoBehaviour
         _unitTransform = null;
         _unitHeight = 0.0f;
         _unitDistanceFromCamera = 0.0f;
+        _clickTime = 0.0f; 
     }
 
     void Update()
@@ -34,18 +37,31 @@ public class DragAndDrop : MonoBehaviour
                 _unitDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
 
                 boardManager.OnDragUnit(_unitTransform);
+
+                _clickTime = Time.time;
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            boardManager.OnDropUnit(_unitTransform);
-            
+            if (Time.time - _clickTime < dragThresholdTime)
+            {
+                // Debug.Log("Click: " + (Time.time - _clickTime));
+                // simple click
+            }
+            else // drag
+            {
+                boardManager.OnDropUnit(_unitTransform);
+            }
             _unitTransform = null;
             _unitHeight = 0.0f;
             _unitDistanceFromCamera = 0.0f;
+
+            _clickTime = 0.0f; 
         }
-        else if (_unitTransform != null)
+        else if (Time.time - _clickTime >= dragThresholdTime
+                 && _unitTransform != null)
         {
+            // Debug.Log("Click: " + (Time.time - _clickTime));
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = _unitDistanceFromCamera;
             Vector3 unitPosition = _camera.ScreenToWorldPoint(mousePos);
