@@ -15,6 +15,7 @@ public class BoardManager : MonoBehaviour
 {
     private float MIN_BATTLEFIELD_Z = 0f;
     private float MAX_BATTLEFIELD_Z = 5.25f;
+    private GameManager _gameManager;
     Vector3 _initUnitPos;
     Tilemap _playerBattlefield;
     Tilemap _playerBench;
@@ -26,7 +27,6 @@ public class BoardManager : MonoBehaviour
 
     public void Init()
     {
-        // Debug.Log("BoardManager awakes.");
         _playerBattlefield = null;
         _playerBench = null;
 
@@ -42,6 +42,9 @@ public class BoardManager : MonoBehaviour
 
         InitBoard(_playerBattlefield, ref _battlefield, false);
         InitBoard(_playerBench, ref _bench, true);
+
+        _gameManager = GameManager.Instance;
+        MoveUnit = _gameManager.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
     public void OnDragUnit(Transform unitTransform)
@@ -71,6 +74,11 @@ public class BoardManager : MonoBehaviour
             Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
             unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
             PlaceUnitOnZone(unitTransform, cellPos, boardZone);
+            
+            // propagate info to subscribers (update synergies)
+            MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(unitTransform, boardZone == _playerBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
+            MoveUnit(null, moveUnitEventArgs);
+
             return true;
         }
         return false;
@@ -117,8 +125,13 @@ public class BoardManager : MonoBehaviour
             _battlefield[yPos][xPos] = unitTransform; // set grid drop cell to unit
 
             if (swapUnitTransform != null)
+            {
                 swapUnitTransform.position = _initUnitPos; // if the swap unit exists, move its position
 
+                // propagate info to subscribers (update synergies)
+                MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(swapUnitTransform, isInitUnitOnBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
+                MoveUnit(null, moveUnitEventArgs);
+            }
         }
         else
         {
@@ -133,7 +146,12 @@ public class BoardManager : MonoBehaviour
             _bench[yPos][xPos] = unitTransform;
 
             if (swapUnitTransform != null)
+            {
                 swapUnitTransform.position = _initUnitPos;
+
+                MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(swapUnitTransform, isInitUnitOnBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
+                MoveUnit(null, moveUnitEventArgs);
+            }
         }
     }
 
