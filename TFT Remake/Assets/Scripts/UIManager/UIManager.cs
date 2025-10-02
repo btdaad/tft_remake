@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public UIDocument UIDoc;
     private Label _healthLabel;
+    private VisualElement _healthBarMask;
     private Canvas _unitDisplay = null;
     private RawImage _unitInfo = null;
     private RawImage _unitArt = null;
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
         _unitDisplay.gameObject.SetActive(false);
         
         _healthLabel = UIDoc.rootVisualElement.Q<Label>("HealthLabel");
+        _healthBarMask = UIDoc.rootVisualElement.Q<VisualElement>("HealthBarMask");
         _healthLabel.text = $"{500}/{500}";
     }
 
