@@ -11,10 +11,11 @@ public class UIManager : MonoBehaviour
     private Label _manaLabel;
     private VisualElement _manaBarMask;
     private Label _name;
+    private Label _baseDamage;
     private Label _ap;
     private Label _ad;
     private Label _armor;
-    private Label _rm;
+    private Label _mr;
     private Label _atkSpeed;
     private Label _crit;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,10 +27,12 @@ public class UIManager : MonoBehaviour
         _manaLabel = UIDoc.rootVisualElement.Q<Label>("ManaLabel");
         _manaBarMask = UIDoc.rootVisualElement.Q<VisualElement>("ManaBarMask");
         _name = UIDoc.rootVisualElement.Q<Label>("Name");
+
+        _baseDamage = UIDoc.rootVisualElement.Q<Label>("BaseDamage");
         _ap = UIDoc.rootVisualElement.Q<Label>("AP");
         _ad = UIDoc.rootVisualElement.Q<Label>("AD");
         _armor = UIDoc.rootVisualElement.Q<Label>("Armor");
-        _rm = UIDoc.rootVisualElement.Q<Label>("RM");
+        _mr = UIDoc.rootVisualElement.Q<Label>("MR");
         _atkSpeed = UIDoc.rootVisualElement.Q<Label>("AtkSpeed");
         _crit = UIDoc.rootVisualElement.Q<Label>("Crit");
 
@@ -47,14 +50,15 @@ public class UIManager : MonoBehaviour
         UnitStats stats = unit.stats;
 
         _healthLabel.text = $"{unit.GetHealth()}/{stats.health[(int) stats.star]}";
-        _manaLabel.text = $"{unit.GetMana()}/{stats.mana[(int) stats.star]}";
+        _manaLabel.text = $"{unit.GetMana()}/{stats.mana[1]}";
 
         _name.text = unit.name;
 
-        _ap.text = $"{stats.abilityPower}";
-        _ad.text = $"{stats.attackDamage[(int)stats.star]}";
+        _ap.text = $"{unit.GetAP()}%";
+        _ad.text = $"{unit.GetAD()}%";
+        _baseDamage.text = $"{stats.attackDamage[(int)stats.star]}";
         _armor.text = $"{stats.armor}";
-        _rm.text = $"{stats.magicResist}";
+        _mr.text = $"{stats.magicResist}";
         _atkSpeed.text = $"{stats.attackSpeed}";
         _crit.text = $"{stats.critChance}%";
 
