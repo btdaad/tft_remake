@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a0e7da94f0d7823fa797ccdcf66f14c, type: 3}
   m_Name: TetrahedronStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
-  cost: 0
+  cost: 1
   star: 0
   traits: 030000000000000000000000
   health:

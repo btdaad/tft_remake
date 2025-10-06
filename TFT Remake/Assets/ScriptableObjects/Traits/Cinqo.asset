@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e94adf1923e471f89b6f43abcd0c918, type: 3}
+  m_Script: {fileID: 11500000, guid: 08c7bf4ff6b359af085ba6903d0bfdc4, type: 3}
   m_Name: Cinqo
   m_EditorClassIdentifier: Assembly-CSharp::UnitTraits
   trait: 4

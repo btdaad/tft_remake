@@ -2040,6 +2040,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d46508b4028c5f098f44ef4c40f3ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  traits:
+  - {fileID: 11400000, guid: 85762d3393e5916f4a1192f3b6e57984, type: 2}
+  - {fileID: 11400000, guid: dac1c5a242c4b94b3ae24f8a6b416530, type: 2}
+  - {fileID: 11400000, guid: 9da0d247be5fafc288910793b2b291c1, type: 2}
+  - {fileID: 11400000, guid: b1620102a340675bba5c17e2fd1f604d, type: 2}
+  - {fileID: 11400000, guid: a9d0b097e85f73c0fad22a05e3444bcd, type: 2}
+  - {fileID: 11400000, guid: d7a29d5ff94cb0c40b834da7a98a20ea, type: 2}
+  - {fileID: 11400000, guid: 89ca425ccada3476093485fe3bbe04a2, type: 2}
 --- !u!1 &2048528643
 GameObject:
   m_ObjectHideFlags: 0
