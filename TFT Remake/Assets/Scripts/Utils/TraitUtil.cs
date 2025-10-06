@@ -14,7 +14,7 @@ public enum Trait
     SoloBolo
 };
 
-public static class UnitTrait
+public static class TraitUtil
 {
     public static string ToTexture(Trait trait)
     {

@@ -2,10 +2,15 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument UIDoc;
+
+    #region UnitDisplay
+    private int MAX_TRAITS_DISPLAYED = 3;
     private VisualElement _unitDisplayBackground;
     private VisualElement[] _traitTextures;
     private Label[] _traitLabels;
@@ -21,12 +26,25 @@ public class UIManager : MonoBehaviour
     private Label _mr;
     private Label _atkSpeed;
     private Label _crit;
+    #endregion
+
+    #region SynergyDisplay
+    private int MAX_SYNERGIES_DISPLAYED = 6;
+    private VisualElement[] _activeSynergies;
+    private VisualElement[] _passiveSynergies;
+    private Button _showMore;
+    #endregion
+
+    private void HideVisualElements(VisualElement[] visualElements)
+    {
+        Array.ForEach(visualElements, (VisualElement ve) => { ve.visible = false; });
+    }
 
     private void InitTraits(ref VisualElement[] traitTextures, ref Label[] traitLabels)
     {
-        traitTextures = new VisualElement[3];
-        traitLabels = new Label[3];
-        for (int i = 0; i < traitTextures.Length; i++)
+        traitTextures = new VisualElement[MAX_TRAITS_DISPLAYED];
+        traitLabels = new Label[MAX_TRAITS_DISPLAYED];
+        for (int i = 0; i < MAX_TRAITS_DISPLAYED; i++)
         {
             int traitIndex = i + 1;
             traitTextures[i] = UIDoc.rootVisualElement.Q<VisualElement>($"Trait{traitIndex}");
@@ -34,7 +52,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void Init()
+    private void InitUnitDisplay()
     {
         _unitDisplayBackground = UIDoc.rootVisualElement.Q<VisualElement>("UnitDisplayBackground");
 
@@ -57,21 +75,44 @@ public class UIManager : MonoBehaviour
         _unitDisplayBackground.visible = false;
     }
 
+    private void InitSynergyDisplay()
+    {
+        _activeSynergies = new VisualElement[MAX_SYNERGIES_DISPLAYED];
+        _passiveSynergies = new VisualElement[MAX_SYNERGIES_DISPLAYED];
+        for (int i = 0; i < MAX_SYNERGIES_DISPLAYED; i++)
+        {
+            int synergyIndex = i + 1;
+            _activeSynergies[i] = UIDoc.rootVisualElement.Q<VisualElement>($"ActiveSynergy{synergyIndex}");
+            _passiveSynergies[i] = UIDoc.rootVisualElement.Q<VisualElement>($"PassiveSynergy{synergyIndex}");
+        }
+        HideVisualElements(_activeSynergies);
+        HideVisualElements(_passiveSynergies);
+
+        _showMore = UIDoc.rootVisualElement.Q<Button>("ShowMore");
+        _showMore.visible = false;
+    }
+
+    public void Init()
+    {
+        InitUnitDisplay();
+        InitSynergyDisplay();
+    }
+
     // Update is called once per frame
     void Update()
     {
     }
 
-    private void DisplayTraits(ref VisualElement[] visualElements, ref Label[] labels, Trait[] traits)
+    private void DisplayTraits(VisualElement[] visualElements, Label[] labels, Trait[] traits)
     {
         for (int i = 0; i < visualElements.Length; i++)
         {
             if (i < traits.Length
                 && traits[i] != Trait.None)
             {
-                Texture2D tex = Resources.Load<Texture2D>(UnitTrait.ToTexture(traits[i]));
+                Texture2D tex = Resources.Load<Texture2D>(TraitUtil.ToTexture(traits[i]));
                 visualElements[i].style.backgroundImage = tex;
-                labels[i].text = UnitTrait.ToString(traits[i]);
+                labels[i].text = TraitUtil.ToString(traits[i]);
                 visualElements[i].visible = true;
             }
             else
@@ -84,7 +125,7 @@ public class UIManager : MonoBehaviour
         Unit unit = unitTransform.GetComponent<Unit>();
         UnitStats stats = unit.stats;
 
-        DisplayTraits(ref _traitTextures, ref _traitLabels, stats.traits);
+        DisplayTraits(_traitTextures, _traitLabels, stats.traits);
 
         _name.text = unit.name;
 
@@ -105,7 +146,21 @@ public class UIManager : MonoBehaviour
 
     public void HideUnitDisplay()
     {
-        Array.ForEach(_traitTextures, (VisualElement ve) => { ve.visible = false; });
+        HideVisualElements(_traitTextures);
         _unitDisplayBackground.visible = false;
+    }
+
+    public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
+    {
+        var synergies = from entry in unsortedSynergies orderby entry.Value.Count descending select entry;
+        synergies.ToDictionary(pair => pair.Key, pair => pair.Value);
+
+        foreach (KeyValuePair<Trait, List<Transform>> kvp in synergies)
+        {
+            Trait trait = kvp.Key;
+            int nbUnit = kvp.Value.Count();
+            // TODO: check they are different unit !;
+            UnitTraitSO traitSO = Array.Find(unitTraits, (UnitTraitSO unitTrait) => { return unitTrait.trait == trait; });
+        }
     }
 }

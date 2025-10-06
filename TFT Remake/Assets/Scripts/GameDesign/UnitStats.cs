@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UnitStats", menuName = "Scriptable Objects/UnitStats")]
+[CreateAssetMenu(fileName = "UnitStat", menuName = "Scriptable Objects/UnitStats")]
 public class UnitStats : ScriptableObject
 {
     public enum Cost

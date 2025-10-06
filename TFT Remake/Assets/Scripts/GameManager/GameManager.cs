@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
     BoardManager _boardManager;
     UIManager _uiManager;
-    Dictionary<Trait, List<Transform>> synergies = new Dictionary<Trait, List<Transform>>();
+    Dictionary<Trait, List<Transform>> _synergies = new Dictionary<Trait, List<Transform>>();
+
+    public UnitTraitSO[] traits;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -20,6 +22,8 @@ public class GameManager : MonoBehaviour
         }
         else
             _instance = this;
+        if (traits.Length != Enum.GetNames(typeof(Trait)).Length)
+            Debug.LogError("There is not the correct number of UnitTraitSO in the trait attribute.");
         Init();
     }
 
@@ -51,7 +55,7 @@ public class GameManager : MonoBehaviour
     {
         return _boardManager;
     }
-    
+
     public UIManager GetUIManager()
     {
         return _uiManager;
@@ -68,40 +72,50 @@ public class GameManager : MonoBehaviour
         MoveUnitEventArgs eventArgs = (MoveUnitEventArgs)e;
         Transform unit = eventArgs.unit;
         UnitStats unitStats = unit.GetComponent<Unit>().stats;
-        Trait[] unitTraits = unitStats.traits;
+        Trait[] traits = unitStats.traits;
 
-        foreach (Trait trait in unitTraits)
+        bool isSynergiesModified = false;
+
+        foreach (Trait trait in traits)
         {
             if (trait == Trait.None) // None trait is skipped because not considered to be an actual trait
                 continue;
 
-            if (!synergies.ContainsKey(trait)) // the dictionnary does not have this trait yet
+            if (!_synergies.ContainsKey(trait)) // the dictionnary does not have this trait yet
             {
                 if (eventArgs.toZone == MoveUnitEventArgs.Zone.Battlefield) // the unit is added to the battlefield
                 {
                     List<Transform> units = new List<Transform>();
                     units.Add(unit);
-                    synergies.Add(trait, units);
+                    _synergies.Add(trait, units);
+                    isSynergiesModified = true;
                 }
                 // else, do nothing
             }
-            else if (!synergies[trait].Contains(unit) // the dictionnary have the trait but the unit is not in the list
+            else if (!_synergies[trait].Contains(unit) // the dictionnary have the trait but the unit is not in the list
                      && eventArgs.toZone == MoveUnitEventArgs.Zone.Battlefield) // AND is added to the battlefield
-                synergies[trait].Add(unit);
-            else if (eventArgs.toZone == MoveUnitEventArgs.Zone.Bench // the unit is move to the bench
-                     && synergies[trait].Contains(unit)) // AND the unit is mentionned in the dictionnary
             {
-                synergies[trait].Remove(unit);
-                if (synergies[trait].Count == 0)
-                    synergies.Remove(trait);
+                _synergies[trait].Add(unit);
+                isSynergiesModified = true;
+            }
+            else if (eventArgs.toZone == MoveUnitEventArgs.Zone.Bench // the unit is move to the bench
+                     && _synergies[trait].Contains(unit)) // AND the unit is mentionned in the dictionnary
+            {
+                _synergies[trait].Remove(unit);
+                if (_synergies[trait].Count == 0)
+                    _synergies.Remove(trait);
+                isSynergiesModified = true;
             }
         }
+
+        if (isSynergiesModified)
+            _uiManager.UpdateSynergyDisplay(_synergies, this.traits);
     }
 
     private void DumpSyergies()
     {
         string str = "[";
-        foreach (KeyValuePair<Trait, List<Transform>> kvp in synergies)
+        foreach (KeyValuePair<Trait, List<Transform>> kvp in _synergies)
         {
             str += kvp.Key.ToString();
             str += ": (";
