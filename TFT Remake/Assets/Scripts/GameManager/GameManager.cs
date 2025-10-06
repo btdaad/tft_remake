@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
     BoardManager _boardManager;
     UIManager _uiManager;
-    Dictionary<UnitStats.Trait, List<Transform>> synergies = new Dictionary<UnitStats.Trait, List<Transform>>();
+    Dictionary<Trait, List<Transform>> synergies = new Dictionary<Trait, List<Transform>>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -68,11 +68,11 @@ public class GameManager : MonoBehaviour
         MoveUnitEventArgs eventArgs = (MoveUnitEventArgs)e;
         Transform unit = eventArgs.unit;
         UnitStats unitStats = unit.GetComponent<Unit>().stats;
-        UnitStats.Trait[] unitTraits = unitStats.traits;
+        Trait[] unitTraits = unitStats.traits;
 
-        foreach (UnitStats.Trait trait in unitTraits)
+        foreach (Trait trait in unitTraits)
         {
-            if (trait == UnitStats.Trait.None) // None trait is skipped because not considered to be an actual trait
+            if (trait == Trait.None) // None trait is skipped because not considered to be an actual trait
                 continue;
 
             if (!synergies.ContainsKey(trait)) // the dictionnary does not have this trait yet
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
     private void DumpSyergies()
     {
         string str = "[";
-        foreach (KeyValuePair<UnitStats.Trait, List<Transform>> kvp in synergies)
+        foreach (KeyValuePair<Trait, List<Transform>> kvp in synergies)
         {
             str += kvp.Key.ToString();
             str += ": (";

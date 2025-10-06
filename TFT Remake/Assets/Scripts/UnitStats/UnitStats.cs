@@ -21,17 +21,6 @@ public class UnitStats : ScriptableObject
         None = -1
     };
 
-    public enum Trait
-    {
-        None,
-        Prism,
-        Oblong,
-        Sharp,
-        Cinqo,
-        DoubleQuatro,
-        Wobbly,
-        SoloBolo
-    }
 
     public Cost cost;
     public Star star;
