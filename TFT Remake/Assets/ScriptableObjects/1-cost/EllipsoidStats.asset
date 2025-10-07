@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a0e7da94f0d7823fa797ccdcf66f14c, type: 3}
   m_Name: EllipsoidStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
+  type: 2
   cost: 1
   star: 0
   traits: 020000000000000000000000

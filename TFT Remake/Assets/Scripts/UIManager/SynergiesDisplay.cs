@@ -26,6 +26,7 @@ public class SynergiesDisplay
     private VisualElement[] _activeSynergies;
     private VisualElement[] _passiveSynergies;
     private Button _showMore;
+    private bool _isShowMoreClicked = false;
     
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -47,6 +48,9 @@ public class SynergiesDisplay
 
         _showMore = GetUIElement<Button>("ShowMore");
         _showMore.visible = false;
+        _showMore.clickable.clicked += () => { _isShowMoreClicked = !_isShowMoreClicked; };
+        // _showMore.clickable.activators.Clear();
+        // _showMore.RegisterCallback<MouseDownEvent>(e => { _isShowMoreClicked = !_isShowMoreClicked; });
     }
 
     // as the text has been specifically set to visible or has been hidden to feat the number of stages of each Trait
@@ -178,6 +182,13 @@ public class SynergiesDisplay
         UIUtil.HideVisualElements(_activeSynergies);
         UIUtil.HideVisualElements(_passiveSynergies);
         HideActiveSynergyStages();
+        if (unsortedSynergies.Count <= MAX_SYNERGIES_DISPLAYED)
+        {
+            _showMore.visible = false;
+            _isShowMoreClicked = false;
+        }
+        else
+            _showMore.visible = true;
 
         unsortedSynergies = RemoveIdenticalUnits(unsortedSynergies);
         Dictionary<Trait, List<Transform>> synergies = unsortedSynergies
@@ -187,8 +198,15 @@ public class SynergiesDisplay
 
         int nbActiveSynergy = 0;
         int nbPassiveSynergy = 0;
+        int skipShowMore = 0;
         foreach (KeyValuePair<Trait, List<Transform>> kvp in synergies)
         {
+            if (_isShowMoreClicked && skipShowMore <= MAX_SYNERGIES_DISPLAYED)
+            {
+                skipShowMore++;
+                continue;
+            }
+
             if (nbActiveSynergy + nbPassiveSynergy == MAX_SYNERGIES_DISPLAYED) // cannot display more than MAX_SYNERGIES_DISPLAYED
                 break;
             int synergyIndex = nbActiveSynergy + nbPassiveSynergy + 1; // used to interact with the UI elements (index starts at 1)
