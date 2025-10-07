@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
 
     #region SynergyDisplay
     private int MAX_SYNERGIES_DISPLAYED = 6;
+    private int MAX_STAGES = 4;
     private VisualElement[] _activeSynergies;
     private VisualElement[] _passiveSynergies;
     private Button _showMore;
@@ -150,17 +151,106 @@ public class UIManager : MonoBehaviour
         _unitDisplayBackground.visible = false;
     }
 
+    public void HideActiveSynergyStages()
+    {
+        for (int i = 0; i < _activeSynergies.Length; i++)
+        {
+            int synergyIndex = i + 1;
+            for (int j = 0; j < MAX_STAGES; j++)
+            {
+                int stageIndex = j + 1;
+                Label curStage = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Stage{synergyIndex}");
+                curStage.visible = false;
+                Label curSeparator = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Separator{synergyIndex}");
+                if (stageIndex != MAX_STAGES) // there is one separator less
+                    curSeparator.visible = true;
+            }
+        }
+    }
+
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
     {
+        HideVisualElements(_activeSynergies);
+        HideVisualElements(_passiveSynergies);
+        HideActiveSynergyStages();
+
+        // TODO : order such that active synergies are put first....
         var synergies = from entry in unsortedSynergies orderby entry.Value.Count descending select entry;
         synergies.ToDictionary(pair => pair.Key, pair => pair.Value);
 
+        int nbActiveSynergy = 0;
+        int nbPassiveSynergy = 0;
         foreach (KeyValuePair<Trait, List<Transform>> kvp in synergies)
         {
+            if (nbActiveSynergy + nbPassiveSynergy == MAX_SYNERGIES_DISPLAYED)
+                break;
+            int synergyIndex = nbActiveSynergy + nbPassiveSynergy + 1;
+
             Trait trait = kvp.Key;
             int nbUnit = kvp.Value.Count();
-            // TODO: check they are different unit !;
+            // TODO: check they are different unit to count them by unit type and not just nb on board!
             UnitTraitSO traitSO = Array.Find(unitTraits, (UnitTraitSO unitTrait) => { return unitTrait.trait == trait; });
+
+            if (nbUnit >= traitSO.stages[0]) // Active Synergy
+            {
+                Label nbActiveUnit = UIDoc.rootVisualElement.Q<Label>($"LevelLabel{synergyIndex}");
+                nbActiveUnit.text = nbUnit.ToString();
+
+                VisualElement traitIcon = UIDoc.rootVisualElement.Q<VisualElement>($"Symbol{synergyIndex}");
+                Texture2D tex = Resources.Load<Texture2D>(TraitUtil.ToTexture(trait));
+                traitIcon.style.backgroundImage = tex;
+
+                Label traitName = UIDoc.rootVisualElement.Q<Label>($"ActiveTrait{synergyIndex}");
+                traitName.text = TraitUtil.ToString(trait);
+
+                int nbStages = traitSO.nbStages;
+                for (int i = 0; i < MAX_STAGES; i++)
+                {
+                    // TODO : color in white the curStage if it is equal to nb active unit !
+                    int stageIndex = i + 1;
+                    Label curStage = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Stage{synergyIndex}");
+                    Label curSeparator = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Separator{synergyIndex}");
+                    if (i < nbStages) // display
+                    {
+                        curStage.text = traitSO.stages[i].ToString();
+                        curStage.visible = true;
+                        if (stageIndex != MAX_STAGES) // there is one separator less
+                        {
+                            if (stageIndex < nbStages) // no need to display a separator if it's the last stage
+                                curSeparator.visible = true;
+                            else
+                                curSeparator.visible = false;
+                        }
+                    }
+                    else // hide
+                    {
+                        curStage.visible = false;
+                        if (stageIndex != MAX_STAGES)
+                            curSeparator.visible = false;
+                    }
+                }
+
+                _activeSynergies[nbActiveSynergy + nbPassiveSynergy].visible = true;
+                nbActiveSynergy++;
+            }
+            else // Passive Synergy
+            {
+                VisualElement traitIcon = UIDoc.rootVisualElement.Q<VisualElement>($"PassiveSymbol{synergyIndex}");
+                Texture2D tex = Resources.Load<Texture2D>(TraitUtil.ToTexture(trait));
+                traitIcon.style.backgroundImage = tex;
+
+                Label traitName = UIDoc.rootVisualElement.Q<Label>($"PassiveTrait{synergyIndex}");
+                traitName.text = TraitUtil.ToString(trait);
+
+                Label actualNb = UIDoc.rootVisualElement.Q<Label>($"curStage{synergyIndex}");
+                actualNb.text = nbUnit.ToString();
+
+                Label expectedNb = UIDoc.rootVisualElement.Q<Label>($"nextStage{synergyIndex}");
+                expectedNb.text = traitSO.stages[0].ToString();
+
+                _passiveSynergies[nbActiveSynergy + nbPassiveSynergy].visible = true;
+                nbPassiveSynergy++;
+            }
         }
     }
 }

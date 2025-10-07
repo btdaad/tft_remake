@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Prism
   m_EditorClassIdentifier: Assembly-CSharp::UnitTraits
   trait: 1
-  stageNb: 3
+  nbStages: 3
   stages: 010000000200000003000000

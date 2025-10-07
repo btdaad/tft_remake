@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Wobbly
   m_EditorClassIdentifier: Assembly-CSharp::UnitTraits
   trait: 6
-  stageNb: 1
+  nbStages: 1
   stages: 02000000

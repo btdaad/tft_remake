@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Oblong
   m_EditorClassIdentifier: Assembly-CSharp::UnitTraits
   trait: 2
-  stageNb: 2
+  nbStages: 2
   stages: 0200000003000000

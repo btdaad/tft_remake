@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         }
         else
             _instance = this;
-        if (traits.Length != Enum.GetNames(typeof(Trait)).Length)
+        if (traits.Length != Enum.GetNames(typeof(Trait)).Length - 1) // -1 because we don't want None to be taken int account
             Debug.LogError("There is not the correct number of UnitTraitSO in the trait attribute.");
         Init();
     }

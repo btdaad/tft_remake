@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Sharp
   m_EditorClassIdentifier: Assembly-CSharp::UnitTraits
   trait: 3
-  stageNb: 3
+  nbStages: 3
   stages: 020000000300000005000000

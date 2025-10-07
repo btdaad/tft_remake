@@ -4,6 +4,6 @@ using UnityEngine;
 public class UnitTraitSO : ScriptableObject
 {
     public Trait trait;
-    public int stageNb;
+    public int nbStages;
     public int[] stages;
 }

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Cinqo
   m_EditorClassIdentifier: Assembly-CSharp::UnitTraits
   trait: 4
-  stageNb: 2
+  nbStages: 2
   stages: 0100000002000000

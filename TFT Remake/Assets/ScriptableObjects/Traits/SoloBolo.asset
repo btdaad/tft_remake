@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SoloBolo
   m_EditorClassIdentifier: Assembly-CSharp::UnitTraits
   trait: 7
-  stageNb: 1
+  nbStages: 1
   stages: 01000000
