@@ -55,30 +55,30 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < MAX_TRAITS_DISPLAYED; i++)
         {
             int traitIndex = i + 1;
-            traitTextures[i] = UIDoc.rootVisualElement.Q<VisualElement>($"Trait{traitIndex}");
-            traitLabels[i] = UIDoc.rootVisualElement.Q<Label>($"Trait{traitIndex}");
+            traitTextures[i] = GetUIElement<VisualElement>($"Trait{traitIndex}");
+            traitLabels[i] = GetUIElement<Label>($"Trait{traitIndex}");
         }
     }
 
     private void InitUnitDisplay()
     {
-        _unitDisplayBackground = UIDoc.rootVisualElement.Q<VisualElement>("UnitDisplayBackground");
+        _unitDisplayBackground = GetUIElement<VisualElement>("UnitDisplayBackground");
 
         InitTraits(ref _traitTextures, ref _traitLabels);
-        _name = UIDoc.rootVisualElement.Q<Label>("Name");
+        _name = GetUIElement<Label>("Name");
 
-        _healthLabel = UIDoc.rootVisualElement.Q<Label>("HealthLabel");
-        _healthBarMask = UIDoc.rootVisualElement.Q<VisualElement>("HealthBarMask");
-        _manaLabel = UIDoc.rootVisualElement.Q<Label>("ManaLabel");
-        _manaBarMask = UIDoc.rootVisualElement.Q<VisualElement>("ManaBarMask");
+        _healthLabel = GetUIElement<Label>("HealthLabel");
+        _healthBarMask = GetUIElement<VisualElement>("HealthBarMask");
+        _manaLabel = GetUIElement<Label>("ManaLabel");
+        _manaBarMask = GetUIElement<VisualElement>("ManaBarMask");
 
-        _baseDamage = UIDoc.rootVisualElement.Q<Label>("BaseDamage");
-        _ap = UIDoc.rootVisualElement.Q<Label>("AP");
-        _ad = UIDoc.rootVisualElement.Q<Label>("AD");
-        _armor = UIDoc.rootVisualElement.Q<Label>("Armor");
-        _mr = UIDoc.rootVisualElement.Q<Label>("MR");
-        _atkSpeed = UIDoc.rootVisualElement.Q<Label>("AtkSpeed");
-        _crit = UIDoc.rootVisualElement.Q<Label>("Crit");
+        _baseDamage = GetUIElement<Label>("BaseDamage");
+        _ap = GetUIElement<Label>("AP");
+        _ad = GetUIElement<Label>("AD");
+        _armor = GetUIElement<Label>("Armor");
+        _mr = GetUIElement<Label>("MR");
+        _atkSpeed = GetUIElement<Label>("AtkSpeed");
+        _crit = GetUIElement<Label>("Crit");
 
         _unitDisplayBackground.visible = false;
     }
@@ -90,13 +90,13 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < MAX_SYNERGIES_DISPLAYED; i++)
         {
             int synergyIndex = i + 1;
-            _activeSynergies[i] = UIDoc.rootVisualElement.Q<VisualElement>($"ActiveSynergy{synergyIndex}");
-            _passiveSynergies[i] = UIDoc.rootVisualElement.Q<VisualElement>($"PassiveSynergy{synergyIndex}");
+            _activeSynergies[i] = GetUIElement<VisualElement>($"ActiveSynergy{synergyIndex}");
+            _passiveSynergies[i] = GetUIElement<VisualElement>($"PassiveSynergy{synergyIndex}");
         }
         HideVisualElements(_activeSynergies);
         HideVisualElements(_passiveSynergies);
 
-        _showMore = UIDoc.rootVisualElement.Q<Button>("ShowMore");
+        _showMore = GetUIElement<Button>("ShowMore");
         _showMore.visible = false;
     }
 
@@ -166,9 +166,9 @@ public class UIManager : MonoBehaviour
             for (int j = 0; j < MAX_STAGES; j++)
             {
                 int stageIndex = j + 1;
-                Label curStage = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Stage{synergyIndex}");
+                Label curStage = GetUIElement<Label>($"{stageIndex}Stage{synergyIndex}");
                 curStage.visible = false;
-                Label curSeparator = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Separator{synergyIndex}");
+                Label curSeparator = GetUIElement<Label>($"{stageIndex}Separator{synergyIndex}");
                 if (stageIndex != MAX_STAGES) // there is one separator less
                     curSeparator.visible = true;
             }
@@ -246,8 +246,8 @@ public class UIManager : MonoBehaviour
                 for (int i = 0; i < MAX_STAGES; i++)
                 {
                     int stageIndex = i + 1;
-                    Label curStage = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Stage{synergyIndex}");
-                    Label curSeparator = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Separator{synergyIndex}");
+                    Label curStage = GetUIElement<Label>($"{stageIndex}Stage{synergyIndex}");
+                    Label curSeparator = GetUIElement<Label>($"{stageIndex}Separator{synergyIndex}");
                     if (i < nbStages) // display
                     {
                         curStage.text = traitSO.stages[i].ToString();
@@ -279,17 +279,17 @@ public class UIManager : MonoBehaviour
             }
             else // Passive Synergy
             {
-                VisualElement traitIcon = UIDoc.rootVisualElement.Q<VisualElement>($"PassiveSymbol{synergyIndex}");
+                VisualElement traitIcon = GetUIElement<VisualElement>($"PassiveSymbol{synergyIndex}");
                 Texture2D tex = Resources.Load<Texture2D>(TraitUtil.ToTexture(trait));
                 traitIcon.style.backgroundImage = tex;
 
-                Label traitName = UIDoc.rootVisualElement.Q<Label>($"PassiveTrait{synergyIndex}");
+                Label traitName = GetUIElement<Label>($"PassiveTrait{synergyIndex}");
                 traitName.text = TraitUtil.ToString(trait);
 
-                Label actualNb = UIDoc.rootVisualElement.Q<Label>($"curStage{synergyIndex}");
+                Label actualNb = GetUIElement<Label>($"curStage{synergyIndex}");
                 actualNb.text = nbUnit.ToString();
 
-                Label expectedNb = UIDoc.rootVisualElement.Q<Label>($"nextStage{synergyIndex}");
+                Label expectedNb = GetUIElement<Label>($"nextStage{synergyIndex}");
                 expectedNb.text = traitSO.stages[0].ToString();
 
                 _passiveSynergies[nbActiveSynergy + nbPassiveSynergy].visible = true;
