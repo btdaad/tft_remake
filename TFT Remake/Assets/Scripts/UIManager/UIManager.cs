@@ -36,6 +36,11 @@ public class UIManager : MonoBehaviour
     private Button _showMore;
     #endregion
 
+    private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
+    {
+        return UIDoc.rootVisualElement.Q<T>(name);
+    }
+
     private void HideVisualElements(VisualElement[] visualElements)
     {
         Array.ForEach(visualElements, (VisualElement ve) => { ve.visible = false; });
@@ -174,9 +179,10 @@ public class UIManager : MonoBehaviour
         HideVisualElements(_passiveSynergies);
         HideActiveSynergyStages();
 
-        // TODO : order such that active synergies are put first....
-        var synergies = from entry in unsortedSynergies orderby entry.Value.Count descending select entry;
-        synergies.ToDictionary(pair => pair.Key, pair => pair.Value);
+        Dictionary<Trait, List<Transform>> synergies = unsortedSynergies
+                        .OrderByDescending(kvp => kvp.Value.Count >= Array.Find(unitTraits, (UnitTraitSO unitTrait) => { return unitTrait.trait == kvp.Key; }).stages[0]) // Active synergies appear before Passive
+                        .ThenByDescending(kvp => kvp.Value.Count) // the more unit there is the higher it appears
+                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); // converts IEnumerable to dictionary
 
         int nbActiveSynergy = 0;
         int nbPassiveSynergy = 0;
