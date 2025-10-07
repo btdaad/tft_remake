@@ -31,6 +31,8 @@ public class UIManager : MonoBehaviour
     #region SynergyDisplay
     private int MAX_SYNERGIES_DISPLAYED = 6;
     private int MAX_STAGES = 4;
+    private Color GRAY = new Color(106.0f / 255.0f, 102.0f / 255.0f, 102.0f / 255.0f);
+    private Color WHITE = new Color(255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
     private VisualElement[] _activeSynergies;
     private VisualElement[] _passiveSynergies;
     private Button _showMore;
@@ -173,12 +175,43 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // returns -1 if the synergy is passive
+    // otherwise, returns the index of the current stage
+    private int GetCurrentStageIndex(int[] stages, int nbUnit)
+    {
+        int currentStageIndex = -1;
+        for (int i = 0; i < stages.Length; i++)
+        {
+            if (stages[i] <= nbUnit)
+                currentStageIndex = i;
+        }
+        return currentStageIndex;
+    }
+
+    private Dictionary<Trait, List<Transform>> RemoveIdenticalUnits(Dictionary<Trait, List<Transform>> synergies)
+    {
+        Dictionary<Trait, List<Transform>> dict = new Dictionary<Trait, List<Transform>>();
+        foreach (KeyValuePair<Trait, List<Transform>> kvp in synergies)
+        {
+            Trait trait = kvp.Key;
+            List<Transform> units = new List<Transform>();
+            foreach (Transform transform in kvp.Value)
+            {
+                if (!units.Exists(unit => unit.gameObject.GetComponent<Unit>().stats.type == transform.gameObject.GetComponent<Unit>().stats.type))
+                    units.Add(transform); 
+            }
+            dict[trait] = units;
+        }
+        return dict;
+    }
+
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
     {
         HideVisualElements(_activeSynergies);
         HideVisualElements(_passiveSynergies);
         HideActiveSynergyStages();
 
+        unsortedSynergies = RemoveIdenticalUnits(unsortedSynergies);
         Dictionary<Trait, List<Transform>> synergies = unsortedSynergies
                         .OrderByDescending(kvp => kvp.Value.Count >= Array.Find(unitTraits, (UnitTraitSO unitTrait) => { return unitTrait.trait == kvp.Key; }).stages[0]) // Active synergies appear before Passive
                         .ThenByDescending(kvp => kvp.Value.Count) // the more unit there is the higher it appears
@@ -194,10 +227,10 @@ public class UIManager : MonoBehaviour
 
             Trait trait = kvp.Key;
             int nbUnit = kvp.Value.Count();
-            // TODO: check they are different unit to count them by unit type and not just nb on board!
             UnitTraitSO traitSO = Array.Find(unitTraits, (UnitTraitSO unitTrait) => { return unitTrait.trait == trait; });
 
-            if (nbUnit >= traitSO.stages[0]) // Active Synergy
+            int currentStageIndex = GetCurrentStageIndex(traitSO.stages, nbUnit);
+            if (currentStageIndex != -1) // Active Synergy
             {
                 Label nbActiveUnit = UIDoc.rootVisualElement.Q<Label>($"LevelLabel{synergyIndex}");
                 nbActiveUnit.text = nbUnit.ToString();
@@ -212,7 +245,6 @@ public class UIManager : MonoBehaviour
                 int nbStages = traitSO.nbStages;
                 for (int i = 0; i < MAX_STAGES; i++)
                 {
-                    // TODO : color in white the curStage if it is equal to nb active unit !
                     int stageIndex = i + 1;
                     Label curStage = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Stage{synergyIndex}");
                     Label curSeparator = UIDoc.rootVisualElement.Q<Label>($"{stageIndex}Separator{synergyIndex}");
@@ -220,6 +252,12 @@ public class UIManager : MonoBehaviour
                     {
                         curStage.text = traitSO.stages[i].ToString();
                         curStage.visible = true;
+
+                        if (i == currentStageIndex)
+                            curStage.style.color = WHITE;
+                        else
+                            curStage.style.color = GRAY;
+
                         if (stageIndex != MAX_STAGES) // there is one separator less
                         {
                             if (stageIndex < nbStages) // no need to display a separator if it's the last stage

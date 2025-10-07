@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1756765046439028197}
   - component: {fileID: 8271070359448620194}
   - component: {fileID: 4421677248716869196}
+  - component: {fileID: 6905047010013562792}
   m_Layer: 6
   m_Name: Octahedron
   m_TagString: Untagged
@@ -103,3 +104,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   stats: {fileID: 11400000, guid: cf4e9c5ace78585a7960e8a2c6a88547, type: 2}
+--- !u!135 &6905047010013562792
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6077386214725400366}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}

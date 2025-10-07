@@ -21,7 +21,7 @@ public class UnitStats : ScriptableObject
         None = -1
     };
 
-
+    public UnitType type;
     public Cost cost;
     public Star star;
 

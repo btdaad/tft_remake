@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8521035767202384015}
   - component: {fileID: 3203043871493035392}
   - component: {fileID: 8243461664966101548}
+  - component: {fileID: 9165662683932794854}
   m_Layer: 0
   m_Name: Tetrahedron
   m_TagString: Untagged
@@ -103,3 +104,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   stats: {fileID: 11400000, guid: 152c5dc8f7d1ee7938ff317c1755a401, type: 2}
+--- !u!136 &9165662683932794854
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5048283057872754160}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.31
+  m_Height: 3.2659864
+  m_Direction: 1
+  m_Center: {x: 0.02, y: 1.632993, z: -0.01}
