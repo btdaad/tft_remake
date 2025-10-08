@@ -10,7 +10,7 @@ public class SynergiesDisplay
     private static UIDocument _uiDoc;
 
     public static SynergiesDisplay Instance(UIDocument uiDoc)
-    { 
+    {
         if (_instance == null)
         {
             _instance = new SynergiesDisplay();
@@ -27,10 +27,22 @@ public class SynergiesDisplay
     private VisualElement[] _passiveSynergies;
     private Button _showMore;
     private bool _isShowMoreClicked = false;
-    
+    private Texture2D _showMoreTex;
+    private Texture2D _showLessTex;
+
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
         return _uiDoc.rootVisualElement.Q<T>(name);
+    }
+
+    private void ShowMore()
+    {
+        _isShowMoreClicked = !_isShowMoreClicked;
+        if (_isShowMoreClicked)
+            _showMore.style.backgroundImage = _showLessTex;
+        else
+            _showMore.style.backgroundImage = _showMoreTex;
+        GameManager.Instance.UpdateSynergyDisplay();
     }
 
     public void InitSynergyDisplay()
@@ -46,11 +58,11 @@ public class SynergiesDisplay
         UIUtil.HideVisualElements(_activeSynergies);
         UIUtil.HideVisualElements(_passiveSynergies);
 
+        _showMoreTex = Resources.Load<Texture2D>("show_more");
+        _showLessTex = Resources.Load<Texture2D>("show_less");
         _showMore = GetUIElement<Button>("ShowMore");
         _showMore.visible = false;
-        _showMore.clickable.clicked += () => { _isShowMoreClicked = !_isShowMoreClicked; };
-        // _showMore.clickable.activators.Clear();
-        // _showMore.RegisterCallback<MouseDownEvent>(e => { _isShowMoreClicked = !_isShowMoreClicked; });
+        _showMore.clickable.clicked += ShowMore;
     }
 
     // as the text has been specifically set to visible or has been hidden to feat the number of stages of each Trait
@@ -67,7 +79,7 @@ public class SynergiesDisplay
                 curStage.visible = false;
                 Label curSeparator = GetUIElement<Label>($"{stageIndex}Separator{synergyIndex}");
                 if (stageIndex != MAX_STAGES) // there is one separator less
-                    curSeparator.visible = true;
+                    curSeparator.visible = false;
             }
         }
     }
@@ -182,10 +194,12 @@ public class SynergiesDisplay
         UIUtil.HideVisualElements(_activeSynergies);
         UIUtil.HideVisualElements(_passiveSynergies);
         HideActiveSynergyStages();
+
         if (unsortedSynergies.Count <= MAX_SYNERGIES_DISPLAYED)
         {
             _showMore.visible = false;
             _isShowMoreClicked = false;
+            _showMore.style.backgroundImage = _showMoreTex;
         }
         else
             _showMore.visible = true;
@@ -201,7 +215,7 @@ public class SynergiesDisplay
         int skipShowMore = 0;
         foreach (KeyValuePair<Trait, List<Transform>> kvp in synergies)
         {
-            if (_isShowMoreClicked && skipShowMore <= MAX_SYNERGIES_DISPLAYED)
+            if (_isShowMoreClicked && skipShowMore < MAX_SYNERGIES_DISPLAYED)
             {
                 skipShowMore++;
                 continue;

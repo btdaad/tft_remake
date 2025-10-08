@@ -109,7 +109,12 @@ public class GameManager : MonoBehaviour
         }
 
         if (isSynergiesModified)
-            _uiManager.UpdateSynergyDisplay(_synergies, this.traits);
+            UpdateSynergyDisplay();
+    }
+
+    public void UpdateSynergyDisplay()
+    {
+        _uiManager.UpdateSynergyDisplay(_synergies, traits);
     }
 
     private void DumpSyergies()
