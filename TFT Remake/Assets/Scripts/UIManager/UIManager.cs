@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
     private UnitsDisplay UIUnit;
     private SynergiesDisplay UISynergy;
+    private Button _fight;
 
     public void Init()
     {
@@ -18,6 +19,9 @@ public class UIManager : MonoBehaviour
         UIUnit.InitUnitDisplay();
         UISynergy = SynergiesDisplay.Instance(UIDoc);
         UISynergy.InitSynergyDisplay();
+
+        _fight = UIDoc.rootVisualElement.Q<Button>("Fight");
+        _fight.clickable.clicked += () => { GameManager.Instance.Fight(); }; 
     }
 
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)

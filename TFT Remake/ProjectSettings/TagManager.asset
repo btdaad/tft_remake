@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Player Battlefield
   - Player Bench
+  - Opponent Battlefield
   layers:
   - Default
   - TransparentFX

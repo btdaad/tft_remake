@@ -15,7 +15,6 @@ public class BoardManager : MonoBehaviour
 {
     private float MIN_BATTLEFIELD_Z = 0f;
     private float MAX_BATTLEFIELD_Z = 5.25f;
-    private GameManager _gameManager;
     Vector3 _initUnitPos;
     Tilemap _playerBattlefield;
     Tilemap _playerBench;
@@ -39,12 +38,14 @@ public class BoardManager : MonoBehaviour
             else if (tilemap.CompareTag("Player Bench"))
                 _playerBench = tilemap;
         }
+        if (_playerBattlefield == null
+            || _playerBench == null)
+            Debug.LogError("Could not find every part of the board");
 
         InitBoard(_playerBattlefield, ref _battlefield, false);
         InitBoard(_playerBench, ref _bench, true);
 
-        _gameManager = GameManager.Instance;
-        MoveUnit = _gameManager.UpdateSynergies; // add UpdateSynergies to the subscribers
+        MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
     public void OnDragUnit(Transform unitTransform)
@@ -58,10 +59,10 @@ public class BoardManager : MonoBehaviour
             return;
 
         Vector3 unitPos = new Vector3(unitTransform.position.x, _initUnitPos.y, unitTransform.position.z);
-        if (!DropOnZone(unitTransform, unitPos, _playerBattlefield))
+        if (!DropOnZone(unitTransform, unitPos, _playerBattlefield)) // unit is not dropped on the player battlefield
         {
-            if (!DropOnZone(unitTransform, unitPos, _playerBench))
-                unitTransform.position = _initUnitPos;
+            if (!DropOnZone(unitTransform, unitPos, _playerBench)) // nor on the player bench
+                unitTransform.position = _initUnitPos; // restore unit position
         }
     }
 
@@ -74,7 +75,7 @@ public class BoardManager : MonoBehaviour
             Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
             unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
             PlaceUnitOnZone(unitTransform, cellPos, boardZone);
-            
+
             // propagate info to subscribers (update synergies)
             MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(unitTransform, boardZone == _playerBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
             MoveUnit(null, moveUnitEventArgs);

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
     BoardManager _boardManager;
     UIManager _uiManager;
+    PvPManager _pvpManager;
     Dictionary<Trait, List<Transform>> _synergies = new Dictionary<Trait, List<Transform>>();
 
     public UnitTraitSO[] traits;
@@ -32,11 +33,11 @@ public class GameManager : MonoBehaviour
         T[] managers = FindObjectsByType<T>(FindObjectsSortMode.None);
         if (managers == null || managers.Length == 0)
         {
-            Debug.LogError("Could not find any " + nameof(T) + " script.");
+            Debug.LogError("Could not find any " + typeof(T).Name + " script.");
             return false;
         }
         else if (managers.Length > 1)
-            Debug.Log("Multiple " + nameof(T) + " scripts have been found.");
+            Debug.Log("Multiple " + typeof(T).Name + " scripts have been found.");
         manager = managers[0];
         return true;
     }
@@ -50,6 +51,10 @@ public class GameManager : MonoBehaviour
         bool findUIManager = FindManager<UIManager>(ref _uiManager);
         if (findUIManager)
             _uiManager.Init();
+
+        bool findPVPManager = FindManager<PvPManager>(ref _pvpManager);
+        if (findPVPManager)
+            _pvpManager.Init();
     }
     public BoardManager GetBoardManager()
     {
@@ -115,6 +120,11 @@ public class GameManager : MonoBehaviour
     public void UpdateSynergyDisplay()
     {
         _uiManager.UpdateSynergyDisplay(_synergies, traits);
+    }
+
+    public void Fight()
+    {
+        _pvpManager.Fight(_boardManager.GetBattlefield());
     }
 
     private void DumpSyergies()
