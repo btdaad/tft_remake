@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     PvPManager _pvpManager;
     public bool isPlayer;
     Dictionary<Trait, List<Transform>> _synergies = new Dictionary<Trait, List<Transform>>();
+    [SerializeField] Camera opponentCamera;
+    Camera playerCamera;
 
     public UnitTraitSO[] traits;
 
@@ -58,6 +60,12 @@ public class GameManager : MonoBehaviour
             _pvpManager.Init();
 
         isPlayer = true;
+
+        playerCamera = Camera.main;
+        playerCamera.enabled = true;
+        playerCamera.GetComponent<DragAndDrop>().enabled = true;
+        opponentCamera.enabled = false;
+        opponentCamera.GetComponent<DragAndDrop>().enabled = false;
     }
     public BoardManager GetBoardManager()
     {
@@ -133,6 +141,11 @@ public class GameManager : MonoBehaviour
     public void ChangePlayer()
     {
         isPlayer = !isPlayer;
+        opponentCamera.enabled = !opponentCamera.enabled;
+        opponentCamera.GetComponent<DragAndDrop>().enabled = !opponentCamera.GetComponent<DragAndDrop>().enabled;
+        playerCamera.enabled = !playerCamera.enabled;
+        playerCamera.GetComponent<DragAndDrop>().enabled = !playerCamera.GetComponent<DragAndDrop>().enabled;
+
         _uiManager.ChangePlayer(isPlayer);
     }
 

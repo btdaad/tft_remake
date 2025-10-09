@@ -20,7 +20,7 @@ public class DragAndDrop : MonoBehaviour
         _gameManager = GameManager.Instance;
         _boardManager = _gameManager.GetBoardManager();
         _uiManager = _gameManager.GetUIManager();
-        _camera = Camera.main;
+        _camera = gameObject.GetComponent<Camera>();
         _unitTransform = null;
         _unitHeight = 0.0f;
         _unitDistanceFromCamera = 0.0f;
