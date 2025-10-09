@@ -1,10 +1,16 @@
 using UnityEngine;
 
-public class Distance 
+public class Distance
 {
+    private int[][] _distances;
     public Distance(int rowsNb, int colsNb)
     {
-        distances = JaggedArrayUtil.InitJaggedArray<int>(rowsNb, colsNb, () => -1);
+        _distances = JaggedArrayUtil.InitJaggedArray<int>(rowsNb, colsNb, () => -1);
     }
-    public int[][] distances;
+
+    public void ComputeDistances(int x, int y)
+    {
+        int distance = 0;
+        _distances[x][y] = distance;
+    }
 }

@@ -104,7 +104,10 @@ public class BoardManager : MonoBehaviour
         int rowsNb = _battlefieldGrid.Length;
         int colsNb = _battlefieldGrid[0].Length;
 
-        _distances = JaggedArrayUtil.InitJaggedArray<Distance>(rowsNb, colsNb, () => new Distance(rowsNb, colsNb) );
+        _distances = JaggedArrayUtil.InitJaggedArray<Distance>(rowsNb, colsNb, () => new Distance(rowsNb, colsNb));
+        for (int x = 0; x < rowsNb; x++)
+            for (int y = 0; y < colsNb; y++)
+                _distances[x][y].ComputeDistances(x, y);
     }
 
     public void DumpBoard(Transform[][] board)
