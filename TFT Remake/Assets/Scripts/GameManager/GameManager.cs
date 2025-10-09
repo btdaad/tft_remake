@@ -137,6 +137,8 @@ public class GameManager : MonoBehaviour
 
     public void Fight()
     {
+        opponentCamera.GetComponent<DragAndDrop>().enabled = false;
+        playerCamera.GetComponent<DragAndDrop>().enabled = false;
         _pvpManager.Fight(_boardManager.GetBattlefield());
     }
 
