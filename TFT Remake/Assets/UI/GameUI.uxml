@@ -200,5 +200,5 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:Button text="Fight!" name="Fight" style="bottom: 40px; position: absolute; left: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 150px; height: 60px; background-color: rgba(29, 29, 29, 0.64); -unity-font-style: bold; color: rgb(255, 255, 255); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; font-size: 16px; border-left-color: rgb(110, 110, 110); border-right-color: rgb(110, 110, 110); border-top-color: rgb(110, 110, 110); border-bottom-color: rgb(110, 110, 110);" />
+    <ui:Button text="Fight!" name="Fight" enabled="true" style="bottom: 40px; position: absolute; left: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 150px; height: 60px; background-color: rgba(29, 29, 29, 0.64); -unity-font-style: bold; color: rgb(255, 255, 255); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; font-size: 16px; border-left-color: rgb(110, 110, 110); border-right-color: rgb(110, 110, 110); border-top-color: rgb(110, 110, 110); border-bottom-color: rgb(110, 110, 110);" />
 </ui:UXML>

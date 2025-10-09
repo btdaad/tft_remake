@@ -13,150 +13,81 @@ using System;
 
 public class BoardManager : MonoBehaviour
 {
-    private float MIN_BATTLEFIELD_Z = 0f;
-    private float MAX_BATTLEFIELD_Z = 5.25f;
-    Vector3 _initUnitPos;
-    Tilemap _playerBattlefield;
-    Tilemap _playerBench;
+    private static BoardManager _instance;
+    private static Transform[][] _battlefieldGrid = null;
+    private static Transform[][] _benchGrid = null;
+    public static BoardManager Instance(Tilemap battlefieldTilemap, Tilemap benchTilemap)
+    {
+        if (_battlefieldGrid == null || _benchGrid == null)
+        {
+            InitBoard(battlefieldTilemap, ref _battlefieldGrid, false); // TODO : use a singleton to not override battlefield twice
+            InitBoard(benchTilemap, ref _benchGrid, true); // TODO : same than above
+        }
+        return _instance;
+    }
 
-    Transform[][] _battlefield;
-    Transform[][] _bench;
+    private PlayerBoardManager _playerBoardManager;
+    private PlayerBoardManager _opponentBoardManager;
 
     public event EventHandler MoveUnit = delegate {};
 
     public void Init()
     {
-        _playerBattlefield = null;
-        _playerBench = null;
-
-        _initUnitPos = Vector3.zero;
-        Tilemap[] tilemaps = gameObject.GetComponentsInChildren<Tilemap>();
-        foreach (Tilemap tilemap in tilemaps)
+        if (_instance != null && _instance != this)
         {
-            if (tilemap.CompareTag("Player Battlefield"))
-                _playerBattlefield = tilemap;
-            else if (tilemap.CompareTag("Player Bench"))
-                _playerBench = tilemap;
+            Destroy(this.gameObject);
+            return;
         }
-        if (_playerBattlefield == null
-            || _playerBench == null)
-            Debug.LogError("Could not find every part of the board");
+        else
+            _instance = this;
 
-        InitBoard(_playerBattlefield, ref _battlefield, false);
-        InitBoard(_playerBench, ref _bench, true);
-
+        _playerBoardManager = new PlayerBoardManager("Player", this);
+        _opponentBoardManager = new PlayerBoardManager("Opponent", this);
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
-    public void OnDragUnit(Transform unitTransform)
+    public void OnDragUnit(string side, Transform unitTransform)
     {
-        _initUnitPos = unitTransform.position;
+        if (side == "Player")
+            _playerBoardManager.OnDragUnit(unitTransform);
+        else
+            _opponentBoardManager.OnDragUnit(unitTransform);
+    }
+    public void OnDropUnit(string side, Transform unitTransform)
+    {
+        if (side == "Player")
+            _playerBoardManager.OnDropUnit(unitTransform);
+        else
+            _opponentBoardManager.OnDropUnit(unitTransform);
     }
 
-    public void OnDropUnit(Transform unitTransform)
+    public Transform GetUnitAt(int xPos, int yPos, bool isBattlefield)
     {
-        if (unitTransform == null)
-            return;
-
-        Vector3 unitPos = new Vector3(unitTransform.position.x, _initUnitPos.y, unitTransform.position.z);
-        if (!DropOnZone(unitTransform, unitPos, _playerBattlefield)) // unit is not dropped on the player battlefield
-        {
-            if (!DropOnZone(unitTransform, unitPos, _playerBench)) // nor on the player bench
-                unitTransform.position = _initUnitPos; // restore unit position
-        }
+        if (isBattlefield)
+            return _battlefieldGrid[yPos][xPos];
+        else
+            return _benchGrid[yPos][xPos];
     }
 
-    private bool DropOnZone(Transform unitTransform, Vector3 unitPos, Tilemap boardZone)
+    public void SetUnitAt(int xPos, int yPos, Transform unitTransform, bool isBattlefield)
     {
-        Vector3Int cellPos = boardZone.WorldToCell(unitPos);
+        if (isBattlefield)
+            _battlefieldGrid[yPos][xPos] = unitTransform;
+        else
+            _benchGrid[yPos][xPos] = unitTransform;
+    }
 
-        if (boardZone.cellBounds.Contains(cellPos) && boardZone.HasTile(cellPos))
-        {
-            Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
-            unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
-            PlaceUnitOnZone(unitTransform, cellPos, boardZone);
-
-            // propagate info to subscribers (update synergies)
-            MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(unitTransform, boardZone == _playerBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
-            MoveUnit(null, moveUnitEventArgs);
-
-            return true;
-        }
-        return false;
+    public void CallMoveUnit(object sender, MoveUnitEventArgs moveUnitEventArgs)
+    {
+        MoveUnit(sender, moveUnitEventArgs);
     }
 
     public Transform[][] GetBattlefield()
     {
-        return _battlefield;
+        return _battlefieldGrid;
     }
 
-    // Careful : the battlefield cell width coords go from -1 to 6 so the index on the x axis are incremented by 1
-    private (int, int) ToBattlefieldCoord(Vector3Int cellCoord)
-    {
-        return (cellCoord.x + 1, cellCoord.y);
-    }
-
-    // Careful : the bench cell width coords go from -1 to 8 so the index on the x axis are incremented by 1
-    // also, on the y axis it goes from -1 to 9 but all rows between 0 and 8 are useless so the y coordinates are either 0 or 1 to match the array index
-    private (int, int) ToBenchCoord(Vector3Int cellCoord)
-    {
-        return (cellCoord.x + 1, cellCoord.y == -1 ? 0 : 1);
-    }
-
-    private void PlaceUnitOnZone(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
-    {
-        // assess init unit zone depending on the z coord
-        bool isInitUnitOnBattlefield = _initUnitPos.z >= MIN_BATTLEFIELD_Z && _initUnitPos.z <= MAX_BATTLEFIELD_Z;
-
-        // get cell coords of the init position of the dropped unit, depending on the zone (battlefield of bench)
-        Vector3Int initUnitCell = isInitUnitOnBattlefield ? _playerBattlefield.WorldToCell(_initUnitPos) : _playerBench.WorldToCell(_initUnitPos);
-        (int xInitCellPos, int yInitCellPos) = isInitUnitOnBattlefield ? ToBattlefieldCoord(initUnitCell) : ToBenchCoord(initUnitCell);
-
-        if (boardZone == _playerBattlefield)
-        {
-            (int xPos, int yPos) = ToBattlefieldCoord(cellPos); // get grid coordinates for drop cell
-            Transform swapUnitTransform = _battlefield[yPos][xPos]; // get the unit on the drop cell
-
-            // set grid init cell to swap unit
-            if (isInitUnitOnBattlefield)
-                _battlefield[yInitCellPos][xInitCellPos] = swapUnitTransform;
-            else
-                _bench[yInitCellPos][xInitCellPos] = swapUnitTransform;
-
-            _battlefield[yPos][xPos] = unitTransform; // set grid drop cell to unit
-
-            if (swapUnitTransform != null)
-            {
-                swapUnitTransform.position = _initUnitPos; // if the swap unit exists, move its position
-
-                // propagate info to subscribers (update synergies)
-                MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(swapUnitTransform, isInitUnitOnBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
-                MoveUnit(null, moveUnitEventArgs);
-            }
-        }
-        else
-        {
-            (int xPos, int yPos) = ToBenchCoord(cellPos);
-            Transform swapUnitTransform = _bench[yPos][xPos];
-
-            if (isInitUnitOnBattlefield)
-                _battlefield[yInitCellPos][xInitCellPos] = swapUnitTransform;
-            else
-                _bench[yInitCellPos][xInitCellPos] = swapUnitTransform;
-
-            _bench[yPos][xPos] = unitTransform;
-
-            if (swapUnitTransform != null)
-            {
-                swapUnitTransform.position = _initUnitPos;
-
-                MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(swapUnitTransform, isInitUnitOnBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
-                MoveUnit(null, moveUnitEventArgs);
-            }
-        }
-    }
-
-    private void InitBoard(Tilemap tilemap, ref Transform[][] board, bool isBench)
+    private static void InitBoard(Tilemap tilemap, ref Transform[][] board, bool isBench)
     {
         BoundsInt bounds = tilemap.cellBounds;
         Vector3Int boardSize = bounds.size + bounds.position;
