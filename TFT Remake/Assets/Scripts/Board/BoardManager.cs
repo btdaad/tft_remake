@@ -20,8 +20,8 @@ public class BoardManager : MonoBehaviour
     {
         if (_battlefieldGrid == null || _benchGrid == null)
         {
-            InitBoard(battlefieldTilemap, ref _battlefieldGrid, false); // TODO : use a singleton to not override battlefield twice
-            InitBoard(benchTilemap, ref _benchGrid, true); // TODO : same than above
+            InitBoard(battlefieldTilemap, ref _battlefieldGrid, false);
+            InitBoard(benchTilemap, ref _benchGrid, true);
         }
         return _instance;
     }
@@ -46,16 +46,16 @@ public class BoardManager : MonoBehaviour
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
-    public void OnDragUnit(string side, Transform unitTransform)
+    public void OnDragUnit(bool isPlayer, Transform unitTransform)
     {
-        if (side == "Player")
+        if (isPlayer)
             _playerBoardManager.OnDragUnit(unitTransform);
         else
             _opponentBoardManager.OnDragUnit(unitTransform);
     }
-    public void OnDropUnit(string side, Transform unitTransform)
+    public void OnDropUnit(bool isPlayer, Transform unitTransform)
     {
-        if (side == "Player")
+        if (isPlayer)
             _playerBoardManager.OnDropUnit(unitTransform);
         else
             _opponentBoardManager.OnDropUnit(unitTransform);

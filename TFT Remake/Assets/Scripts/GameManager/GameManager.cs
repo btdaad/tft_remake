@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     BoardManager _boardManager;
     UIManager _uiManager;
     PvPManager _pvpManager;
+    public bool isPlayer;
     Dictionary<Trait, List<Transform>> _synergies = new Dictionary<Trait, List<Transform>>();
 
     public UnitTraitSO[] traits;
@@ -55,6 +56,8 @@ public class GameManager : MonoBehaviour
         bool findPVPManager = FindManager<PvPManager>(ref _pvpManager);
         if (findPVPManager)
             _pvpManager.Init();
+
+        isPlayer = true;
     }
     public BoardManager GetBoardManager()
     {
@@ -125,6 +128,12 @@ public class GameManager : MonoBehaviour
     public void Fight()
     {
         _pvpManager.Fight(_boardManager.GetBattlefield());
+    }
+
+    public void ChangePlayer()
+    {
+        isPlayer = !isPlayer;
+        _uiManager.ChangePlayer(isPlayer);
     }
 
     private void DumpSyergies()

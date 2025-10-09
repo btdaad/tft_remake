@@ -41,7 +41,7 @@ public class DragAndDrop : MonoBehaviour
                 _unitHeight = _unitTransform.position.y;
                 _unitDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
 
-                _boardManager.OnDragUnit("Player", _unitTransform);
+                _boardManager.OnDragUnit(_gameManager.isPlayer, _unitTransform);
 
                 _clickTime = Time.time;
             }
@@ -54,7 +54,7 @@ public class DragAndDrop : MonoBehaviour
                 _uiManager.ShowUnitDisplay(_unitTransform);
             else // drag
             {
-                _boardManager.OnDropUnit("Player", _unitTransform);
+                _boardManager.OnDropUnit(_gameManager.isPlayer, _unitTransform);
             }
             _unitTransform = null;
             _unitHeight = 0.0f;

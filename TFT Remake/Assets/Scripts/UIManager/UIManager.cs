@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     private UnitsDisplay UIUnit;
     private SynergiesDisplay UISynergy;
     private Button _fight;
+    private Button _changePlayer;
 
     public void Init()
     {
@@ -21,7 +22,9 @@ public class UIManager : MonoBehaviour
         UISynergy.InitSynergyDisplay();
 
         _fight = UIDoc.rootVisualElement.Q<Button>("Fight");
-        _fight.clickable.clicked += () => { GameManager.Instance.Fight(); }; 
+        _fight.clickable.clicked += () => { GameManager.Instance.Fight(); };
+        _changePlayer = UIDoc.rootVisualElement.Q<Button>("ChangePlayer");
+        _changePlayer.clickable.clicked += () => { GameManager.Instance.ChangePlayer(); };
     }
 
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
@@ -42,5 +45,13 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void ChangePlayer(bool isPlayer)
+    {
+        if (isPlayer)
+            _changePlayer.text = "Play as opponent";
+        else
+            _changePlayer.text = "Play as yourself";
     }
 }
