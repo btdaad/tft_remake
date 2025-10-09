@@ -16,6 +16,7 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
     private static Transform[][] _battlefieldGrid = null;
     private static Transform[][] _benchGrid = null;
+    private static Distance[][] _distances = null;
     public static BoardManager Instance(Tilemap battlefieldTilemap, Tilemap benchTilemap)
     {
         if (_battlefieldGrid == null || _benchGrid == null)
@@ -44,6 +45,7 @@ public class BoardManager : MonoBehaviour
         _playerBoardManager = new PlayerBoardManager("Player", this);
         _opponentBoardManager = new PlayerBoardManager("Opponent", this);
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
+
     }
 
     public bool OnDragUnit(bool isPlayer, Transform unitTransform)
@@ -94,7 +96,17 @@ public class BoardManager : MonoBehaviour
         board = new Transform[isBench ? 2 : boardSize.y][];
         for (int i = 0; i < board.Length; i++)
             board[i] = new Transform[boardSize.x + 1];
+
+        InitDistances();
     }
+    private static void InitDistances()
+    {
+        int rowsNb = _battlefieldGrid.Length;
+        int colsNb = _battlefieldGrid[0].Length;
+
+        _distances = JaggedArrayUtil.InitJaggedArray<Distance>(rowsNb, colsNb, () => new Distance(rowsNb, colsNb) );
+    }
+
     public void DumpBoard(Transform[][] board)
     {
         string str = "[";
