@@ -32,9 +32,16 @@ public class PlayerBoardManager
 
         _boardManager = BoardManager.Instance(_battlefieldTilemap, _benchTilemap);
     }
-    public void OnDragUnit(Transform unitTransform)
+    public bool OnDragUnit(Transform unitTransform)
     {
         _initUnitPos = unitTransform.position;
+        Vector3Int cellPos = _battlefieldTilemap.WorldToCell(_initUnitPos);
+        if (_battlefieldTilemap.cellBounds.Contains(cellPos) && _battlefieldTilemap.HasTile(cellPos))
+            return true;
+        cellPos = _benchTilemap.WorldToCell(_initUnitPos);
+        if (_benchTilemap.cellBounds.Contains(cellPos) && _benchTilemap.HasTile(cellPos))
+            return true;
+        return false;
     }
 
     public void OnDropUnit(Transform unitTransform)

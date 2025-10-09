@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5698513104362536437}
   - component: {fileID: 1299542489289493773}
   - component: {fileID: 6496445792426053090}
-  - component: {fileID: 1813193041907614840}
   - component: {fileID: 2952412683339360014}
+  - component: {fileID: 1813193041907614840}
   m_Layer: 6
   m_Name: Trigonal
   m_TagString: Untagged
@@ -91,19 +91,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1813193041907614840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6063662448118066848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit
-  stats: {fileID: 11400000, guid: 2358d001be86c639e8a93f219e738118, type: 2}
 --- !u!136 &2952412683339360014
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -127,3 +114,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.00000002980232, y: 0, z: 0.03}
+--- !u!114 &1813193041907614840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6063662448118066848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unit
+  stats: {fileID: 11400000, guid: 2358d001be86c639e8a93f219e738118, type: 2}

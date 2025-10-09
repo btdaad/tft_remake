@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1688745644092853701}
   - component: {fileID: 8521035767202384015}
   - component: {fileID: 3203043871493035392}
-  - component: {fileID: 8243461664966101548}
   - component: {fileID: 9165662683932794854}
-  m_Layer: 0
+  - component: {fileID: 8243461664966101548}
+  m_Layer: 6
   m_Name: Tetrahedron
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,19 +91,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8243461664966101548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5048283057872754160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit
-  stats: {fileID: 11400000, guid: 152c5dc8f7d1ee7938ff317c1755a401, type: 2}
 --- !u!136 &9165662683932794854
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -127,3 +114,16 @@ CapsuleCollider:
   m_Height: 3.2659864
   m_Direction: 1
   m_Center: {x: 0.02, y: 1.632993, z: -0.01}
+--- !u!114 &8243461664966101548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5048283057872754160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unit
+  stats: {fileID: 11400000, guid: 152c5dc8f7d1ee7938ff317c1755a401, type: 2}

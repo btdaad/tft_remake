@@ -21,10 +21,15 @@ public class DragAndDrop : MonoBehaviour
         _boardManager = _gameManager.GetBoardManager();
         _uiManager = _gameManager.GetUIManager();
         _camera = gameObject.GetComponent<Camera>();
+        ResetInfo();
+    }
+
+    void ResetInfo()
+    {
         _unitTransform = null;
         _unitHeight = 0.0f;
         _unitDistanceFromCamera = 0.0f;
-        _clickTime = 0.0f; 
+        _clickTime = 0.0f;
     }
 
     void Update()
@@ -41,7 +46,12 @@ public class DragAndDrop : MonoBehaviour
                 _unitHeight = _unitTransform.position.y;
                 _unitDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
 
-                _boardManager.OnDragUnit(_gameManager.isPlayer, _unitTransform);
+                bool isUnitPickable = _boardManager.OnDragUnit(_gameManager.isPlayer, _unitTransform);
+                if (!isUnitPickable)
+                {
+                    ResetInfo();
+                    return;
+                }
 
                 _clickTime = Time.time;
             }
@@ -56,11 +66,7 @@ public class DragAndDrop : MonoBehaviour
             {
                 _boardManager.OnDropUnit(_gameManager.isPlayer, _unitTransform);
             }
-            _unitTransform = null;
-            _unitHeight = 0.0f;
-            _unitDistanceFromCamera = 0.0f;
-
-            _clickTime = 0.0f;
+            ResetInfo();
         }
         else if (Time.time - _clickTime >= dragThresholdTime
                  && _unitTransform != null)

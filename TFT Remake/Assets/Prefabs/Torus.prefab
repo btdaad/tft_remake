@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6829029865936190826}
   - component: {fileID: 3198656041685197064}
   - component: {fileID: 8199253184841673130}
-  - component: {fileID: 6957499504104377572}
   - component: {fileID: 4332132299817704900}
+  - component: {fileID: 6957499504104377572}
   m_Layer: 6
   m_Name: Torus
   m_TagString: Untagged
@@ -91,19 +91,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6957499504104377572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4614900328354995680}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit
-  stats: {fileID: 11400000, guid: 51380739e72b471bda06bf197ac7be51, type: 2}
 --- !u!136 &4332132299817704900
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -127,3 +114,16 @@ CapsuleCollider:
   m_Height: 2.4999998
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6957499504104377572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614900328354995680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unit
+  stats: {fileID: 11400000, guid: 51380739e72b471bda06bf197ac7be51, type: 2}

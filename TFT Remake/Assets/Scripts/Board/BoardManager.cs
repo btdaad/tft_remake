@@ -46,12 +46,12 @@ public class BoardManager : MonoBehaviour
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
-    public void OnDragUnit(bool isPlayer, Transform unitTransform)
+    public bool OnDragUnit(bool isPlayer, Transform unitTransform)
     {
         if (isPlayer)
-            _playerBoardManager.OnDragUnit(unitTransform);
+            return _playerBoardManager.OnDragUnit(unitTransform);
         else
-            _opponentBoardManager.OnDragUnit(unitTransform);
+            return _opponentBoardManager.OnDragUnit(unitTransform);
     }
     public void OnDropUnit(bool isPlayer, Transform unitTransform)
     {
