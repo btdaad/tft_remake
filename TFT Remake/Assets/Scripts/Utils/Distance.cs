@@ -10,16 +10,11 @@ public class Distance
         _distances = JaggedArrayUtil.InitJaggedArray<int>(rowsNb, colsNb, () => -1);
     }
 
-    private struct Coords
+    public int[][] GetDistances()
     {
-        public int x;
-        public int y;
-        public Coords(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
+        return _distances;
     }
+
 
     /*
      *      / \ / \                  / \ / \
