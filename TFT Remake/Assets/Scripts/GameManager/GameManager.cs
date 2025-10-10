@@ -142,6 +142,12 @@ public class GameManager : MonoBehaviour
         _pvpManager.Fight(_boardManager.GetBattlefield());
     }
 
+    public void Dump()
+    {
+        JaggedArrayUtil.Dump<Transform>(_boardManager.GetBattlefield());
+        _boardManager.GetDistances()[0][1].Dump();
+    }
+
     public void ChangePlayer()
     {
         isPlayer = !isPlayer;

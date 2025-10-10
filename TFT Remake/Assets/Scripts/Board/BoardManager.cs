@@ -23,6 +23,7 @@ public class BoardManager : MonoBehaviour
         {
             InitBoard(battlefieldTilemap, ref _battlefieldGrid, false);
             InitBoard(benchTilemap, ref _benchGrid, true);
+            InitDistances();
         }
         return _instance;
     }
@@ -45,7 +46,6 @@ public class BoardManager : MonoBehaviour
         _playerBoardManager = new PlayerBoardManager("Player", this);
         _opponentBoardManager = new PlayerBoardManager("Opponent", this);
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
-
     }
 
     public bool OnDragUnit(bool isPlayer, Transform unitTransform)
@@ -89,6 +89,11 @@ public class BoardManager : MonoBehaviour
         return _battlefieldGrid;
     }
 
+    public Distance[][] GetDistances()
+    {
+        return _distances;
+    }
+
     private static void InitBoard(Tilemap tilemap, ref Transform[][] board, bool isBench)
     {
         BoundsInt bounds = tilemap.cellBounds;
@@ -96,8 +101,6 @@ public class BoardManager : MonoBehaviour
         board = new Transform[isBench ? 2 : boardSize.y][];
         for (int i = 0; i < board.Length; i++)
             board[i] = new Transform[boardSize.x + 1];
-
-        InitDistances();
     }
     private static void InitDistances()
     {
@@ -108,22 +111,5 @@ public class BoardManager : MonoBehaviour
         for (int x = 0; x < rowsNb; x++)
             for (int y = 0; y < colsNb; y++)
                 _distances[x][y].ComputeDistances(x, y);
-    }
-
-    public void DumpBoard(Transform[][] board)
-    {
-        string str = "[";
-        foreach (var row in board)
-        {
-            str += "[";
-            int i = 0;
-            for (; i < row.Length - 1; i++)
-                str += row[i] + ", ";
-            str += row[i];
-            str += "]\n";
-        }
-        if (str[str.Length - 1] == '\n')
-            str = str.Remove(str.Length - 1);
-        Debug.Log(str + "]");
     }
 }

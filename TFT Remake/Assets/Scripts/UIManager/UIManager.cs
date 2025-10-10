@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
         _fight.clickable.clicked += () => { GameManager.Instance.Fight(); };
         _changePlayer = UIDoc.rootVisualElement.Q<Button>("ChangePlayer");
         _changePlayer.clickable.clicked += () => { GameManager.Instance.ChangePlayer(); };
+        Button dumpButton = UIDoc.rootVisualElement.Q<Button>("Dump");
+        dumpButton.clickable.clicked += () => { GameManager.Instance.Dump(); };
     }
 
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)

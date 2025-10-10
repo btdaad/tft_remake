@@ -14,4 +14,20 @@ public static class JaggedArrayUtil
         }
         return jaggedArray;
     } 
+    public static void Dump<T>(T[][] board)
+    {
+        string str = "[";
+        foreach (var row in board)
+        {
+            str += "[";
+            int i = 0;
+            for (; i < row.Length - 1; i++)
+                str += row[i] + ", ";
+            str += row[i];
+            str += "]\n";
+        }
+        if (str[str.Length - 1] == '\n')
+            str = str.Remove(str.Length - 1);
+        Debug.Log(str + "]");
+    }
 }
