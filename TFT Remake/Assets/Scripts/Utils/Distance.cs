@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Distance
 {
@@ -21,101 +22,52 @@ public class Distance
      */
     public void ComputeDistances(int x, int y)
     {
-        int distance = 0;
-        _distances[x][y] = distance;
+        _distances[x][y] = 0;
 
-        // side cells
-        if (y - 1 >= 0)
-            _distances[x][y - 1] = 1;
-        if (y + 1 < _distances[0].Length)
-            _distances[x][y + 1] = 1;
+        int distance = 1;
+        for (int yy = y + 1; yy < _distances[0].Length; yy++) // fill, same row, columns on the right
+            _distances[x][yy] = distance++; // distance increments for each cell
+        distance = 1;
+        for (int yy = y - 1; yy >= 0; yy--) // fill, same rows, columns on the left; 
+            _distances[x][yy] = distance++;
 
-        // top/bot cells, same col
-        if (x - 1 >= 0)
-            _distances[x - 1][y] = 1;
-        if (x + 1 < _distances.Length)
-            _distances[x + 1][y] = 1;
-
-        if (x % 2 == 0) // see diagram
+        // for the rows above
+        for (int xx = x + 1; xx < _distances.Length; xx++)
         {
-            if (y - 1 >= 0)
+            distance = xx - x;
+            int yy = y;
+            // fill, in row xx, the cells at same distance
+            if (x % 2 == 0)
             {
-                if (x - 1 >= 0)
-                    _distances[x - 1][y - 1] = 1;
-                if (x + 1 < _distances.Length)
-                    _distances[x + 1][y - 1] = 1;
+                for (; yy < _distances[0].Length && (yy - y) <= Math.Ceiling((float)distance / 2.0f); yy++) // the ceiling thing is based on observations, see diagram
+                    _distances[xx][yy] = distance;
             }
-        }
-        else
-        {
-            if (y + 1 < _distances[0].Length)
+            else
             {
-                if (x - 1 >= 0)
-                    _distances[x - 1][y + 1] = 1;
-                if (x + 1 < _distances.Length)
-                    _distances[x + 1][y + 1] = 1;
-            }
-        }
-
-        // side cells
-        if (y - 2 >= 0)
-            _distances[x][y - 2] = 2;
-        if (y + 2 < _distances[0].Length)
-            _distances[x][y + 2] = 2;
-
-        // top/bot cells
-        if (x - 2 >= 0)
-        {
-            for (int yy = y - 1; yy <= y + 1; yy++)
-            {
-                if (yy >= 0 && yy < _distances[0].Length)
-                    _distances[x - 2][yy] = 2;
-            }
-        }
-        if (x + 2 < _distances.Length)
-        {
-            for (int yy = y - 1; yy <= y + 1; yy++)
-            {
-                if (yy >= 0 && yy < _distances[0].Length)
-                    _distances[x + 2][yy] = 2;
-            }
-        }
-
-        // digonal cells
-        if (x % 2 == 0)
-        {
-            if (y - 2 >= 0)
-            {
-                if (x - 1 >= 0)
-                    _distances[x - 1][y - 2] = 2;
-                if (x + 1 < _distances.Length)
-                    _distances[x + 1][y - 2] = 2;
-            }
-            if (y + 1 < _distances[0].Length)
-            {
-                if (x - 1 >= 0)
-                    _distances[x - 1][y + 1] = 2;
-                if (x + 1 < _distances.Length)
-                    _distances[x + 1][y + 1] = 2;
-            }
-        }
-        else
-        {
-            if (y - 1 >= 0)
-            {
-                if (x - 1 >= 0)
-                    _distances[x - 1][y - 1] = 2;
-                if (x + 1 < _distances.Length)
-                    _distances[x + 1][y - 1] = 2;
-            }
-            if (y + 2 < _distances[0].Length)
-            {
-                if (x - 1 >= 0)
-                    _distances[x - 1][y + 2] = 2;
-                if (x + 1 < _distances.Length)
-                    _distances[x + 1][y + 2] = 2;
+                for (; yy < _distances[0].Length && (yy - y) <= Math.Floor((float)distance / 2.0f); yy++)
+                    _distances[xx][yy] = distance;
             }
 
+            // fill, in row xx, the columns on the right
+            for (; yy < _distances[0].Length; yy++)
+                _distances[xx][yy] = ++distance;
+
+            distance = xx - x;
+            yy = y - 1;
+            if (x % 2 == 0)
+            {
+                for (; yy >= 0 && y - yy <= Math.Floor((float) distance / 2.0f); yy--)
+                    _distances[xx][yy] = distance;
+            }
+            else
+            {
+                for (; yy >= 0 && y - yy <= Math.Ceiling((float) distance / 2.0f); yy--)
+                    _distances[xx][yy] = distance;
+            }
+            
+            // fill, in row xx, the columns on the left
+            for (; yy >= 0; yy--)
+                _distances[xx][yy] = ++distance;
         }
     }
 
