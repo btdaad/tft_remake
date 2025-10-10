@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class Distance
 {
@@ -7,6 +8,17 @@ public class Distance
     public Distance(int rowsNb, int colsNb)
     {
         _distances = JaggedArrayUtil.InitJaggedArray<int>(rowsNb, colsNb, () => -1);
+    }
+
+    private struct Coords
+    {
+        public int x;
+        public int y;
+        public Coords(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     /*
@@ -20,55 +32,82 @@ public class Distance
      *                                | y |y+1|
      *                                 \ / \ /          
      */
+    private List<Coords> FindSurroundingCells(int x, int y)
+    {
+        List<Coords> cells = new List<Coords>();
+
+        // side cells
+        if (y - 1 >= 0)
+            cells.Add(new Coords(x, y - 1));
+        if (y + 1 < _distances[0].Length)
+            cells.Add(new Coords(x, y + 1));
+
+        // top/bot cells, same col
+        if (x - 1 >= 0)
+            cells.Add(new Coords(x - 1, y));
+        if (x + 1 < _distances.Length)
+            cells.Add(new Coords(x + 1, y));
+
+        if (x % 2 == 0) // see diagram
+        {
+            if (y - 1 >= 0)
+            {
+                if (x - 1 >= 0)
+                    cells.Add(new Coords(x - 1, y - 1));
+                if (x + 1 < _distances.Length)
+                    cells.Add(new Coords(x + 1, y - 1));
+            }
+        }
+        else
+        {
+            if (y + 1 < _distances[0].Length)
+            {
+                if (x - 1 >= 0)
+                    cells.Add(new Coords(x - 1, y + 1));
+                if (x + 1 < _distances.Length)
+                    cells.Add(new Coords(x + 1, y + 1));
+            }
+        }
+
+        return cells;
+    }
+
+    private bool SaveDistance(int dist, List<Coords> cells)
+    {
+        bool wasDistancesUpdated = false;
+        foreach (Coords coord in cells)
+        {
+            int x = coord.x;
+            int y = coord.y;
+            if (_distances[x][y] == -1)
+            {
+                _distances[x][y] = dist;
+                wasDistancesUpdated = true;
+            }
+            else if (_distances[x][y] > dist)
+            {
+                _distances[x][y] = dist;
+                wasDistancesUpdated = true;
+            }
+        }
+        return wasDistancesUpdated;
+    }
+
+    private void ComputeDistancesRec(int x, int y, int dist)
+    {
+        List<Coords> cells = FindSurroundingCells(x, y);
+        bool wasDistancesUpdated = SaveDistance(dist, cells);
+        if (wasDistancesUpdated)
+        {
+            foreach (Coords coord in cells)
+                ComputeDistancesRec(coord.x, coord.y, dist + 1);
+        }
+    }
+
     public void ComputeDistances(int x, int y)
     {
         _distances[x][y] = 0;
-
-        int distance = 1;
-        for (int yy = y + 1; yy < _distances[0].Length; yy++) // fill, same row, columns on the right
-            _distances[x][yy] = distance++; // distance increments for each cell
-        distance = 1;
-        for (int yy = y - 1; yy >= 0; yy--) // fill, same rows, columns on the left; 
-            _distances[x][yy] = distance++;
-
-        // for the rows above
-        for (int xx = x + 1; xx < _distances.Length; xx++)
-        {
-            distance = xx - x;
-            int yy = y;
-            // fill, in row xx, the cells at same distance
-            if (x % 2 == 0)
-            {
-                for (; yy < _distances[0].Length && (yy - y) <= Math.Ceiling((float)distance / 2.0f); yy++) // the ceiling thing is based on observations, see diagram
-                    _distances[xx][yy] = distance;
-            }
-            else
-            {
-                for (; yy < _distances[0].Length && (yy - y) <= Math.Floor((float)distance / 2.0f); yy++)
-                    _distances[xx][yy] = distance;
-            }
-
-            // fill, in row xx, the columns on the right
-            for (; yy < _distances[0].Length; yy++)
-                _distances[xx][yy] = ++distance;
-
-            distance = xx - x;
-            yy = y - 1;
-            if (x % 2 == 0)
-            {
-                for (; yy >= 0 && y - yy <= Math.Floor((float) distance / 2.0f); yy--)
-                    _distances[xx][yy] = distance;
-            }
-            else
-            {
-                for (; yy >= 0 && y - yy <= Math.Ceiling((float) distance / 2.0f); yy--)
-                    _distances[xx][yy] = distance;
-            }
-            
-            // fill, in row xx, the columns on the left
-            for (; yy >= 0; yy--)
-                _distances[xx][yy] = ++distance;
-        }
+        ComputeDistancesRec(x, y, 1);
     }
 
     public void Dump()
