@@ -122,26 +122,25 @@ public class BoardManager : MonoBehaviour
     public void DisplayPath(Coords startingCell)
     {
         PathFindingInfo pathFindingInfo = _pathFindingInfo[startingCell.x][startingCell.y];
+        PathFindingInfo.HexCellInfo[][] hexCellInfos = pathFindingInfo.GetHexCellInfos();
 
-        Vector3Int cellPos = CoordsToTilemapCell(startingCell);
-        Vector3 cellPosCenter = _playerBoardManager.GetCellCenterWorldBattlefield(cellPos);
+        for (int x = 0; x < hexCellInfos.Length; x++)
+        {
+            for (int y = 0; y < hexCellInfos[x].Length; y++)
+            {
+                if (hexCellInfos[x][y].dist != 0)
+                {
+                    Coords targetCoords = new Coords(x, y);
+                    Vector3Int targetCellPos = CoordsToTilemapCell(targetCoords);
+                    Vector3 targetCellCenter = _playerBoardManager.GetCellCenterWorldBattlefield(targetCellPos);
 
-        Coords targetCoords = new Coords(startingCell.x + 1, startingCell.y - 1);
-        Vector3Int targetCellPos = CoordsToTilemapCell(targetCoords);
-        Vector3 targetCellCenter = _playerBoardManager.GetCellCenterWorldBattlefield(targetCellPos);
+                    Vector3Int fromCellPos = CoordsToTilemapCell(hexCellInfos[x][y].fromCell);
+                    Vector3 fromCellCenter = _playerBoardManager.GetCellCenterWorldBattlefield(fromCellPos);
 
-        Vector3 direction = targetCellCenter - cellPosCenter;
-        Debug.Log(direction);
-
-        Instantiate(arrowHelperPrefab, cellPosCenter, Quaternion.LookRotation(direction, Vector3.up));
-        // Distance.HexCellInfo[][] hexCellInfos = distance.GetHexCellInfos();
-
-        // foreach (Distance.HexCellInfo[] row in hexCellInfos)
-        // {
-        //     foreach (Distance.HexCellInfo hexCellInfo in row)
-        //     {
-
-        //     }
-        // }
+                    Vector3 direction = targetCellCenter - fromCellCenter;
+                    Instantiate(arrowHelperPrefab, fromCellCenter, Quaternion.Euler(0, 90, 0) * Quaternion.LookRotation(direction, Vector3.up));
+                }
+            }
+        }
     }
 }

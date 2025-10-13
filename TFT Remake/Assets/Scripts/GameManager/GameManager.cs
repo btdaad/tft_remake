@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
     {
         JaggedArrayUtil.Dump<Transform>(_boardManager.GetBattlefield());
         JaggedArrayUtil.Dump<int>(_boardManager.GetDistances()[0][1].GetDistances());
-        _boardManager.DisplayPath(new Coords(0, 1));
+        // _boardManager.DisplayPath(new Coords(0, 1));
     }
 
     public void ChangePlayer()
