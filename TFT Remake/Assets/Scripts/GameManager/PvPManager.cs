@@ -22,7 +22,7 @@ public class PvPManager : MonoBehaviour
         _fight = true;
     }
 
-    private Coords FindClosestUnit(List<Coords> coordsList, int index)
+    private (Coords, int) FindClosestUnit(List<Coords> coordsList, int index)
     {
         Coords coords = coordsList[index];
         int[][] distances = _distances[coords.x][coords.y].GetDistances();
@@ -42,7 +42,7 @@ public class PvPManager : MonoBehaviour
             }
         }
 
-        return minDistCoords;
+        return (minDistCoords, minDist);
     }
 
     private List<Coords> GetUnitsCoords(Transform[][] units)
@@ -72,10 +72,15 @@ public class PvPManager : MonoBehaviour
 
         for (int i = 0; i < coordsList.Count; i++)
         {
-            Coords closestCoords = FindClosestUnit(coordsList, i);
             Coords coords = coordsList[i];
-            // if unit has enough range, do not move !!!!
-            MoveUnitTo(units[coords.x][coords.y], closestCoords.x, closestCoords.y);
+            (Coords closestCoords, int dist) = FindClosestUnit(coordsList, i);
+
+            Transform unitTransform = units[coords.x][coords.y];
+            UnitStats stats = unitTransform.GetComponent<UnitStats>();
+            int range = stats.range;
+            
+            if (range < dist)
+                MoveUnitTo(units[coords.x][coords.y], closestCoords.x, closestCoords.y);
         }
     }
 }

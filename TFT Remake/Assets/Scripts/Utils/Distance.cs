@@ -4,15 +4,33 @@ using System.Collections.Generic;
 
 public class Distance
 {
-    private int[][] _distances;
+    private struct HexCellInfo
+    {
+        public int dist;
+        public Coords fromCell;
+
+        public HexCellInfo(int dist, Coords fromCell)
+        {
+            this.dist = dist;
+            this.fromCell = fromCell;
+        }
+    }
+    private HexCellInfo[][] _distances;
     public Distance(int rowsNb, int colsNb)
     {
-        _distances = JaggedArrayUtil.InitJaggedArray<int>(rowsNb, colsNb, () => -1);
+        _distances = JaggedArrayUtil.InitJaggedArray<HexCellInfo>(rowsNb, colsNb, () => new HexCellInfo(-1, new Coords(-1, -1)));
     }
 
     public int[][] GetDistances()
     {
-        return _distances;
+        int[][] dist = new int[_distances.Length][];
+        for (int x = 0; x < dist.Length; x++)
+        {
+            dist[x] = new int[_distances[0].Length];
+            for (int y = 0; y < dist[x].Length; y++)
+                dist[x][y] = _distances[x][y].dist;
+        }
+        return dist;
     }
 
 
@@ -27,8 +45,10 @@ public class Distance
      *                                | y |y+1|
      *                                 \ / \ /          
      */
-    private List<Coords> FindSurroundingCells(int x, int y)
+    private List<Coords> FindSurroundingCells(Coords coords)
     {
+        int x = coords.x;
+        int y = coords.y;
         List<Coords> cells = new List<Coords>();
 
         // side cells
@@ -67,42 +87,46 @@ public class Distance
         return cells;
     }
 
-    private bool SaveDistance(int dist, List<Coords> cells)
+    private bool SaveDistance(int dist, Coords coords, List<Coords> cells)
     {
         bool wasDistancesUpdated = false;
         foreach (Coords coord in cells)
         {
             int x = coord.x;
             int y = coord.y;
-            if (_distances[x][y] == -1)
+            if (_distances[x][y].dist == -1)
             {
-                _distances[x][y] = dist;
+                _distances[x][y].dist = dist;
+                _distances[x][y].fromCell = coords;
                 wasDistancesUpdated = true;
             }
-            else if (_distances[x][y] > dist)
+            else if (_distances[x][y].dist > dist)
             {
-                _distances[x][y] = dist;
+                _distances[x][y].dist = dist;
+                _distances[x][y].fromCell = coords;
                 wasDistancesUpdated = true;
             }
         }
         return wasDistancesUpdated;
     }
 
-    private void ComputeDistancesRec(int x, int y, int dist)
+    private void ComputeDistancesRec(Coords coords, int dist)
     {
-        List<Coords> cells = FindSurroundingCells(x, y);
-        bool wasDistancesUpdated = SaveDistance(dist, cells);
+        List<Coords> cells = FindSurroundingCells(coords);
+        bool wasDistancesUpdated = SaveDistance(dist, coords, cells);
         if (wasDistancesUpdated)
         {
-            foreach (Coords coord in cells)
-                ComputeDistancesRec(coord.x, coord.y, dist + 1);
+            foreach (Coords cellCoords in cells)
+                ComputeDistancesRec(cellCoords, dist + 1);
         }
     }
 
     public void ComputeDistances(int x, int y)
     {
-        _distances[x][y] = 0;
-        ComputeDistancesRec(x, y, 1);
+        Coords coords = new Coords(x, y);
+        _distances[x][y].dist = 0;
+        _distances[x][y].fromCell = coords;
+        ComputeDistancesRec(coords, 1);
     }
 
     public void Dump()
