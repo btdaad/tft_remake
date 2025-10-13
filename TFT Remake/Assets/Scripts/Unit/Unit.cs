@@ -7,6 +7,8 @@ public class Unit : MonoBehaviour
     float _mana;
     float _ap;
     float _ad;
+    [SerializeField] bool _isPlayerTeam;
+    bool _hasMoved = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,5 +42,20 @@ public class Unit : MonoBehaviour
     public float GetAD()
     {
         return _ad;
+    }
+
+    public bool IsFromPlayerTeam()
+    {
+        return _isPlayerTeam;
+    }
+
+    public bool HasMoved()
+    {
+        return _hasMoved;
+    }
+
+    public void SetHasMoved(bool hasMoved)
+    {
+        _hasMoved = hasMoved;
     }
 }

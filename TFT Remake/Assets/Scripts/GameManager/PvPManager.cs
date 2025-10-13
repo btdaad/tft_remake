@@ -16,7 +16,7 @@ public class PvPManager : MonoBehaviour
     {
         if (_hasFightStarted)
         {
-            InvokeRepeating(nameof(MoveUnits), 0.0f, 5.0f);
+            InvokeRepeating(nameof(MoveUnits), 0.0f, 0.3f);
             _hasFightStarted = false;
         }
     }
@@ -25,42 +25,44 @@ public class PvPManager : MonoBehaviour
         _hasFightStarted = true;
     }
 
-    private (Coords, int) FindClosestUnit(List<Coords> coordsList, int index)
+    private (Coords, int) FindClosestUnit(List<Coords> coordsList, Coords curCoords)
     {
-        Coords coords = coordsList[index];
-        int[][] distances = _pathFindingInfo[coords.x][coords.y].GetDistances();
+        int[][] distances = _pathFindingInfo[curCoords.x][curCoords.y].GetDistances();
 
-        Coords minDistCoords = coords;
+        Coords minDistCoords = curCoords;
         int minDist = int.MaxValue;
         for (int i = 0; i < coordsList.Count; i++)
         {
-            if (i != index)
+            int dist = distances[coordsList[i].x][coordsList[i].y];
+            if (dist < minDist)
             {
-                int dist = distances[coordsList[i].x][coordsList[i].y];
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    minDistCoords = coordsList[i];
-                }
+                minDist = dist;
+                minDistCoords = coordsList[i];
             }
         }
 
         return (minDistCoords, minDist);
     }
 
-    private List<Coords> GetUnitsCoords(Transform[][] units)
+    private (List<Coords>, List<Coords>) GetUnitsCoords(Transform[][] units)
     {
-        List<Coords> coordsList = new List<Coords>();
+        List<Coords> playerTeamCoords = new List<Coords>();
+        List<Coords> opponentTeamCoords = new List<Coords>();
         for (int x = 0; x < units.Length; x++)
         {
             for (int y = 0; y < units[0].Length; y++)
             {
                 if (units[x][y] != null)
-                    coordsList.Add(new Coords(x, y));
+                {
+                    if (units[x][y].GetComponent<Unit>().IsFromPlayerTeam())
+                        playerTeamCoords.Add(new Coords(x, y));
+                    else
+                        opponentTeamCoords.Add(new Coords(x, y));
+                }
             }
         }
 
-        return coordsList;
+        return (playerTeamCoords, opponentTeamCoords);
     }
 
     private Coords FindNextCell(Coords curCoords, Coords targetCoords)
@@ -73,31 +75,85 @@ public class PvPManager : MonoBehaviour
         return nextCell.coords;
     }
 
-    private void MoveUnitTo(Coords curCoords, Coords targetCoords)
+    private bool MoveUnitTo(Coords curCoords, Coords targetCoords)
     {
-        _gameManager.GetBoardManager().MoveUnitTo(curCoords, targetCoords);
+        return _gameManager.GetBoardManager().MoveUnitTo(curCoords, targetCoords);
+    }
+
+    private bool MoveUnit(Transform[][] units, List<Coords> thisTeamCoords, List<Coords> opponentTeamCoords, int index)
+    {
+        Coords curCoords = thisTeamCoords[index];
+
+        Transform unitTransform = units[curCoords.x][curCoords.y];
+        Unit unit = unitTransform.GetComponent<Unit>();
+        if (unit.HasMoved()) // as we update unit positions and recalculate the list of coordinates every time, this property prevent from moving the same entity everytime
+            return false;
+        unit.SetHasMoved(true);
+
+        (Coords closestCoords, int dist) = FindClosestUnit(opponentTeamCoords, curCoords);
+        int range = unit.stats.range;
+        if (range < dist)
+        {
+            Coords nextCellCoords = FindNextCell(curCoords, closestCoords);
+            return MoveUnitTo(curCoords, nextCellCoords);
+        }
+        return false;
+    }
+
+    private void ResetHasMovedParam()
+    {
+        Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
+
+        for (int x = 0; x < units.Length; x++)
+        {
+            for (int y = 0; y < units[0].Length; y++)
+            {
+                if (units[x][y] != null)
+                    units[x][y].GetComponent<Unit>().SetHasMoved(false);
+            }
+        }
     }
 
     public void MoveUnits()
     {
         Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
-        // differentiate friend and enemi teams !!!
-        List<Coords> coordsList = GetUnitsCoords(units);
 
-        for (int i = 0; i < coordsList.Count; i++)
+        (List<Coords> playerCoordsList, List<Coords> opponentCoordsList) = GetUnitsCoords(units); // differentiate player and enemy teams
+
+        int playerIndex = 0;
+        int opponentIndex = 0;
+
+        bool allPlayerUnitsHasMoved = false;
+        bool allOpponentUnitsHasMoved = false;
+
+        while (!(allPlayerUnitsHasMoved && allOpponentUnitsHasMoved))
         {
-            Coords curCoords = coordsList[i];
-            (Coords closestCoords, int dist) = FindClosestUnit(coordsList, i);
-
-            Transform unitTransform = units[curCoords.x][curCoords.y];
-            UnitStats stats = unitTransform.GetComponent<Unit>().stats;
-            int range = stats.range;
-
-            if (range < dist) // if cannot attack from this distance, unit have to move closer
+            bool hasMoved = false;
+            if (playerIndex < playerCoordsList.Count)
             {
-                Coords nextCellCoords = FindNextCell(curCoords, closestCoords);
-                MoveUnitTo(curCoords, nextCellCoords);
+                hasMoved |= MoveUnit(units, playerCoordsList, opponentCoordsList, playerIndex);
+                playerIndex++;
+            }
+            else
+                allPlayerUnitsHasMoved = true;
+
+            if (opponentIndex < opponentCoordsList.Count)
+            {
+                hasMoved |= MoveUnit(units, opponentCoordsList, playerCoordsList, opponentIndex);
+                opponentIndex++;
+            }
+            else
+                allOpponentUnitsHasMoved = true;
+
+            if (hasMoved)
+            {
+                units = _gameManager.GetBoardManager().GetBattlefield();
+                (playerCoordsList, opponentCoordsList) = GetUnitsCoords(units);
+                playerIndex = 0;
+                opponentIndex = 0;
             }
         }
+
+        ResetHasMovedParam();
     }
 }

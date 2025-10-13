@@ -143,7 +143,7 @@ public class PlayerBoardManager
         if (_battlefieldTilemap.cellBounds.Contains(targetCellPos) && _battlefieldTilemap.HasTile(targetCellPos))
         {
             Vector3 cellCenterPos = _battlefieldTilemap.GetCellCenterWorld(targetCellPos);
-            unitTransform.position = cellCenterPos;
+            unitTransform.position = new Vector3(cellCenterPos.x, unitTransform.position.y, cellCenterPos.z);
             return true;
         }
         return false;

@@ -47,7 +47,7 @@ public class DragAndDrop : MonoBehaviour
                 _unitDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
 
                 bool isUnitPickable = _boardManager.OnDragUnit(_gameManager.isPlayer, _unitTransform);
-                if (!isUnitPickable)
+                if (!isUnitPickable) // if unit is on the opponent board
                 {
                     ResetInfo();
                     return;
