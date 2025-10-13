@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class PvPManager : MonoBehaviour
 {
-    private bool _fight = false;
+    private bool _hasFightStarted = false;
     private GameManager _gameManager;
     private PathFindingInfo[][] _pathFindingInfo;
     public void Init()
@@ -14,12 +14,15 @@ public class PvPManager : MonoBehaviour
 
     void Update()
     {
-        if (_fight)
-            MoveUnits();
+        if (_hasFightStarted)
+        {
+            InvokeRepeating(nameof(MoveUnits), 0.0f, 5.0f);
+            _hasFightStarted = false;
+        }
     }
     public void Fight()
     {
-        _fight = true;
+        _hasFightStarted = true;
     }
 
     private (Coords, int) FindClosestUnit(List<Coords> coordsList, int index)
@@ -60,27 +63,41 @@ public class PvPManager : MonoBehaviour
         return coordsList;
     }
 
-    private void MoveUnitTo(Transform unitTransform, int x, int y)
+    private Coords FindNextCell(Coords curCoords, Coords targetCoords)
     {
-        
+        PathFindingInfo.HexCellInfo[][] hexCellInfos = _pathFindingInfo[curCoords.x][curCoords.y].GetHexCellInfos();
+        PathFindingInfo.HexCellInfo nextCell = hexCellInfos[targetCoords.x][targetCoords.y];
+        while (nextCell.fromCell != curCoords)
+            nextCell = hexCellInfos[nextCell.fromCell.x][nextCell.fromCell.y];
+
+        return nextCell.coords;
+    }
+
+    private void MoveUnitTo(Coords curCoords, Coords targetCoords)
+    {
+        _gameManager.GetBoardManager().MoveUnitTo(curCoords, targetCoords);
     }
 
     public void MoveUnits()
     {
         Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
+        // differentiate friend and enemi teams !!!
         List<Coords> coordsList = GetUnitsCoords(units);
 
         for (int i = 0; i < coordsList.Count; i++)
         {
-            Coords coords = coordsList[i];
+            Coords curCoords = coordsList[i];
             (Coords closestCoords, int dist) = FindClosestUnit(coordsList, i);
 
-            Transform unitTransform = units[coords.x][coords.y];
-            UnitStats stats = unitTransform.GetComponent<UnitStats>();
+            Transform unitTransform = units[curCoords.x][curCoords.y];
+            UnitStats stats = unitTransform.GetComponent<Unit>().stats;
             int range = stats.range;
-            
-            if (range < dist)
-                MoveUnitTo(units[coords.x][coords.y], closestCoords.x, closestCoords.y);
+
+            if (range < dist) // if cannot attack from this distance, unit have to move closer
+            {
+                Coords nextCellCoords = FindNextCell(curCoords, closestCoords);
+                MoveUnitTo(curCoords, nextCellCoords);
+            }
         }
     }
 }

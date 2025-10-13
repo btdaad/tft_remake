@@ -7,11 +7,13 @@ public class PathFindingInfo
     public struct HexCellInfo
     {
         public int dist;
+        public Coords coords;
         public Coords fromCell;
 
-        public HexCellInfo(int dist, Coords fromCell)
+        public HexCellInfo(int dist, Coords coords, Coords fromCell)
         {
             this.dist = dist;
+            this.coords = coords;
             this.fromCell = fromCell;
         }
     }
@@ -19,7 +21,7 @@ public class PathFindingInfo
     private HexCellInfo[][] _hexCellInfos;
     public PathFindingInfo(int rowsNb, int colsNb)
     {
-        _hexCellInfos = JaggedArrayUtil.InitJaggedArray<HexCellInfo>(rowsNb, colsNb, () => new HexCellInfo(-1, new Coords(-1, -1)));
+        _hexCellInfos = JaggedArrayUtil.InitJaggedArray<HexCellInfo>(rowsNb, colsNb, () => new HexCellInfo(-1, new Coords(-1, -1), new Coords(-1, -1)));
     }
 
     public int[][] GetDistances()
@@ -92,33 +94,35 @@ public class PathFindingInfo
         return cells;
     }
 
-    private bool SaveDistance(int dist, Coords coords, List<Coords> cells)
+    private bool SaveDistance(int dist, Coords curCoords, List<Coords> cells)
     {
         bool wasDistancesUpdated = false;
-        foreach (Coords coord in cells)
+        foreach (Coords cellCoords in cells)
         {
-            int x = coord.x;
-            int y = coord.y;
+            int x = cellCoords.x;
+            int y = cellCoords.y;
             if (_hexCellInfos[x][y].dist == -1)
             {
                 _hexCellInfos[x][y].dist = dist;
-                _hexCellInfos[x][y].fromCell = coords;
+                _hexCellInfos[x][y].coords = cellCoords;
+                _hexCellInfos[x][y].fromCell = curCoords;
                 wasDistancesUpdated = true;
             }
             else if (_hexCellInfos[x][y].dist > dist)
             {
                 _hexCellInfos[x][y].dist = dist;
-                _hexCellInfos[x][y].fromCell = coords;
+                _hexCellInfos[x][y].coords = cellCoords;
+                _hexCellInfos[x][y].fromCell = curCoords;
                 wasDistancesUpdated = true;
             }
         }
         return wasDistancesUpdated;
     }
 
-    private void ComputeDistancesRec(Coords coords, int dist)
+    private void ComputeDistancesRec(Coords curCoords, int dist)
     {
-        List<Coords> cells = FindSurroundingCells(coords);
-        bool wasDistancesUpdated = SaveDistance(dist, coords, cells);
+        List<Coords> cells = FindSurroundingCells(curCoords);
+        bool wasDistancesUpdated = SaveDistance(dist, curCoords, cells);
         if (wasDistancesUpdated)
         {
             foreach (Coords cellCoords in cells)
@@ -128,10 +132,11 @@ public class PathFindingInfo
 
     public void ComputeDistances(int x, int y)
     {
-        Coords coords = new Coords(x, y);
+        Coords curCoords = new Coords(x, y);
         _hexCellInfos[x][y].dist = 0;
-        _hexCellInfos[x][y].fromCell = coords;
-        ComputeDistancesRec(coords, 1);
+        _hexCellInfos[x][y].coords = curCoords;
+        _hexCellInfos[x][y].fromCell = curCoords;
+        ComputeDistancesRec(curCoords, 1);
     }
 
     public void Dump()

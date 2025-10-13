@@ -35,6 +35,7 @@ public class UnitsDisplay
     private Label _mr;
     private Label _atkSpeed;
     private Label _crit;
+    private Label _range;
 
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -72,6 +73,7 @@ public class UnitsDisplay
         _mr = GetUIElement<Label>("MR");
         _atkSpeed = GetUIElement<Label>("AtkSpeed");
         _crit = GetUIElement<Label>("Crit");
+        _range = GetUIElement<Label>("Range");
 
         _unitDisplayBackground.visible = false;
     }
@@ -112,6 +114,7 @@ public class UnitsDisplay
         _mr.text = $"{stats.magicResist}";
         _atkSpeed.text = $"{stats.attackSpeed}";
         _crit.text = $"{stats.critChance}%";
+        _range.text = $"{stats.range}";
 
         // _unitArt.material = unit.GetComponent<Renderer>().material;
         _unitDisplayBackground.visible = true;

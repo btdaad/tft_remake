@@ -119,6 +119,28 @@ public class BoardManager : MonoBehaviour
         return new Vector3Int(coords.y - 1, coords.x, 0);
     }
 
+    public bool MoveUnitTo(Coords curCoords, Coords targetCoords)
+    {
+        Transform target = _battlefieldGrid[targetCoords.x][targetCoords.y];
+        if (target != null)
+            return false;
+
+        Transform unitTransform = _battlefieldGrid[curCoords.x][curCoords.y];
+
+        if (!_playerBoardManager.MoveUnitTo(unitTransform, CoordsToTilemapCell(targetCoords)))
+        {
+            if (!_opponentBoardManager.MoveUnitTo(unitTransform, CoordsToTilemapCell(targetCoords)))
+            {
+                Debug.LogError("Could not move unit !");
+                return false;
+            }
+        }
+
+        _battlefieldGrid[curCoords.x][curCoords.y] = null;
+        _battlefieldGrid[targetCoords.x][targetCoords.y] = unitTransform;
+        return true;
+    }
+
     public void DisplayPath(Coords startingCell)
     {
         PathFindingInfo pathFindingInfo = _pathFindingInfo[startingCell.x][startingCell.y];

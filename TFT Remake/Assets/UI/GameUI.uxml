@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="UnitDisplayBackground" enabled="true" style="flex-grow: 1; position: absolute; height: 300px; top: 101px; width: 180px; left: 955px; background-color: rgb(23, 30, 31);">
+    <ui:VisualElement name="UnitDisplayBackground" enabled="true" style="flex-grow: 1; position: absolute; height: 325px; top: 101px; width: 180px; left: 955px; background-color: rgb(23, 30, 31);">
         <ui:VisualElement name="Trait1" style="flex-grow: 1; position: absolute; width: 16px; height: 16px; top: 90px; left: 8px; background-image: url(&quot;project://database/Assets/Textures/Traits/Resources/wobbly.png?fileID=2800000&amp;guid=4a524a3e9dd6ec86cb54603aed25b6fa&amp;type=3#wobbly&quot;);">
             <ui:Label text="Label" name="Trait1" style="color: rgb(255, 255, 255); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 12px; -unity-text-align: middle-left; position: absolute; left: 23px;" />
         </ui:VisualElement>
@@ -46,6 +46,9 @@
         <ui:VisualElement name="Omnivamp" style="flex-grow: 1; position: absolute; width: 16px; height: 16px; background-image: url(&quot;project://database/Assets/Textures/Resources/scaleSV.png?fileID=2800000&amp;guid=e58d3a6993b543a97bc4eac15be43916&amp;type=3#scaleSV&quot;); -unity-slice-type: sliced; top: 240px; left: 45%;" />
         <ui:VisualElement name="DA" style="flex-grow: 1; position: absolute; width: 16px; height: 16px; background-image: url(&quot;project://database/Assets/Textures/Resources/scaleDA.png?fileID=2800000&amp;guid=5348c845c81da6a99bc54bfd4e9ace42&amp;type=3#scaleDA&quot;); -unity-slice-type: sliced; top: 240px; left: 63%;" />
         <ui:VisualElement name="DR" style="flex-grow: 1; position: absolute; width: 16px; height: 16px; background-image: url(&quot;project://database/Assets/Textures/Resources/scaleDR.png?fileID=2800000&amp;guid=06c217413d97b58d5b5a575a67b9794e&amp;type=3#scaleDR&quot;); -unity-slice-type: sliced; top: 240px; left: 81%;" />
+        <ui:VisualElement name="Range" style="flex-grow: 1; position: absolute; width: 16px; height: 16px; background-image: resource(&apos;Range&apos;); -unity-slice-type: sliced; top: 290px; left: 50%;">
+            <ui:Label text="0" name="Range" style="position: absolute; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; top: 2px; left: auto; font-size: 12px; color: rgb(255, 255, 255); -unity-text-align: upper-center; align-content: center; align-self: center; right: 20px;" />
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="Synergies" style="flex-grow: 1; position: absolute; height: 350px; width: 220px; top: 85px; left: 10px;">
         <ui:VisualElement name="ActiveSynergy1" style="flex-grow: 1; position: absolute; width: 100%; height: 15%; background-color: rgba(0, 0, 0, 0.41); border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px;">

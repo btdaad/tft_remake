@@ -68,7 +68,6 @@ public class PlayerBoardManager
 
         if (boardZone.cellBounds.Contains(cellPos) && boardZone.HasTile(cellPos))
         {
-            Debug.Log(cellPos);
             Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
             unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
             PlaceUnitOnZone(unitTransform, cellPos, boardZone);
@@ -137,5 +136,16 @@ public class PlayerBoardManager
                 _boardManager.CallMoveUnit(null, moveUnitEventArgs);
             }
         }
+    }
+
+    public bool MoveUnitTo(Transform unitTransform, Vector3Int targetCellPos)
+    {
+        if (_battlefieldTilemap.cellBounds.Contains(targetCellPos) && _battlefieldTilemap.HasTile(targetCellPos))
+        {
+            Vector3 cellCenterPos = _battlefieldTilemap.GetCellCenterWorld(targetCellPos);
+            unitTransform.position = cellCenterPos;
+            return true;
+        }
+        return false;
     }
 }
