@@ -1,11 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PvPManager : MonoBehaviour
 {
     private bool _fight = false;
     private GameManager _gameManager;
     private Distance[][] _distances;
-    void Init()
+    public void Init()
     {
         _gameManager = GameManager.Instance;
         _distances = _gameManager.GetBoardManager().GetDistances();
@@ -21,42 +22,42 @@ public class PvPManager : MonoBehaviour
         _fight = true;
     }
 
-    private Coord FindClosestUnit(List<Coord> unitsCoord, int index)
+    private Coords FindClosestUnit(List<Coords> coordsList, int index)
     {
-        Coord unitCoord = unitsCoord[index];
-        int[][] distances = _distances[unitCoord.x][unitCoord.y].GetDistances();
+        Coords coords = coordsList[index];
+        int[][] distances = _distances[coords.x][coords.y].GetDistances();
 
-        Coord minDistCoord = unitCoord;
+        Coords minDistCoords = coords;
         int minDist = int.MaxValue;
-        for (int i = 0; i < unitsCoord.Count; i++)
+        for (int i = 0; i < coordsList.Count; i++)
         {
             if (i != index)
             {
-                int dist = distances[unitsCoord[i].x][unitsCoord[i].y];
+                int dist = distances[coordsList[i].x][coordsList[i].y];
                 if (dist < minDist)
                 {
                     minDist = dist;
-                    minDistCoord = unitsCoord[i];
+                    minDistCoords = coordsList[i];
                 }
             }
         }
 
-        return minDistCoord;
+        return minDistCoords;
     }
 
-    private List<Coord> GetUnitsCoord(Transform[][] units)
+    private List<Coords> GetUnitsCoords(Transform[][] units)
     {
-        List<Coords> unitsCoords = new List<Coords>();
+        List<Coords> coordsList = new List<Coords>();
         for (int x = 0; x < units.Length; x++)
         {
             for (int y = 0; y < units[0].Length; y++)
             {
                 if (units[x][y] != null)
-                    unitsCoords.Add(new Coord(x, y));
+                    coordsList.Add(new Coords(x, y));
             }
         }
 
-        return unitsCoords;
+        return coordsList;
     }
 
     private void MoveUnitTo(Transform unitTransform, int x, int y)
@@ -67,13 +68,14 @@ public class PvPManager : MonoBehaviour
     public void MoveUnits()
     {
         Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
-        List<Coord> unitsCoord = GetUnitsCoord(units);
+        List<Coords> coordsList = GetUnitsCoords(units);
 
-        for (int i = 0; i < unitsCoords.Count; i++)
+        for (int i = 0; i < coordsList.Count; i++)
         {
-            Coord closestCoord = FindClosestUnit(unitsCoord, i);
-            Coord unitCoord = unitsCoord[i];
-            MoveUnitTo(units[unitCoord.x][unitCoord.y], closestCoord.x, closestCoord.y);
+            Coords closestCoords = FindClosestUnit(coordsList, i);
+            Coords coords = coordsList[i];
+            // if unit has enough range, do not move !!!!
+            MoveUnitTo(units[coords.x][coords.y], closestCoords.x, closestCoords.y);
         }
     }
 }
