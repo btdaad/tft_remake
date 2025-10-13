@@ -16,14 +16,14 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
     private static Transform[][] _battlefieldGrid = null;
     private static Transform[][] _benchGrid = null;
-    private static Distance[][] _distances = null;
+    private static PathFindingInfo[][] _pathFindingInfo = null;
     public static BoardManager Instance(Tilemap battlefieldTilemap, Tilemap benchTilemap)
     {
         if (_battlefieldGrid == null || _benchGrid == null)
         {
             InitBoard(battlefieldTilemap, ref _battlefieldGrid, false);
             InitBoard(benchTilemap, ref _benchGrid, true);
-            InitDistances();
+            InitPathFindingInfo();
         }
         return _instance;
     }
@@ -31,7 +31,8 @@ public class BoardManager : MonoBehaviour
     private PlayerBoardManager _playerBoardManager;
     private PlayerBoardManager _opponentBoardManager;
 
-    public event EventHandler MoveUnit = delegate {};
+    public event EventHandler MoveUnit = delegate { };
+    [SerializeField] GameObject arrowHelperPrefab;
 
     public void Init()
     {
@@ -89,9 +90,9 @@ public class BoardManager : MonoBehaviour
         return _battlefieldGrid;
     }
 
-    public Distance[][] GetDistances()
+    public PathFindingInfo[][] GetDistances()
     {
-        return _distances;
+        return _pathFindingInfo;
     }
 
     private static void InitBoard(Tilemap tilemap, ref Transform[][] board, bool isBench)
@@ -102,14 +103,45 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < board.Length; i++)
             board[i] = new Transform[boardSize.x + 1];
     }
-    private static void InitDistances()
+    private static void InitPathFindingInfo()
     {
         int rowsNb = _battlefieldGrid.Length;
         int colsNb = _battlefieldGrid[0].Length;
 
-        _distances = JaggedArrayUtil.InitJaggedArray<Distance>(rowsNb, colsNb, () => new Distance(rowsNb, colsNb));
+        _pathFindingInfo = JaggedArrayUtil.InitJaggedArray<PathFindingInfo>(rowsNb, colsNb, () => new PathFindingInfo(rowsNb, colsNb));
         for (int x = 0; x < rowsNb; x++)
             for (int y = 0; y < colsNb; y++)
-                _distances[x][y].ComputeDistances(x, y);
+                _pathFindingInfo[x][y].ComputeDistances(x, y);
+    }
+
+    private Vector3Int CoordsToTilemapCell(Coords coords)
+    {
+        return new Vector3Int(coords.y - 1, coords.x, 0);
+    }
+
+    public void DisplayPath(Coords startingCell)
+    {
+        PathFindingInfo pathFindingInfo = _pathFindingInfo[startingCell.x][startingCell.y];
+
+        Vector3Int cellPos = CoordsToTilemapCell(startingCell);
+        Vector3 cellPosCenter = _playerBoardManager.GetCellCenterWorldBattlefield(cellPos);
+
+        Coords targetCoords = new Coords(startingCell.x + 1, startingCell.y - 1);
+        Vector3Int targetCellPos = CoordsToTilemapCell(targetCoords);
+        Vector3 targetCellCenter = _playerBoardManager.GetCellCenterWorldBattlefield(targetCellPos);
+
+        Vector3 direction = targetCellCenter - cellPosCenter;
+        Debug.Log(direction);
+
+        Instantiate(arrowHelperPrefab, cellPosCenter, Quaternion.LookRotation(direction, Vector3.up));
+        // Distance.HexCellInfo[][] hexCellInfos = distance.GetHexCellInfos();
+
+        // foreach (Distance.HexCellInfo[] row in hexCellInfos)
+        // {
+        //     foreach (Distance.HexCellInfo hexCellInfo in row)
+        //     {
+
+        //     }
+        // }
     }
 }

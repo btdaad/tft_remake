@@ -5,11 +5,11 @@ public class PvPManager : MonoBehaviour
 {
     private bool _fight = false;
     private GameManager _gameManager;
-    private Distance[][] _distances;
+    private PathFindingInfo[][] _pathFindingInfo;
     public void Init()
     {
         _gameManager = GameManager.Instance;
-        _distances = _gameManager.GetBoardManager().GetDistances();
+        _pathFindingInfo = _gameManager.GetBoardManager().GetDistances();
     }
 
     void Update()
@@ -25,7 +25,7 @@ public class PvPManager : MonoBehaviour
     private (Coords, int) FindClosestUnit(List<Coords> coordsList, int index)
     {
         Coords coords = coordsList[index];
-        int[][] distances = _distances[coords.x][coords.y].GetDistances();
+        int[][] distances = _pathFindingInfo[coords.x][coords.y].GetDistances();
 
         Coords minDistCoords = coords;
         int minDist = int.MaxValue;

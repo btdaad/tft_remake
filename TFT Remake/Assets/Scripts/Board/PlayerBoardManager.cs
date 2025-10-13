@@ -57,12 +57,18 @@ public class PlayerBoardManager
         }
     }
 
+    public Vector3 GetCellCenterWorldBattlefield(Vector3Int cellPos)
+    {
+        return _battlefieldTilemap.GetCellCenterWorld(cellPos);
+    }
+
     private bool DropOnZone(Transform unitTransform, Vector3 unitPos, Tilemap boardZone)
     {
         Vector3Int cellPos = boardZone.WorldToCell(unitPos);
 
         if (boardZone.cellBounds.Contains(cellPos) && boardZone.HasTile(cellPos))
         {
+            Debug.Log(cellPos);
             Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
             unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
             PlaceUnitOnZone(unitTransform, cellPos, boardZone);
