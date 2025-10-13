@@ -16,6 +16,7 @@ public class PvPManager : MonoBehaviour
     {
         if (_hasFightStarted)
         {
+            // MoveUnits();
             InvokeRepeating(nameof(MoveUnits), 0.0f, 0.3f);
             _hasFightStarted = false;
         }
@@ -44,6 +45,7 @@ public class PvPManager : MonoBehaviour
         return (minDistCoords, minDist);
     }
 
+    // Extracts unit coordinates from the board manager grid
     private (List<Coords>, List<Coords>) GetUnitsCoords(Transform[][] units)
     {
         List<Coords> playerTeamCoords = new List<Coords>();
@@ -65,6 +67,7 @@ public class PvPManager : MonoBehaviour
         return (playerTeamCoords, opponentTeamCoords);
     }
 
+    // Revert path to closest cell in order to find the cell to move to, in order to get closer
     private Coords FindNextCell(Coords curCoords, Coords targetCoords)
     {
         PathFindingInfo.HexCellInfo[][] hexCellInfos = _pathFindingInfo[curCoords.x][curCoords.y].GetHexCellInfos();
@@ -75,12 +78,15 @@ public class PvPManager : MonoBehaviour
         return nextCell.coords;
     }
 
+    // Move the unit on the grid and on the board
     private bool MoveUnitTo(Coords curCoords, Coords targetCoords)
     {
         return _gameManager.GetBoardManager().MoveUnitTo(curCoords, targetCoords);
     }
 
-    private bool MoveUnit(Transform[][] units, List<Coords> thisTeamCoords, List<Coords> opponentTeamCoords, int index)
+    // Handles logical checks before actually moving the unit
+    // Has the unit already moved ? Is it close enough for its attack range ?
+    private bool TryMoveUnit(Transform[][] units, List<Coords> thisTeamCoords, List<Coords> opponentTeamCoords, int index)
     {
         Coords curCoords = thisTeamCoords[index];
 
@@ -97,9 +103,12 @@ public class PvPManager : MonoBehaviour
             Coords nextCellCoords = FindNextCell(curCoords, closestCoords);
             return MoveUnitTo(curCoords, nextCellCoords);
         }
+        else
+            unit.Attack(units[closestCoords.x][closestCoords.y]);
         return false;
     }
 
+    // Resets the hasMoved parameter that prevents a unit from moving multiple times in a row
     private void ResetHasMovedParam()
     {
         Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
@@ -114,6 +123,7 @@ public class PvPManager : MonoBehaviour
         }
     }
 
+    // Go through all units and make them move, towards their closes enemy, once each
     public void MoveUnits()
     {
         Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
@@ -131,25 +141,33 @@ public class PvPManager : MonoBehaviour
             bool hasMoved = false;
             if (playerIndex < playerCoordsList.Count)
             {
-                hasMoved |= MoveUnit(units, playerCoordsList, opponentCoordsList, playerIndex);
+                hasMoved |= TryMoveUnit(units, playerCoordsList, opponentCoordsList, playerIndex);
                 playerIndex++;
             }
             else
                 allPlayerUnitsHasMoved = true;
 
+            if (hasMoved) // a unit has moved, the coordinates have changed
+            {
+                units = _gameManager.GetBoardManager().GetBattlefield();
+                (playerCoordsList, opponentCoordsList) = GetUnitsCoords(units);
+                playerIndex = 0; // the list might be in a different order, unit already seen will be skipped because of the hasMoved parameter
+                opponentIndex = 0;
+            }
+
             if (opponentIndex < opponentCoordsList.Count)
             {
-                hasMoved |= MoveUnit(units, opponentCoordsList, playerCoordsList, opponentIndex);
+                hasMoved |= TryMoveUnit(units, opponentCoordsList, playerCoordsList, opponentIndex);
                 opponentIndex++;
             }
             else
                 allOpponentUnitsHasMoved = true;
 
-            if (hasMoved)
+            if (hasMoved) // a unit has moved, the coordinates have changed
             {
                 units = _gameManager.GetBoardManager().GetBattlefield();
                 (playerCoordsList, opponentCoordsList) = GetUnitsCoords(units);
-                playerIndex = 0;
+                playerIndex = 0; // the list might be in a different order, unit already seen will be skipped because of the hasMoved parameter
                 opponentIndex = 0;
             }
         }

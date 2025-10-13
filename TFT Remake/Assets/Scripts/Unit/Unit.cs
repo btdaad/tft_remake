@@ -58,4 +58,18 @@ public class Unit : MonoBehaviour
     {
         _hasMoved = hasMoved;
     }
+
+    public void TakeDamage(float damage)
+    {
+        _health -= damage;
+        if (_health <= 0)
+            Debug.Log($"{this} has died");
+    }
+
+    public void Attack(Transform opponentTransform)
+    {
+        Debug.Log("Attack");
+        Unit opponent = opponentTransform.GetComponent<Unit>();
+        opponent.TakeDamage(stats.attackDamage[(int)stats.star]);
+    }
 }
