@@ -105,6 +105,10 @@ public class UnitsDisplay
         _name.text = stats.type.ToString();
 
         _healthLabel.text = $"{unit.GetHealth()}/{stats.health[(int)stats.star]}";
+        float healthRatio = unit.GetHealth() / stats.health[(int)stats.star];
+        float healthPercent = Mathf.Lerp(0, 100, healthRatio);
+        _healthBarMask.style.width = Length.Percent(healthPercent);
+
         _manaLabel.text = $"{unit.GetMana()}/{stats.mana[1]}";
 
         _ap.text = $"{unit.GetAP()}%";

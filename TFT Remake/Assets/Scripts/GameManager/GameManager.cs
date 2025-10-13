@@ -65,8 +65,10 @@ public class GameManager : MonoBehaviour
         playerCamera = Camera.main;
         playerCamera.enabled = true;
         playerCamera.GetComponent<DragAndDrop>().enabled = true;
+        playerCamera.GetComponent<DisplayUnitStats>().enabled = true;
         opponentCamera.enabled = false;
         opponentCamera.GetComponent<DragAndDrop>().enabled = false;
+        opponentCamera.GetComponent<DisplayUnitStats>().enabled = false;
     }
     public BoardManager GetBoardManager()
     {
@@ -153,9 +155,12 @@ public class GameManager : MonoBehaviour
         isPlayer = !isPlayer;
         opponentCamera.enabled = !opponentCamera.enabled;
         opponentCamera.GetComponent<DragAndDrop>().enabled = !opponentCamera.GetComponent<DragAndDrop>().enabled;
+        opponentCamera.GetComponent<DisplayUnitStats>().enabled = !opponentCamera.GetComponent<DisplayUnitStats>().enabled;
         playerCamera.enabled = !playerCamera.enabled;
         playerCamera.GetComponent<DragAndDrop>().enabled = !playerCamera.GetComponent<DragAndDrop>().enabled;
+        playerCamera.GetComponent<DisplayUnitStats>().enabled = !playerCamera.GetComponent<DisplayUnitStats>().enabled;
 
+        _uiManager.HideUnitDisplay();
         _uiManager.ChangePlayer(isPlayer);
         UpdateSynergyDisplay();
     }

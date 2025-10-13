@@ -567,6 +567,7 @@ GameObject:
   - component: {fileID: 136807372}
   - component: {fileID: 136807370}
   - component: {fileID: 136807374}
+  - component: {fileID: 136807375}
   m_Layer: 0
   m_Name: Opponent Camera
   m_TagString: Untagged
@@ -700,7 +701,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   dragHeight: 1
-  dragThresholdTime: 0.15
+--- !u!114 &136807375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136807369}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ff24557f77fad63a2485255b20b7a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisplayUnitStats
+  mask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &205740354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,6 +1279,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -1405,7 +1421,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   dragHeight: 1
-  dragThresholdTime: 0.15
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ff24557f77fad63a2485255b20b7a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisplayUnitStats
+  mask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &351256804
 PrefabInstance:
   m_ObjectHideFlags: 0

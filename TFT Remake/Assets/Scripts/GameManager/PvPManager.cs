@@ -105,6 +105,7 @@ public class PvPManager : MonoBehaviour
         }
         else
             unit.Attack(units[closestCoords.x][closestCoords.y]);
+
         return false;
     }
 

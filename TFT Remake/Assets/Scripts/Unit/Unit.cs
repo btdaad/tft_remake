@@ -68,7 +68,7 @@ public class Unit : MonoBehaviour
 
     public void Attack(Transform opponentTransform)
     {
-        Debug.Log("Attack");
+        // Debug.Log("Attack");
         Unit opponent = opponentTransform.GetComponent<Unit>();
         opponent.TakeDamage(stats.attackDamage[(int)stats.star]);
     }
