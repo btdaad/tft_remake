@@ -104,12 +104,15 @@ public class UnitsDisplay
 
         _name.text = stats.type.ToString();
 
-        _healthLabel.text = $"{unit.GetHealth()}/{stats.health[(int)stats.star]}";
+        _healthLabel.text = $"{Mathf.Round(unit.GetHealth())}/{stats.health[(int)stats.star]}";
         float healthRatio = unit.GetHealth() / stats.health[(int)stats.star];
         float healthPercent = Mathf.Lerp(0, 100, healthRatio);
         _healthBarMask.style.width = Length.Percent(healthPercent);
 
-        _manaLabel.text = $"{unit.GetMana()}/{stats.mana[1]}";
+        _manaLabel.text = $"{Mathf.Round(unit.GetMana())}/{stats.mana[1]}";
+        float manaRatio = unit.GetMana() / stats.mana[1];
+        float manaPercent = Mathf.Lerp(0, 100, manaRatio);
+        _manaBarMask.style.width = Length.Percent(manaPercent);
 
         _ap.text = $"{unit.GetAP()}%";
         _ad.text = $"{unit.GetAD()}%";

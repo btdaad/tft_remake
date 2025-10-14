@@ -93,6 +93,17 @@ public class Unit : MonoBehaviour
     {
         float r = GetArmor();
         float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
+
+        // (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
+        if (_mana != stats.mana[1])
+        {
+            float manaGenerated = 0.01f * damageRaw; // taking damage generates (1% of pre-mitigation damage taken
+            manaGenerated += 0.03f * dm; // and 3% of post-mitigation damage taken) mana
+            manaGenerated = Mathf.Min(manaGenerated, 42.5f); // up to 42.5 Mana
+            _mana += manaGenerated;
+            _mana = Mathf.Min(_mana, stats.mana[1]);
+        }
+
         _health -= dm;
         if (_health <= 0)
             Debug.Log($"{this} has died");
@@ -112,8 +123,11 @@ public class Unit : MonoBehaviour
 
             basicAttack *= (Random.Range(1, 100) <= GetCritChance()) ? GetCritDamage() / 100 : 1;
 
-            if (basicAttack > stats.attackDamage[(int)stats.star])
-                Debug.Log("Crit !");
+            if (_mana != stats.mana[1])
+            {
+                _mana += 10.0f; // "All units generate 10 Mana per attack" (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
+                _mana = Mathf.Min(_mana, stats.mana[1]);
+            }
 
             opponent.TakeDamage(basicAttack);
             _lastAttack = 0.0f;
