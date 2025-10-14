@@ -140,6 +140,7 @@ public class GameManager : MonoBehaviour
     {
         opponentCamera.GetComponent<DragAndDrop>().enabled = false;
         playerCamera.GetComponent<DragAndDrop>().enabled = false;
+        _boardManager.SavePositions();
         _pvpManager.Fight();
     }
 

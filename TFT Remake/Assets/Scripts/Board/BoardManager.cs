@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using System.Collections.Generic;
 
 // Vocabulary note :
 // the "battlefield" : the game board part where active units are placed, where the fight happens
@@ -16,6 +17,8 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
     private static Transform[][] _battlefieldGrid = null;
     private static Transform[][] _benchGrid = null;
+    private static Transform[][] _saveBattlefieldGrid = null;
+    private static List<GameObject> _saveUnits = null;
     private static PathFindingInfo[][] _pathFindingInfo = null;
     public static BoardManager Instance(Tilemap battlefieldTilemap, Tilemap benchTilemap)
     {
@@ -146,11 +149,42 @@ public class BoardManager : MonoBehaviour
         Transform deadUnit = _battlefieldGrid[unitCoords.x][unitCoords.y];
         _battlefieldGrid[unitCoords.x][unitCoords.y] = null;
         deadUnit.gameObject.SetActive(false);
+        _saveUnits.Add(deadUnit.gameObject);
+    }
+
+    public void SavePositions()
+    {
+        _saveUnits = new List<GameObject>();
+        _saveBattlefieldGrid = new Transform[_battlefieldGrid.Length][];
+        for (int x = 0; x < _battlefieldGrid.Length; x++)
+        {
+            _saveBattlefieldGrid[x] = new Transform[_battlefieldGrid[x].Length];
+            for (int y = 0; y < _battlefieldGrid[x].Length; y++)
+            {
+                if (_battlefieldGrid[x][y] != null)
+                    _battlefieldGrid[x][y].GetComponent<Unit>().SavePosition();
+                _saveBattlefieldGrid[x][y] = _battlefieldGrid[x][y];
+            }
+        }
     }
 
     public void RestorePositions()
     {
-        Debug.Log("End of the fight.");
+        for (int x = 0; x < _battlefieldGrid.Length; x++)
+        {
+            for (int y = 0; y < _battlefieldGrid[x].Length; y++)
+            {
+                if (_battlefieldGrid[x][y] != null) // if the unit was not dead, put it back physically
+                    _battlefieldGrid[x][y].GetComponent<Unit>().Reset();
+                _battlefieldGrid[x][y] = _saveBattlefieldGrid[x][y]; // set the current cell to what it was before the fight (null or transform)
+            }
+        }
+
+        foreach (GameObject unit in _saveUnits)
+        {
+            unit.GetComponent<Unit>().Reset();
+            unit.SetActive(true);
+        }
     }
 
     public void DisplayPath(Coords startingCell)

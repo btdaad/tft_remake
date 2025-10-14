@@ -16,6 +16,7 @@ public class PvPManager : MonoBehaviour
     {
         if (_hasFightStarted)
         {
+            _gameManager.GetBoardManager().SavePositions();
             InvokeRepeating(nameof(MoveUnits), 0.0f, 0.3f);
             _hasFightStarted = false;
         }
@@ -163,7 +164,7 @@ public class PvPManager : MonoBehaviour
         bool allPlayerUnitsHasMoved = false;
         bool allOpponentUnitsHasMoved = false;
 
-        while (!(allPlayerUnitsHasMoved && allOpponentUnitsHasMoved))
+        while (!(allPlayerUnitsHasMoved && allOpponentUnitsHasMoved) && !CheckForAWinner(playerCoordsList, opponentCoordsList))
         {
             bool hasMoved = false;
             if (playerIndex < playerCoordsList.Count)

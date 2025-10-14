@@ -10,11 +10,17 @@ public class Unit : MonoBehaviour
     [SerializeField] bool _isPlayerTeam;
     bool _hasMoved;
     float _lastAttack; // time since last attack
+    Vector3 _position = Vector3.zero;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Random.InitState(300600);
 
+        Init();
+    }
+
+    void Init()
+    {
         _health = stats.health[(int)stats.star];
         _mana = stats.mana[0];
         _ap = 0f;
@@ -87,6 +93,22 @@ public class Unit : MonoBehaviour
     public void SetHasMoved(bool hasMoved)
     {
         _hasMoved = hasMoved;
+    }
+
+    public void SavePosition()
+    {
+        _position = transform.position;
+    }
+
+    private void RestorePosition()
+    {
+        transform.position = _position;
+    }
+
+    public void Reset()
+    {
+        RestorePosition();
+        Init();
     }
 
     // Returns wether the unit died
