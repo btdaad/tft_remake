@@ -6,6 +6,8 @@ public class PvPManager : MonoBehaviour
     private bool _hasFightStarted = false;
     private GameManager _gameManager;
     private PathFindingInfo[][] _pathFindingInfo;
+    // private List<Transform> _units;
+
     public void Init()
     {
         _gameManager = GameManager.Instance;
@@ -24,6 +26,17 @@ public class PvPManager : MonoBehaviour
     public void Fight()
     {
         _hasFightStarted = true;
+
+        // Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
+        // _units = new List<Transform>();
+        // for (int x = 0; x < units.Length; x++)
+        // {
+        //     for (int y = 0; y < units[0].Length; y++)
+        //     {
+        //         if (units[x][y] != null)
+        //             _units.Add(units[x][y]);
+        //     }
+        // }
     }
 
     private void EndFight(bool hasPlayerWon, bool hasOpponentWon)

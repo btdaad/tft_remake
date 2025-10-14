@@ -1160,6 +1160,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1813193041907614840, guid: f6f8031bd291e8a959c01e67e5ae2368, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 1813193041907614840, guid: f6f8031bd291e8a959c01e67e5ae2368, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 5698513104362536437, guid: f6f8031bd291e8a959c01e67e5ae2368, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3
@@ -1257,6 +1265,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 8992936054688810843, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
       propertyPath: m_Name
       value: Pyramid (1)
@@ -1448,6 +1464,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Capsule (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 8339534086537676548, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.85
@@ -1669,9 +1693,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 7872495705548493769, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
       propertyPath: m_Name
       value: Rectangular (1)
@@ -1730,9 +1762,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 8992936054688810843, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
       propertyPath: m_Name
       value: Pyramid
@@ -1794,6 +1834,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6957499504104377572, guid: 2c9b721bb0fe5270083abdb1bcc75fb0, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 6957499504104377572, guid: 2c9b721bb0fe5270083abdb1bcc75fb0, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1858,9 +1906,17 @@ PrefabInstance:
       value: Capsule
       objectReference: {fileID: 0}
     - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 8339534086537676548, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.85
@@ -2203,6 +2259,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2297071150538444183, guid: a83cddc8dae38c368984ea0030714ea2, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 2297071150538444183, guid: a83cddc8dae38c368984ea0030714ea2, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 3814011140347408985, guid: a83cddc8dae38c368984ea0030714ea2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.65
@@ -2304,6 +2368,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tetrahedron
       objectReference: {fileID: 0}
+    - target: {fileID: 8243461664966101548, guid: 724187251e056ada288cc1c42c6a28fb, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 8243461664966101548, guid: 724187251e056ada288cc1c42c6a28fb, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2575,6 +2647,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5836744150668194490, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 5836744150668194490, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 6984781890196448501, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
       propertyPath: m_Name
       value: Hexagonal Prism (1)
@@ -2633,9 +2713,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5836744150668194490, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 5836744150668194490, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5836744150668194490, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 6984781890196448501, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
       propertyPath: m_Name
       value: Hexagonal Prism
@@ -2654,9 +2742,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4421677248716869196, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 4421677248716869196, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4421677248716869196, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 6077386214725400366, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
       propertyPath: m_Name
       value: Octahedron
@@ -2885,6 +2981,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ellipsoid
       objectReference: {fileID: 0}
+    - target: {fileID: 7213075274576419247, guid: 1f9533ade165aec609b146c34834aae0, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 7213075274576419247, guid: 1f9533ade165aec609b146c34834aae0, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3237,9 +3341,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1089804176776716037, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 1089804176776716037, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1089804176776716037, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 2960332821156560980, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
       propertyPath: m_Name
       value: Cylinder
@@ -3353,9 +3465,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3487050497496565493, guid: 8b5f95badbbd6871bb15b40d0629770e, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 3487050497496565493, guid: 8b5f95badbbd6871bb15b40d0629770e, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3487050497496565493, guid: 8b5f95badbbd6871bb15b40d0629770e, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 7995966119424386166, guid: 8b5f95badbbd6871bb15b40d0629770e, type: 3}
       propertyPath: m_Name
       value: Cone
@@ -3523,9 +3643,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
+      propertyPath: basicAttack
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+    - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
       propertyPath: _isPlayerTeam
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
+      propertyPath: _basicAttackPrefab
+      value: 
+      objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 1180801208543563934, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
       propertyPath: m_Enabled
       value: 1

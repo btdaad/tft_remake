@@ -11,6 +11,8 @@ public class Unit : MonoBehaviour
     bool _hasMoved;
     float _lastAttack; // time since last attack
     Vector3 _position = Vector3.zero;
+    [SerializeField] GameObject _basicAttackPrefab;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -153,7 +155,8 @@ public class Unit : MonoBehaviour
             Unit opponent = opponentTransform.GetComponent<Unit>();
             float basicAttack = stats.attackDamage[(int)stats.star];
 
-            basicAttack *= (Random.Range(1, 100) <= GetCritChance()) ? GetCritDamage() / 100 : 1;
+            bool crit = Random.Range(1, 100) <= GetCritChance();
+            basicAttack *= crit ? GetCritDamage() / 100 : 1;
 
             if (_mana != stats.mana[1])
             {
@@ -162,6 +165,15 @@ public class Unit : MonoBehaviour
             }
 
             _lastAttack = 0.0f;
+
+            Vector3 basicAttackPos = new Vector3(transform.position.x, 0.4f, transform.position.z);
+            Vector3 dir = opponentTransform.position - transform.position;
+            GameObject _basicAttackGO = Instantiate(_basicAttackPrefab, basicAttackPos, Quaternion.LookRotation(dir, Vector3.up));
+
+            if (crit)
+                _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load("BasicAttackMatCrit", typeof(Material)) as Material;
+
+            _basicAttackGO.GetComponent<Launch>().SetTarget(opponentTransform);
 
             return opponent.TakeDamage(basicAttack);
         }

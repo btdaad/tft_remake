@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8199253184841673130}
   - component: {fileID: 4332132299817704900}
   - component: {fileID: 6957499504104377572}
+  - component: {fileID: -8913828174108769317}
   m_Layer: 6
   m_Name: Torus
   m_TagString: Untagged
@@ -127,3 +128,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   stats: {fileID: 11400000, guid: 51380739e72b471bda06bf197ac7be51, type: 2}
+  _isPlayerTeam: 0
+  _basicAttackPrefab: {fileID: 0}
+--- !u!54 &-8913828174108769317
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614900328354995680}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
