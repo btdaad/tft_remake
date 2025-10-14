@@ -114,11 +114,11 @@ public class UnitsDisplay
         _ap.text = $"{unit.GetAP()}%";
         _ad.text = $"{unit.GetAD()}%";
         _baseDamage.text = $"{stats.attackDamage[(int)stats.star]}";
-        _armor.text = $"{stats.armor}";
+        _armor.text = $"{unit.GetArmor()}";
         _mr.text = $"{stats.magicResist}";
-        _atkSpeed.text = $"{stats.attackSpeed}";
-        _crit.text = $"{stats.critChance}%";
-        _range.text = $"{stats.range}";
+        _atkSpeed.text = $"{unit.GetAS()}";
+        _crit.text = $"{unit.GetCritChance()}%";
+        _range.text = $"{unit.GetRange()}";
 
         // _unitArt.material = unit.GetComponent<Renderer>().material;
         _unitDisplayBackground.visible = true;

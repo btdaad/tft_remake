@@ -97,7 +97,7 @@ public class PvPManager : MonoBehaviour
         unit.SetHasMoved(true);
 
         (Coords closestCoords, int dist) = FindClosestUnit(opponentTeamCoords, curCoords);
-        int range = unit.stats.range;
+        int range = unit.GetRange();
         if (range < dist)
         {
             Coords nextCellCoords = FindNextCell(curCoords, closestCoords);
