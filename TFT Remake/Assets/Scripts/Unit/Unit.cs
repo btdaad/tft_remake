@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Unit : MonoBehaviour
 {
@@ -7,16 +8,17 @@ public class Unit : MonoBehaviour
     float _mana;
     float _ap;
     float _ad;
-    [SerializeField] bool _isPlayerTeam;
+    [SerializeField] bool _isFromPlayerTeam;
     bool _hasMoved;
     float _lastAttack; // time since last attack
     Vector3 _position = Vector3.zero;
     [SerializeField] GameObject _basicAttackPrefab;
+    public event EventHandler OnDeath = delegate { };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Random.InitState(300600);
+        UnityEngine.Random.InitState(300600);
 
         Init();
     }
@@ -84,7 +86,7 @@ public class Unit : MonoBehaviour
 
     public bool IsFromPlayerTeam()
     {
-        return _isPlayerTeam;
+        return _isFromPlayerTeam;
     }
 
     public bool HasMoved()
@@ -133,6 +135,8 @@ public class Unit : MonoBehaviour
         if (_health <= 0)
         {
             _health = 0;
+            OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
+            OnDeath(null, onDeathEventArgs);
             return true;
         }
 
@@ -145,17 +149,17 @@ public class Unit : MonoBehaviour
     }
 
     // Returns wether the attacked unit died;
-    public bool Attack(Transform opponentTransform)
+    public void Attack(Transform opponentTransform)
     {
         if (opponentTransform == null) // if unit died during the attack call
-            return false;
+            return;
 
         if (CanAttack())
         {
             Unit opponent = opponentTransform.GetComponent<Unit>();
             float basicAttack = stats.attackDamage[(int)stats.star];
 
-            bool crit = Random.Range(1, 100) <= GetCritChance();
+            bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
             basicAttack *= crit ? GetCritDamage() / 100 : 1;
 
             if (_mana != stats.mana[1])
@@ -173,10 +177,7 @@ public class Unit : MonoBehaviour
             if (crit)
                 _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load("BasicAttackMatCrit", typeof(Material)) as Material;
 
-            _basicAttackGO.GetComponent<Launch>().SetTarget(opponentTransform);
-
-            return opponent.TakeDamage(basicAttack);
+            _basicAttackGO.GetComponent<Launch>().SetTarget(opponent, basicAttack);
         }
-        return false;
     }
 }

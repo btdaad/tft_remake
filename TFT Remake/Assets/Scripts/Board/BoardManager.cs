@@ -33,7 +33,6 @@ public class BoardManager : MonoBehaviour
 
     private PlayerBoardManager _playerBoardManager;
     private PlayerBoardManager _opponentBoardManager;
-
     public event EventHandler MoveUnit = delegate { };
     [SerializeField] GameObject arrowHelperPrefab;
 
@@ -142,6 +141,14 @@ public class BoardManager : MonoBehaviour
         _battlefieldGrid[curCoords.x][curCoords.y] = null;
         _battlefieldGrid[targetCoords.x][targetCoords.y] = unitTransform;
         return true;
+    }
+
+    public void RemoveUnit(Transform deadUnit)
+    {
+        (int xPos, int yPos) = _playerBoardManager.ToBattlefieldCoord(deadUnit.position);
+        _battlefieldGrid[yPos][xPos] = null;
+        deadUnit.gameObject.SetActive(false);
+        _saveUnits.Add(deadUnit.gameObject);
     }
 
     public void RemoveUnitAt(Coords unitCoords)

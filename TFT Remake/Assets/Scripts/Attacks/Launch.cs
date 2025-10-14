@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Launch : MonoBehaviour
 {
+    private Unit _targetUnit = null;
     private Transform _target = null;
+    private float _damage = 0.0f;
     [SerializeField] float speed;
 
     void Start()
@@ -12,20 +14,29 @@ public class Launch : MonoBehaviour
     {
         if (_target != null)
         {
-            float step = speed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, _target.position, step);
+            if (_target.gameObject.activeSelf)
+            {
+                float step = speed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, _target.position, step);
+            }
+            else
+                Destroy(this.gameObject);
         }
     }
 
-    public void SetTarget(Transform target)
+    public void SetTarget(Unit targetUnit, float damage)
     {
-        _target = target;
+        _targetUnit = targetUnit;
+        _target = targetUnit.transform;
+        _damage = damage;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("TRIGGER");
         if (_target != null && _target.GetComponent<Collider>() == other)
+        {
+            _targetUnit.TakeDamage(_damage);
             Destroy(this.gameObject);
+        }
     }
 }

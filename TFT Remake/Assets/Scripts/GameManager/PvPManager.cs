@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 public class PvPManager : MonoBehaviour
@@ -6,7 +7,6 @@ public class PvPManager : MonoBehaviour
     private bool _hasFightStarted = false;
     private GameManager _gameManager;
     private PathFindingInfo[][] _pathFindingInfo;
-    // private List<Transform> _units;
 
     public void Init()
     {
@@ -23,20 +23,26 @@ public class PvPManager : MonoBehaviour
             _hasFightStarted = false;
         }
     }
+
+    private void HandleUnitDeath(object sender, EventArgs e)
+    {
+        OnDeathEventArgs onDeathEventArgs = (OnDeathEventArgs)e;
+        _gameManager.GetBoardManager().RemoveUnit(onDeathEventArgs.unit);
+    }
+
     public void Fight()
     {
         _hasFightStarted = true;
 
-        // Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
-        // _units = new List<Transform>();
-        // for (int x = 0; x < units.Length; x++)
-        // {
-        //     for (int y = 0; y < units[0].Length; y++)
-        //     {
-        //         if (units[x][y] != null)
-        //             _units.Add(units[x][y]);
-        //     }
-        // }
+        Transform[][] units = _gameManager.GetBoardManager().GetBattlefield();
+        for (int x = 0; x < units.Length; x++)
+        {
+            for (int y = 0; y < units[0].Length; y++)
+            {
+                if (units[x][y] != null)
+                    units[x][y].GetComponent<Unit>().OnDeath += HandleUnitDeath;
+            }
+        }
     }
 
     private void EndFight(bool hasPlayerWon, bool hasOpponentWon)
@@ -127,11 +133,7 @@ public class PvPManager : MonoBehaviour
             return MoveUnitTo(curCoords, nextCellCoords);
         }
         else
-        {
-            bool isUnitDead = unit.Attack(units[closestCoords.x][closestCoords.y]);
-            if (isUnitDead)
-                _gameManager.GetBoardManager().RemoveUnitAt(closestCoords);
-        }
+            unit.Attack(units[closestCoords.x][closestCoords.y]);
 
         return false;
     }

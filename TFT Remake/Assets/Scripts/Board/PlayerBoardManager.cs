@@ -81,6 +81,12 @@ public class PlayerBoardManager
         return false;
     }
 
+    public (int, int) ToBattlefieldCoord(Vector3 position)
+    {
+        Vector3Int cellPos = _battlefieldTilemap.WorldToCell(position);
+        return ToBattlefieldCoord(cellPos);
+    }
+
     // Careful : the battlefield cell width coords go from -1 to 6 so the index on the x axis are incremented by 1
     private (int, int) ToBattlefieldCoord(Vector3Int cellCoord)
     {
