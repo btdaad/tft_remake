@@ -35,10 +35,13 @@ public class DisplayUnitStats : MonoBehaviour
             else
             {
                 _uiManager.HideUnitDisplay();
-                _unitTransform = null;   
+                _unitTransform = null;
             }
         }
+
         if (_unitTransform != null)
             _uiManager.ShowUnitDisplay(_unitTransform);
+        else
+            _uiManager.HideUnitDisplay(); // hide stats display if unit has died
     }
 }

@@ -141,6 +141,18 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
+    public void RemoveUnitAt(Coords unitCoords)
+    {
+        Transform deadUnit = _battlefieldGrid[unitCoords.x][unitCoords.y];
+        _battlefieldGrid[unitCoords.x][unitCoords.y] = null;
+        deadUnit.gameObject.SetActive(false);   
+    }
+
+    public void RestorePositions()
+    {
+        Debug.Log("End of the fight.");
+    }
+
     public void DisplayPath(Coords startingCell)
     {
         PathFindingInfo pathFindingInfo = _pathFindingInfo[startingCell.x][startingCell.y];

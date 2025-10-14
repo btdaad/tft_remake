@@ -16,7 +16,6 @@ public class PvPManager : MonoBehaviour
     {
         if (_hasFightStarted)
         {
-            // MoveUnits();
             InvokeRepeating(nameof(MoveUnits), 0.0f, 0.3f);
             _hasFightStarted = false;
         }
@@ -24,6 +23,13 @@ public class PvPManager : MonoBehaviour
     public void Fight()
     {
         _hasFightStarted = true;
+    }
+
+    private void EndFight(bool hasPlayerWon, bool hasOpponentWon)
+    {
+        CancelInvoke(nameof(MoveUnits));
+        _gameManager.GetBoardManager().RestorePositions();
+        // TODO : make player lose PV
     }
 
     private (Coords, int) FindClosestUnit(List<Coords> coordsList, Coords curCoords)
@@ -91,6 +97,9 @@ public class PvPManager : MonoBehaviour
         Coords curCoords = thisTeamCoords[index];
 
         Transform unitTransform = units[curCoords.x][curCoords.y];
+        if (unitTransform == null) // if unit died in the meantime
+            return false;
+
         Unit unit = unitTransform.GetComponent<Unit>();
         if (unit.HasMoved()) // as we update unit positions and recalculate the list of coordinates every time, this property prevent from moving the same entity everytime
             return false;
@@ -104,7 +113,11 @@ public class PvPManager : MonoBehaviour
             return MoveUnitTo(curCoords, nextCellCoords);
         }
         else
-            unit.Attack(units[closestCoords.x][closestCoords.y]);
+        {
+            bool isUnitDead = unit.Attack(units[closestCoords.x][closestCoords.y]);
+            if (isUnitDead)
+                _gameManager.GetBoardManager().RemoveUnitAt(closestCoords);
+        }
 
         return false;
     }
@@ -124,6 +137,19 @@ public class PvPManager : MonoBehaviour
         }
     }
 
+    private bool CheckForAWinner(List<Coords> playerCoordsList, List<Coords> opponentCoordsList)
+    {
+        bool hasPlayerWon = opponentCoordsList.Count == 0;
+        bool hasOpponentWon = playerCoordsList.Count == 0;
+
+        if (hasPlayerWon || hasOpponentWon)
+        {
+            EndFight(hasPlayerWon, hasOpponentWon);
+            return true;
+        }
+        return false;
+    }
+
     // Go through all units and make them move, towards their closes enemy, once each
     public void MoveUnits()
     {
@@ -137,7 +163,7 @@ public class PvPManager : MonoBehaviour
         bool allPlayerUnitsHasMoved = false;
         bool allOpponentUnitsHasMoved = false;
 
-        while (!(allPlayerUnitsHasMoved && allOpponentUnitsHasMoved))
+        while (!(allPlayerUnitsHasMoved && allOpponentUnitsHasMoved) || !CheckForAWinner(playerCoordsList, opponentCoordsList))
         {
             bool hasMoved = false;
             if (playerIndex < playerCoordsList.Count)

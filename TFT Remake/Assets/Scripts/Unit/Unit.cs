@@ -89,7 +89,8 @@ public class Unit : MonoBehaviour
         _hasMoved = hasMoved;
     }
 
-    public void TakeDamage(float damageRaw)
+    // Returns wether the unit died
+    public bool TakeDamage(float damageRaw)
     {
         float r = GetArmor();
         float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
@@ -106,7 +107,12 @@ public class Unit : MonoBehaviour
 
         _health -= dm;
         if (_health <= 0)
-            Debug.Log($"{this} has died");
+        {
+            _health = 0;
+            return true;
+        }
+
+        return false;
     }
 
     private bool CanAttack()
@@ -114,8 +120,12 @@ public class Unit : MonoBehaviour
         return _lastAttack >= (1 / GetAS());
     }
 
-    public void Attack(Transform opponentTransform)
+    // Returns wether the attacked unit died;
+    public bool Attack(Transform opponentTransform)
     {
+        if (opponentTransform == null) // if unit died during the attack call
+            return false;
+
         if (CanAttack())
         {
             Unit opponent = opponentTransform.GetComponent<Unit>();
@@ -129,8 +139,10 @@ public class Unit : MonoBehaviour
                 _mana = Mathf.Min(_mana, stats.mana[1]);
             }
 
-            opponent.TakeDamage(basicAttack);
             _lastAttack = 0.0f;
+
+            return opponent.TakeDamage(basicAttack);
         }
+        return false;
     }
 }
