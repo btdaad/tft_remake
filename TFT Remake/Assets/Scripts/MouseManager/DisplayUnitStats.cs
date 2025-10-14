@@ -28,9 +28,7 @@ public class DisplayUnitStats : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 100, mask))
             {
                 _unitTransform = hit.transform;
-                bool isUnitPickable = _boardManager.OnDragUnit(_gameManager.isPlayer, _unitTransform);
-                if (isUnitPickable) // if unit is on the opponent board
-                    _uiManager.ShowUnitDisplay(_unitTransform);
+                _uiManager.ShowUnitDisplay(_unitTransform);
             }
             else
             {
@@ -39,9 +37,12 @@ public class DisplayUnitStats : MonoBehaviour
             }
         }
 
-        if (_unitTransform != null)
+        if (_unitTransform != null && _unitTransform.gameObject.activeSelf)
             _uiManager.ShowUnitDisplay(_unitTransform);
         else
+        {
             _uiManager.HideUnitDisplay(); // hide stats display if unit has died
+            _unitTransform = null;
+        }
     }
 }

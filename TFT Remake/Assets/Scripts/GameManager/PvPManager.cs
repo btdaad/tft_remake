@@ -163,7 +163,7 @@ public class PvPManager : MonoBehaviour
         bool allPlayerUnitsHasMoved = false;
         bool allOpponentUnitsHasMoved = false;
 
-        while (!(allPlayerUnitsHasMoved && allOpponentUnitsHasMoved) || !CheckForAWinner(playerCoordsList, opponentCoordsList))
+        while (!(allPlayerUnitsHasMoved && allOpponentUnitsHasMoved))
         {
             bool hasMoved = false;
             if (playerIndex < playerCoordsList.Count)

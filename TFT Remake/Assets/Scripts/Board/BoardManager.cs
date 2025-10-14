@@ -145,7 +145,7 @@ public class BoardManager : MonoBehaviour
     {
         Transform deadUnit = _battlefieldGrid[unitCoords.x][unitCoords.y];
         _battlefieldGrid[unitCoords.x][unitCoords.y] = null;
-        deadUnit.gameObject.SetActive(false);   
+        deadUnit.gameObject.SetActive(false);
     }
 
     public void RestorePositions()
