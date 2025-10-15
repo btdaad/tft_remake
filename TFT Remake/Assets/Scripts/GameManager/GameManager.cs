@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     BoardManager _boardManager;
     UIManager _uiManager;
     PvPManager _pvpManager;
+    GoldManager _goldManager;
     public bool isPlayer;
     Dictionary<Trait, List<Transform>> _playerSynergies = new Dictionary<Trait, List<Transform>>();
     Dictionary<Trait, List<Transform>> _opponentSynergies = new Dictionary<Trait, List<Transform>>();
@@ -61,6 +62,10 @@ public class GameManager : MonoBehaviour
         bool findPVPManager = FindManager<PvPManager>(ref _pvpManager);
         if (findPVPManager)
             _pvpManager.Init();
+
+        bool findGoldManager = FindManager<GoldManager>(ref _goldManager);
+        if (findGoldManager)
+            _goldManager.Init();
 
         isPlayer = true;
         _player = new Player();
@@ -153,9 +158,18 @@ public class GameManager : MonoBehaviour
     public void EndFight(bool hasPlayerWon, int damage)
     {
         if (hasPlayerWon)
-            _opponent.LoseHP(damage);
+        {
+            _opponent.Defeat(damage);
+            _player.Victory();
+            _goldManager.BonusPvP(_player);
+        }
         else
-            _player.LoseHP(damage);
+        {
+            _player.Defeat(damage);
+            _opponent.Victory();
+            _goldManager.BonusPvP(_opponent);
+        }
+        _goldManager.ManageGold(_player, _opponent);
     }
 
     public void Dump()

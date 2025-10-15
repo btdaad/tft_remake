@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
 public class PlayerBoardManager
 {
     private float MIN_BATTLEFIELD_Z = 0f;
