@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     Dictionary<Trait, List<Transform>> _opponentSynergies = new Dictionary<Trait, List<Transform>>();
     [SerializeField] Camera opponentCamera;
     Camera playerCamera;
+    Player _player;
+    Player _opponent;
 
     public UnitTraitSO[] traits;
 
@@ -61,6 +63,10 @@ public class GameManager : MonoBehaviour
             _pvpManager.Init();
 
         isPlayer = true;
+        _player = new Player();
+        _player.Init();
+        _opponent = new Player();
+        _opponent.Init();
 
         playerCamera = Camera.main;
         playerCamera.enabled = true;
@@ -142,6 +148,14 @@ public class GameManager : MonoBehaviour
         playerCamera.GetComponent<DragAndDrop>().enabled = false;
         _boardManager.SavePositions();
         _pvpManager.Fight();
+    }
+
+    public void EndFight(bool hasPlayerWon, int damage)
+    {
+        if (hasPlayerWon)
+            _opponent.LoseHP(damage);
+        else
+            _player.LoseHP(damage);
     }
 
     public void Dump()

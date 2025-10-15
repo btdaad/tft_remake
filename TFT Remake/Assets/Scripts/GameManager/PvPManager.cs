@@ -45,11 +45,16 @@ public class PvPManager : MonoBehaviour
         }
     }
 
-    private void EndFight(bool hasPlayerWon, bool hasOpponentWon)
+    private void EndFight(bool hasPlayerWon, bool hasOpponentWon, int playerTeamSize, int opponentTeamSize)
     {
         CancelInvoke(nameof(MoveUnits));
         _gameManager.GetBoardManager().RestorePositions();
-        // TODO : make player lose PV
+
+        int damage = playerTeamSize;
+        if (hasOpponentWon)
+            damage = opponentTeamSize;
+        _gameManager.EndFight(hasPlayerWon, damage);
+        // TODO : take stages into account to remove hp
     }
 
     private (Coords, int) FindClosestUnit(List<Coords> coordsList, Coords curCoords)
@@ -160,7 +165,7 @@ public class PvPManager : MonoBehaviour
 
         if (hasPlayerWon || hasOpponentWon)
         {
-            EndFight(hasPlayerWon, hasOpponentWon);
+            EndFight(hasPlayerWon, hasOpponentWon, playerCoordsList.Count, opponentCoordsList.Count);
             return true;
         }
         return false;
