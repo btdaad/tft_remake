@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Launch : MonoBehaviour
+public class Cast : MonoBehaviour
 {
     private Unit _targetUnit = null;
     private Transform _target = null;

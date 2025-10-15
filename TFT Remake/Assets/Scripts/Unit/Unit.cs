@@ -168,8 +168,6 @@ public class Unit : MonoBehaviour
                 _mana = Mathf.Min(_mana, stats.mana[1]);
             }
 
-            _lastAttack = 0.0f;
-
             Vector3 basicAttackPos = new Vector3(transform.position.x, 0.4f, transform.position.z);
             Vector3 dir = opponentTransform.position - transform.position;
             GameObject _basicAttackGO = Instantiate(_basicAttackPrefab, basicAttackPos, Quaternion.LookRotation(dir, Vector3.up));
@@ -177,7 +175,9 @@ public class Unit : MonoBehaviour
             if (crit)
                 _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load("BasicAttackMatCrit", typeof(Material)) as Material;
 
-            _basicAttackGO.GetComponent<Launch>().SetTarget(opponent, basicAttack);
+            _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, basicAttack);
+
+            _lastAttack = 0.0f;
         }
     }
 }
