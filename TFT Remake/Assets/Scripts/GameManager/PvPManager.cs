@@ -50,16 +50,16 @@ public class PvPManager : MonoBehaviour
     {
         CancelInvoke(nameof(MoveUnits));
 
-        Debug.Log("Before wait");
-        await Task.Delay(1000);
-        Debug.Log("After wait");
-
-        _gameManager.GetBoardManager().RestorePositions();
-
         int damage = playerTeamSize;
         if (hasOpponentWon)
             damage = opponentTeamSize;
         _gameManager.EndFight(hasPlayerWon, damage);
+
+        await Task.Delay(1000);
+
+        _gameManager.GetBoardManager().RestorePositions();
+        _gameManager.ManageGold();
+
         // TODO : take stages into account to remove hp
     }
 

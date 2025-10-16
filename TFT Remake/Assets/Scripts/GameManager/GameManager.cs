@@ -91,9 +91,29 @@ public class GameManager : MonoBehaviour
         return _uiManager;
     }
 
+    public GoldManager GetGoldManager()
+    {
+        return _goldManager;
+    }
+
+    public Player GetPlayer(bool isPlayer)
+    {
+        return isPlayer ? _player : _opponent;
+    }
+
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void UpdateGoldDisplay()
+    {
+        _uiManager.UpdateGold(isPlayer);
+    }
+
+    public void ManageGold()
+    {
+        _goldManager.ManageGold(_player, _opponent);
     }
 
     public void UpdateSynergies(object sender, EventArgs e)
@@ -169,7 +189,6 @@ public class GameManager : MonoBehaviour
             _opponent.Victory();
             _goldManager.BonusPvP(_opponent);
         }
-        _goldManager.ManageGold(_player, _opponent);
     }
 
     public void Dump()

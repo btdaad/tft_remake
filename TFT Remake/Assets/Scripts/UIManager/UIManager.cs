@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     private SynergiesDisplay UISynergy;
     private Button _fight;
     private Button _changePlayer;
+    private Label _gold;
 
     public void Init()
     {
@@ -25,6 +26,7 @@ public class UIManager : MonoBehaviour
         _fight.clickable.clicked += () => { GameManager.Instance.Fight(); };
         _changePlayer = UIDoc.rootVisualElement.Q<Button>("ChangePlayer");
         _changePlayer.clickable.clicked += () => { GameManager.Instance.ChangePlayer(); };
+        _gold = UIDoc.rootVisualElement.Q<Label>("Gold");
         Button dumpButton = UIDoc.rootVisualElement.Q<Button>("Dump");
         dumpButton.clickable.clicked += () => { GameManager.Instance.Dump(); };
     }
@@ -32,6 +34,11 @@ public class UIManager : MonoBehaviour
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
     {
         UISynergy.UpdateSynergyDisplay(unsortedSynergies, unitTraits);
+    }
+
+    public void UpdateGold(bool isPlayer)
+    {
+        _gold.text = $"{GameManager.Instance.GetGoldManager().GetGold(isPlayer)}";
     }
 
     public void ShowUnitDisplay(Transform unitTransform)
@@ -55,5 +62,6 @@ public class UIManager : MonoBehaviour
             _changePlayer.text = "Play as opponent";
         else
             _changePlayer.text = "Play as yourself";
+        UpdateGold(isPlayer);
     }
 }

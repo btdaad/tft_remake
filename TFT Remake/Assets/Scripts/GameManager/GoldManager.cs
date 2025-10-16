@@ -60,6 +60,8 @@ public class GoldManager : MonoBehaviour
     public void BonusPvP(Player player)
     {
         player.UpdateGold(1);
+
+        GameManager.Instance.UpdateGoldDisplay();
     }
 
     private void UpdateGoldBank(Player player, GameObject[] goldStacks)
@@ -79,9 +81,14 @@ public class GoldManager : MonoBehaviour
     {
         ComputeTotalIncome(player);
         UpdateGoldBank(player, playerGoldStacks);
-        Debug.Log($"{player.GetGold()}");
         ComputeTotalIncome(opponent);
         UpdateGoldBank(opponent, opponentGoldStacks);
-        Debug.Log($"{opponent.GetGold()}");
+
+        GameManager.Instance.UpdateGoldDisplay();
+    }
+
+    public int GetGold(bool isPlayer)
+    {
+        return GameManager.Instance.GetPlayer(isPlayer).GetGold();
     }
 }
