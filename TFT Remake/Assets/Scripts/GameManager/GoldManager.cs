@@ -4,27 +4,15 @@ using UnityEngine.Tilemaps;
 public class GoldManager : MonoBehaviour
 {
     private int MAX_INTEREST = 5;
-    [SerializeField] GameObject goldStack;
-    private Tilemap _playerGoldTilemap; // {-2, 1|2|3|4|5, 0}
-    private (int, int)[] _playerGoldCoords = { (-2, 1), (-2, 2), (-2, 3), (-2, 4), (-2, 5) };
-    private Tilemap _opponentGoldTilemap; // {-3, 0|1|2|3|4, 0}
-    private (int, int)[] _opponentGoldCoords = { (-3, 0), (-3, 1), (-3, 2), (-3, 3), (-3, 4) };
+    [SerializeField] GameObject[] playerGoldStacks = new GameObject[5];
+    [SerializeField] GameObject[] opponentGoldStacks = new GameObject[5];
     public void Init()
     {
-        _playerGoldTilemap = null;
-        _opponentGoldTilemap = null;
-
-        Tilemap[] tilemaps = GameManager.Instance.GetBoardManager().gameObject.GetComponentsInChildren<Tilemap>();
-        foreach (Tilemap tilemap in tilemaps)
+        for (int i = 0; i < playerGoldStacks.Length; i++)
         {
-            if (tilemap.CompareTag($"Player Gold"))
-                _playerGoldTilemap = tilemap;
-            else if (tilemap.CompareTag($"Opponent Gold"))
-                _opponentGoldTilemap = tilemap;
+            playerGoldStacks[i].SetActive(false);
+            opponentGoldStacks[i].SetActive(false);
         }
-        if (_playerGoldTilemap == null
-            || _opponentGoldTilemap == null)
-            Debug.LogError("Could not find every gold bank");
     }
 
     private int ComputeInterest(Player player)
@@ -74,24 +62,26 @@ public class GoldManager : MonoBehaviour
         player.UpdateGold(1);
     }
 
-    private void UpdateGoldBank(Player player, Tilemap goldBankTilemap, (int, int)[] goldBankCoords)
+    private void UpdateGoldBank(Player player, GameObject[] goldStacks)
     {
-        int stack = player.GetGold() / 10;
-        stack = Mathf.Min(stack, goldBankCoords.Length);
-        for (int i = 0; i < stack; i++)
+        int nbStack = player.GetGold() / 10;
+        for (int i = 0; i < goldStacks.Length; i++)
         {
-            (int x, int y) = goldBankCoords[i];
-            Vector3 position = goldBankTilemap.GetCellCenterWorld(new Vector3Int(x, y, 0));
-            Instantiate(goldStack, position, Quaternion.identity);
-            // TODO : remove stack not used
+            int stackIndex = i + 1;
+            if (stackIndex <= nbStack)
+                goldStacks[i].SetActive(true);
+            else
+                goldStacks[i].SetActive(false);
         }
     }
 
     public void ManageGold(Player player, Player opponent)
     {
         ComputeTotalIncome(player);
-        UpdateGoldBank(player, _playerGoldTilemap, _playerGoldCoords);
+        UpdateGoldBank(player, playerGoldStacks);
+        Debug.Log($"{player.GetGold()}");
         ComputeTotalIncome(opponent);
-        UpdateGoldBank(opponent, _opponentGoldTilemap, _opponentGoldCoords);
+        UpdateGoldBank(opponent, opponentGoldStacks);
+        Debug.Log($"{opponent.GetGold()}");
     }
 }

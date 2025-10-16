@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class PvPManager : MonoBehaviour
 {
@@ -45,9 +46,14 @@ public class PvPManager : MonoBehaviour
         }
     }
 
-    private void EndFight(bool hasPlayerWon, bool hasOpponentWon, int playerTeamSize, int opponentTeamSize)
+    private async Task EndFight(bool hasPlayerWon, bool hasOpponentWon, int playerTeamSize, int opponentTeamSize)
     {
         CancelInvoke(nameof(MoveUnits));
+
+        Debug.Log("Before wait");
+        await Task.Delay(1000);
+        Debug.Log("After wait");
+
         _gameManager.GetBoardManager().RestorePositions();
 
         int damage = playerTeamSize;

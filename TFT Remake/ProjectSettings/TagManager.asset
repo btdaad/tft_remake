@@ -8,8 +8,6 @@ TagManager:
   - Player Bench
   - Opponent Battlefield
   - Opponent Bench
-  - Player Gold
-  - Opponent Gold
   layers:
   - Default
   - TransparentFX
