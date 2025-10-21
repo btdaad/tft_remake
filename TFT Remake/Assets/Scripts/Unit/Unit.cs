@@ -148,6 +148,35 @@ public class Unit : MonoBehaviour
         return _lastAttack >= (1 / GetAS());
     }
 
+    private void BasicAttack(Transform opponentTransform)
+    {
+        Unit opponent = opponentTransform.GetComponent<Unit>();
+        float basicAttack = stats.attackDamage[(int)stats.star];
+
+        bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
+        basicAttack *= crit ? GetCritDamage() / 100 : 1;
+
+        Vector3 basicAttackPos = new Vector3(transform.position.x, 0.4f, transform.position.z);
+        Vector3 dir = opponentTransform.position - transform.position;
+        GameObject _basicAttackGO = Instantiate(_basicAttackPrefab, basicAttackPos, Quaternion.LookRotation(dir, Vector3.up));
+
+        if (crit)
+            _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load("BasicAttackMatCrit", typeof(Material)) as Material;
+
+        _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, basicAttack);
+
+        if (_mana != stats.mana[1])
+        {
+            _mana += 10.0f; // "All units generate 10 Mana per attack" (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
+            _mana = Mathf.Min(_mana, stats.mana[1]);
+        }
+    }
+
+    private void SpecialAbility(Transform opponentTransform)
+    {
+
+    }
+
     // Returns wether the attacked unit died;
     public void Attack(Transform opponentTransform)
     {
@@ -156,26 +185,10 @@ public class Unit : MonoBehaviour
 
         if (CanAttack())
         {
-            Unit opponent = opponentTransform.GetComponent<Unit>();
-            float basicAttack = stats.attackDamage[(int)stats.star];
-
-            bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
-            basicAttack *= crit ? GetCritDamage() / 100 : 1;
-
-            if (_mana != stats.mana[1])
-            {
-                _mana += 10.0f; // "All units generate 10 Mana per attack" (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
-                _mana = Mathf.Min(_mana, stats.mana[1]);
-            }
-
-            Vector3 basicAttackPos = new Vector3(transform.position.x, 0.4f, transform.position.z);
-            Vector3 dir = opponentTransform.position - transform.position;
-            GameObject _basicAttackGO = Instantiate(_basicAttackPrefab, basicAttackPos, Quaternion.LookRotation(dir, Vector3.up));
-
-            if (crit)
-                _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load("BasicAttackMatCrit", typeof(Material)) as Material;
-
-            _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, basicAttack);
+            if (_mana == stats.mana[1])
+                SpecialAbility(opponentTransform);
+            else
+                BasicAttack(opponentTransform);
 
             _lastAttack = 0.0f;
         }

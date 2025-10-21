@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(menuName = "Targeting/Closest Enemy")]
-public class ClosestEnemy : TargetingStrategyBase
+[CreateAssetMenu(menuName = "Targeting/Farthest Enemy")]
+public class FarthestEnemy : AbilityTargetBase 
 {
     public override List<Unit> GetTargets(Unit caster)
     {
@@ -11,7 +11,7 @@ public class ClosestEnemy : TargetingStrategyBase
 }
 
 [CreateAssetMenu(menuName = "Targeting/AoE")]
-public class AoE : TargetingStrategyBase
+public class AoE : AbilityTargetBase
 {
     [SerializeField] int radius;
     public override List<Unit> GetTargets(Unit caster)
@@ -21,7 +21,7 @@ public class AoE : TargetingStrategyBase
 }
 
 [CreateAssetMenu(menuName = "Targeting/Cone")]
-public class Cone : TargetingStrategyBase
+public class Cone : AbilityTargetBase
 {
     [SerializeField] int radius;
     public override List<Unit> GetTargets(Unit caster)
@@ -31,7 +31,7 @@ public class Cone : TargetingStrategyBase
 }
 
 [CreateAssetMenu(menuName = "Targeting/Line")]
-public class Line : TargetingStrategyBase
+public class Line : AbilityTargetBase
 {
     public override List<Unit> GetTargets(Unit caster)
     {
