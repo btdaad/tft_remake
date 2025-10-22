@@ -126,8 +126,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   stats: {fileID: 11400000, guid: 7e09f76ad00084772a7ce7aebd9fd54f, type: 2}
-  _isPlayerTeam: 0
-  _basicAttackPrefab: {fileID: 0}
+  _isFromPlayerTeam: 0
+  _basicAttackPrefab: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
+  ability: {fileID: 0}
 --- !u!54 &103294255659258660
 Rigidbody:
   m_ObjectHideFlags: 0

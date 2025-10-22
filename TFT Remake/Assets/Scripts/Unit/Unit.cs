@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class Unit : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class Unit : MonoBehaviour
     bool _hasMoved;
     float _lastAttack; // time since last attack
     Vector3 _position = Vector3.zero;
-    [SerializeField] GameObject _basicAttackPrefab;
+    [SerializeField] private GameObject _basicAttackPrefab;
+    [SerializeField] AbilityBase ability;
     public event EventHandler OnDeath = delegate { };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -62,6 +64,11 @@ public class Unit : MonoBehaviour
     public float GetArmor()
     {
         return stats.armor; // apply modifiers here
+    }
+
+    public float GetMagicResist()
+    {
+        return stats.magicResist; // apply modifiers here
     }
 
     public float GetAS()
@@ -116,9 +123,9 @@ public class Unit : MonoBehaviour
     }
 
     // Returns wether the unit died
-    public bool TakeDamage(float damageRaw)
+    public bool TakeDamage(float damageRaw, bool isPhysicalDamage)
     {
-        float r = GetArmor();
+        float r = isPhysicalDamage ? GetArmor() : GetMagicResist();
         float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
 
         // (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
@@ -128,7 +135,7 @@ public class Unit : MonoBehaviour
             manaGenerated += 0.03f * dm; // and 3% of post-mitigation damage taken) mana
             manaGenerated = Mathf.Min(manaGenerated, 42.5f); // up to 42.5 Mana
             _mana += manaGenerated;
-            _mana = Mathf.Min(_mana, stats.mana[1]);
+            _mana = Mathf.Min(_mana, stats.mana[1]); // TODO : Mana that is gained that would overflow will be carried over up to one cast (50/60 + 20 mana = 10/60 mana after casting).
         }
 
         _health -= dm;
@@ -156,15 +163,9 @@ public class Unit : MonoBehaviour
         bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
         basicAttack *= crit ? GetCritDamage() / 100 : 1;
 
-        Vector3 basicAttackPos = new Vector3(transform.position.x, 0.4f, transform.position.z);
-        Vector3 dir = opponentTransform.position - transform.position;
-        GameObject _basicAttackGO = Instantiate(_basicAttackPrefab, basicAttackPos, Quaternion.LookRotation(dir, Vector3.up));
+        CastSphere(opponent, crit ? "BasicAttackMatCrit" : "BasicAttackMat", basicAttack, true);
 
-        if (crit)
-            _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load("BasicAttackMatCrit", typeof(Material)) as Material;
-
-        _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, basicAttack);
-
+        // TODO : After casting their Special Ability, champions can't accumulate mana for the second thereafter. 
         if (_mana != stats.mana[1])
         {
             _mana += 10.0f; // "All units generate 10 Mana per attack" (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
@@ -172,9 +173,36 @@ public class Unit : MonoBehaviour
         }
     }
 
+    private void CastSphere(Unit opponent, string material, float damage, bool isPhysicalDamage)
+    {
+        Transform opponentTransform = opponent.transform;
+
+        Vector3 basicAttackPos = new Vector3(transform.position.x, 0.4f, transform.position.z);
+        Vector3 dir = opponentTransform.position - transform.position;
+        GameObject _basicAttackGO = Instantiate(_basicAttackPrefab, basicAttackPos, Quaternion.LookRotation(dir, Vector3.up));
+
+        _basicAttackGO.tag = "Attack";
+
+        _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load(material, typeof(Material)) as Material;
+
+        _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, damage, isPhysicalDamage);
+    }
+
     private void SpecialAbility(Transform opponentTransform)
     {
-
+        AbilityBase.Effect effect = ability.GetDamage(this);
+        List<Unit> targets = ability.targetZone.GetTargets(this);
+        if (targets == null) // == target is closest enemy
+        {
+            Unit opponent = opponentTransform.GetComponent<Unit>();
+            CastSphere(opponent, "AbilityMat", effect.damage, effect.isPhysicalDamage);
+        }
+        else
+        {
+            foreach (Unit opponent in targets)
+                CastSphere(opponent, "AbilityMat", effect.damage, effect.isPhysicalDamage);
+        }
+        _mana = 0f;
     }
 
     // Returns wether the attacked unit died;

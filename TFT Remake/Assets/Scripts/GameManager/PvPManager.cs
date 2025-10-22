@@ -46,6 +46,13 @@ public class PvPManager : MonoBehaviour
         }
     }
 
+    private void DestroyLastAttackSpheres()
+    {
+        GameObject[] attackSpheres = GameObject.FindGameObjectsWithTag("Attack");
+        foreach (GameObject attackSphere in attackSpheres)
+            Destroy(attackSphere);
+    }
+
     private async Task EndFight(bool hasPlayerWon, bool hasOpponentWon, int playerTeamSize, int opponentTeamSize)
     {
         CancelInvoke(nameof(MoveUnits));
@@ -54,6 +61,8 @@ public class PvPManager : MonoBehaviour
         if (hasOpponentWon)
             damage = opponentTeamSize;
         _gameManager.EndFight(hasPlayerWon, damage);
+
+        DestroyLastAttackSpheres();
 
         await Task.Delay(1000);
 

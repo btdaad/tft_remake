@@ -1,12 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[CreateAssetMenu(menuName = "Targeting/Closest Enemy")]
+public class ClosestEnemy : AbilityTargetBase 
+{
+    public override List<Unit> GetTargets(Unit caster)
+    {
+        return null;
+    } 
+}
 [CreateAssetMenu(menuName = "Targeting/Farthest Enemy")]
 public class FarthestEnemy : AbilityTargetBase 
 {
     public override List<Unit> GetTargets(Unit caster)
     {
-        return new List<Unit>();
+        return new List<Unit>(); // TODO
     } 
 }
 
@@ -16,7 +24,7 @@ public class AoE : AbilityTargetBase
     [SerializeField] int radius;
     public override List<Unit> GetTargets(Unit caster)
     {
-        return new List<Unit>();
+        return new List<Unit>(); // TODO
     } 
 }
 
@@ -26,7 +34,7 @@ public class Cone : AbilityTargetBase
     [SerializeField] int radius;
     public override List<Unit> GetTargets(Unit caster)
     {
-        return new List<Unit>();
+        return new List<Unit>(); // TODO
     } 
 }
 
@@ -35,6 +43,6 @@ public class Line : AbilityTargetBase
 {
     public override List<Unit> GetTargets(Unit caster)
     {
-        return new List<Unit>();
+        return new List<Unit>(); // TODO
     } 
 }

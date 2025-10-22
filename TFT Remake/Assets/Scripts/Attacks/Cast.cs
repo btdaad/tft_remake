@@ -6,6 +6,7 @@ public class Cast : MonoBehaviour
     private Transform _target = null;
     private float _damage = 0.0f;
     [SerializeField] float speed;
+    private bool _isPhysicalDamage;
 
     void Start()
     { }
@@ -24,18 +25,19 @@ public class Cast : MonoBehaviour
         }
     }
 
-    public void SetTarget(Unit targetUnit, float damage)
+    public void SetTarget(Unit targetUnit, float damage, bool isPhysicalDamage)
     {
         _targetUnit = targetUnit;
         _target = targetUnit.transform;
         _damage = damage;
+        _isPhysicalDamage = isPhysicalDamage;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (_target != null && _target.GetComponent<Collider>() == other)
         {
-            _targetUnit.TakeDamage(_damage);
+            _targetUnit.TakeDamage(_damage, _isPhysicalDamage);
             Destroy(this.gameObject);
         }
     }
