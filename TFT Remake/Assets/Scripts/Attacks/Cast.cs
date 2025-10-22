@@ -5,8 +5,8 @@ public class Cast : MonoBehaviour
     private Unit _targetUnit = null;
     private Transform _target = null;
     private float _damage = 0.0f;
+    private bool _isPhysicalDamage = true;
     [SerializeField] float speed;
-    private bool _isPhysicalDamage;
 
     void Start()
     { }

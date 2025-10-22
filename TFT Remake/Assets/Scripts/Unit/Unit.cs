@@ -11,7 +11,9 @@ public class Unit : MonoBehaviour
     float _ad;
     [SerializeField] bool _isFromPlayerTeam;
     bool _hasMoved;
-    float _lastAttack; // time since last attack
+    float _lastAttack; // time since last basic attack
+    float _lastAbility; // time since last special ability
+    float _manaOverflow;
     Vector3 _position = Vector3.zero;
     [SerializeField] private GameObject _basicAttackPrefab;
     [SerializeField] AbilityBase ability;
@@ -33,12 +35,15 @@ public class Unit : MonoBehaviour
         _ad = 0f;
         _hasMoved = false;
         _lastAttack = 0.0f;
+        _lastAbility = 0.0f;
+        _manaOverflow = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         _lastAttack += Time.deltaTime;
+        _lastAbility += Time.deltaTime;
     }
 
     public float GetHealth()
@@ -121,6 +126,22 @@ public class Unit : MonoBehaviour
         RestorePosition();
         Init();
     }
+    
+    // After casting their Special Ability, champions can't accumulate mana for the second thereafter. 
+    private bool IsManaLocked()
+    {
+        return _lastAbility < 1f; 
+    }
+
+    // Mana that is gained that would overflow will be carried over up to one cast (50/60 + 20 mana = 10/60 mana after casting).
+    private void HandleManaOverflow()
+    {
+        if (_mana > stats.mana[1])
+        {
+            _manaOverflow += (_mana - stats.mana[1]);
+            _mana = stats.mana[1];
+        }
+    }
 
     // Returns wether the unit died
     public bool TakeDamage(float damageRaw, bool isPhysicalDamage)
@@ -129,13 +150,13 @@ public class Unit : MonoBehaviour
         float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
 
         // (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
-        if (_mana != stats.mana[1])
+        if (!IsManaLocked() && _mana != stats.mana[1])
         {
             float manaGenerated = 0.01f * damageRaw; // taking damage generates (1% of pre-mitigation damage taken
             manaGenerated += 0.03f * dm; // and 3% of post-mitigation damage taken) mana
             manaGenerated = Mathf.Min(manaGenerated, 42.5f); // up to 42.5 Mana
             _mana += manaGenerated;
-            _mana = Mathf.Min(_mana, stats.mana[1]); // TODO : Mana that is gained that would overflow will be carried over up to one cast (50/60 + 20 mana = 10/60 mana after casting).
+            HandleManaOverflow();
         }
 
         _health -= dm;
@@ -155,24 +176,6 @@ public class Unit : MonoBehaviour
         return _lastAttack >= (1 / GetAS());
     }
 
-    private void BasicAttack(Transform opponentTransform)
-    {
-        Unit opponent = opponentTransform.GetComponent<Unit>();
-        float basicAttack = stats.attackDamage[(int)stats.star];
-
-        bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
-        basicAttack *= crit ? GetCritDamage() / 100 : 1;
-
-        CastSphere(opponent, crit ? "BasicAttackMatCrit" : "BasicAttackMat", basicAttack, true);
-
-        // TODO : After casting their Special Ability, champions can't accumulate mana for the second thereafter. 
-        if (_mana != stats.mana[1])
-        {
-            _mana += 10.0f; // "All units generate 10 Mana per attack" (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
-            _mana = Mathf.Min(_mana, stats.mana[1]);
-        }
-    }
-
     private void CastSphere(Unit opponent, string material, float damage, bool isPhysicalDamage)
     {
         Transform opponentTransform = opponent.transform;
@@ -186,6 +189,23 @@ public class Unit : MonoBehaviour
         _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load(material, typeof(Material)) as Material;
 
         _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, damage, isPhysicalDamage);
+    }
+
+    private void BasicAttack(Transform opponentTransform)
+    {
+        Unit opponent = opponentTransform.GetComponent<Unit>();
+        float basicAttack = stats.attackDamage[(int)stats.star];
+
+        bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
+        basicAttack *= crit ? GetCritDamage() / 100 : 1;
+
+        CastSphere(opponent, crit ? "BasicAttackMatCrit" : "BasicAttackMat", basicAttack, true);
+
+        if (!IsManaLocked() && _mana != stats.mana[1])
+        {
+            _mana += 10.0f; // "All units generate 10 Mana per attack" (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
+            HandleManaOverflow();
+        }
     }
 
     private void SpecialAbility(Transform opponentTransform)
@@ -202,7 +222,8 @@ public class Unit : MonoBehaviour
             foreach (Unit opponent in targets)
                 CastSphere(opponent, "AbilityMat", effect.damage, effect.isPhysicalDamage);
         }
-        _mana = 0f;
+        _mana = _manaOverflow;
+        _manaOverflow = 0.0f;
     }
 
     // Returns wether the attacked unit died;
@@ -211,13 +232,15 @@ public class Unit : MonoBehaviour
         if (opponentTransform == null) // if unit died during the attack call
             return;
 
+        if (_mana == stats.mana[1]) // TODO : cast directly when mana is full
+        {
+            SpecialAbility(opponentTransform);
+            _lastAbility = 0.0f;
+        }
+
         if (CanAttack())
         {
-            if (_mana == stats.mana[1])
-                SpecialAbility(opponentTransform);
-            else
-                BasicAttack(opponentTransform);
-
+            BasicAttack(opponentTransform);
             _lastAttack = 0.0f;
         }
     }
