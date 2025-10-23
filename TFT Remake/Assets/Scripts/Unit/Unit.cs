@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
     float _mana;
     float _ap;
     float _ad;
+    float _mr;
     [SerializeField] bool _isFromPlayerTeam;
     bool _hasMoved;
     float _lastAttack; // time since last basic attack
@@ -33,6 +34,7 @@ public class Unit : MonoBehaviour
         _mana = stats.mana[0];
         _ap = 0f;
         _ad = 0f;
+        _mr = stats.magicResist;
         _hasMoved = false;
         _lastAttack = 0.0f;
         _lastAbility = 0.0f;
@@ -64,6 +66,17 @@ public class Unit : MonoBehaviour
     public float GetAD()
     {
         return _ad;
+    }
+
+    public float GetMR()
+    {
+        return _mr;
+    }
+
+    public void UpdateMR(float delta)
+    {
+        _mr += delta;
+        _mr = Mathf.Max(_mr, 0.0f);
     }
 
     public float GetArmor()
@@ -176,7 +189,7 @@ public class Unit : MonoBehaviour
         return _lastAttack >= (1 / GetAS());
     }
 
-    private void CastSphere(Unit opponent, string material, float damage, bool isPhysicalDamage)
+    private void CastSphere(Unit opponent, string material, List<AbilityBase.Effect> effects)
     {
         Transform opponentTransform = opponent.transform;
 
@@ -188,7 +201,7 @@ public class Unit : MonoBehaviour
 
         _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load(material, typeof(Material)) as Material;
 
-        _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, damage, isPhysicalDamage);
+        _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, effects);
     }
 
     private void BasicAttack(Transform opponentTransform)
@@ -199,7 +212,9 @@ public class Unit : MonoBehaviour
         bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
         basicAttack *= crit ? GetCritDamage() / 100 : 1;
 
-        CastSphere(opponent, crit ? "BasicAttackMatCrit" : "BasicAttackMat", basicAttack, true);
+        List<AbilityBase.Effect> effects = new List<AbilityBase.Effect>();
+        effects.Add(new AbilityBase.Effect(basicAttack, AbilityBase.EffectType.PHYSICAL_DAMAGE));
+        CastSphere(opponent, crit ? "BasicAttackMatCrit" : "BasicAttackMat", effects);
 
         if (!IsManaLocked() && _mana != stats.mana[1])
         {
@@ -210,17 +225,17 @@ public class Unit : MonoBehaviour
 
     private void SpecialAbility(Transform opponentTransform)
     {
-        AbilityBase.Effect effect = ability.GetDamage(this);
+        List<AbilityBase.Effect> effects = ability.GetEffect(this);
         List<Unit> targets = ability.targetZone.GetTargets(this);
         if (targets == null) // == target is closest enemy
         {
             Unit opponent = opponentTransform.GetComponent<Unit>();
-            CastSphere(opponent, "AbilityMat", effect.damage, effect.isPhysicalDamage);
+            CastSphere(opponent, "AbilityMat", effects);
         }
         else
         {
             foreach (Unit opponent in targets)
-                CastSphere(opponent, "AbilityMat", effect.damage, effect.isPhysicalDamage);
+                CastSphere(opponent, "AbilityMat", effects);
         }
         _mana = _manaOverflow;
         _manaOverflow = 0.0f;

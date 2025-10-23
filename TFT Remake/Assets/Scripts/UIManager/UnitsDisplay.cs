@@ -118,7 +118,7 @@ public class UnitsDisplay
         _ad.text = $"{unit.GetAD()}%";
         _baseDamage.text = $"{stats.attackDamage[(int)stats.star]}";
         _armor.text = $"{unit.GetArmor()}";
-        _mr.text = $"{stats.magicResist}";
+        _mr.text = $"{unit.GetMR()}";
         _atkSpeed.text = $"{unit.GetAS()}";
         _crit.text = $"{unit.GetCritChance()}%";
         _range.text = $"{unit.GetRange()}";

@@ -8,6 +8,7 @@ TagManager:
   - Player Bench
   - Opponent Battlefield
   - Opponent Bench
+  - Attack
   layers:
   - Default
   - TransparentFX

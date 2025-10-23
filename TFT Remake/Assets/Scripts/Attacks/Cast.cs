@@ -1,11 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Cast : MonoBehaviour
 {
     private Unit _targetUnit = null;
     private Transform _target = null;
-    private float _damage = 0.0f;
-    private bool _isPhysicalDamage = true;
+    private List<AbilityBase.Effect> _effects = null;
     [SerializeField] float speed;
 
     void Start()
@@ -24,20 +24,41 @@ public class Cast : MonoBehaviour
                 Destroy(this.gameObject);
         }
     }
+    
+    private void ApplyEffect(AbilityBase.Effect effect)
+    {
+        switch (effect.stat)
+        {
+            case AbilityBase.EffectType.HEALTH:
+                break;
+            case AbilityBase.EffectType.MAGIC_RESIST:
+                _targetUnit.UpdateMR(effect.damage);
+                break;
+            case AbilityBase.EffectType.MAGIC_DAMAGE:
+                _targetUnit.TakeDamage(effect.damage, false);
+                break;
+            case AbilityBase.EffectType.PHYSICAL_DAMAGE:
+                _targetUnit.TakeDamage(effect.damage, true);
+                break;
+            default:
+                Debug.LogError($"Ability Effect is not handled for this stat {effect.stat}");
+                break;
+        }
+    }
 
-    public void SetTarget(Unit targetUnit, float damage, bool isPhysicalDamage)
+    public void SetTarget(Unit targetUnit, List<AbilityBase.Effect> effects)
     {
         _targetUnit = targetUnit;
         _target = targetUnit.transform;
-        _damage = damage;
-        _isPhysicalDamage = isPhysicalDamage;
+        _effects = effects;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (_target != null && _target.GetComponent<Collider>() == other)
         {
-            _targetUnit.TakeDamage(_damage, _isPhysicalDamage);
+            foreach (AbilityBase.Effect effect in _effects)
+                ApplyEffect(effect);
             Destroy(this.gameObject);
         }
     }
