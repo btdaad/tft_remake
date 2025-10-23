@@ -53,6 +53,22 @@ public class Unit : MonoBehaviour
         return _health;
     }
 
+    public void UpdateHealth(float value)
+    {
+        _health += value;
+        if (_health <= 0.0f)
+        {
+            _health = 0;
+            OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
+            OnDeath(null, onDeathEventArgs);
+        }
+    }
+
+    public float GetMaxHealth()
+    {
+        return stats.health[(int)stats.star]; // apply modifiers
+    }
+
     public float GetMana()
     {
         return _mana;
@@ -73,9 +89,9 @@ public class Unit : MonoBehaviour
         return _mr;
     }
 
-    public void UpdateMR(float delta)
+    public void UpdateMR(float value)
     {
-        _mr += delta;
+        _mr += value;
         _mr = Mathf.Max(_mr, 0.0f);
     }
 
@@ -156,8 +172,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    // Returns wether the unit died
-    public bool TakeDamage(float damageRaw, bool isPhysicalDamage)
+    public void TakeDamage(float damageRaw, bool isPhysicalDamage)
     {
         float r = isPhysicalDamage ? GetArmor() : GetMagicResist();
         float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
@@ -172,16 +187,7 @@ public class Unit : MonoBehaviour
             HandleManaOverflow();
         }
 
-        _health -= dm;
-        if (_health <= 0)
-        {
-            _health = 0;
-            OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
-            OnDeath(null, onDeathEventArgs);
-            return true;
-        }
-
-        return false;
+        UpdateHealth(-dm);
     }
 
     private bool CanAttack()
@@ -201,7 +207,7 @@ public class Unit : MonoBehaviour
 
         _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load(material, typeof(Material)) as Material;
 
-        _basicAttackGO.GetComponent<Cast>().SetTarget(opponent, effects);
+        _basicAttackGO.GetComponent<Cast>().SetTarget(this, opponent, effects);
     }
 
     private void BasicAttack(Transform opponentTransform)

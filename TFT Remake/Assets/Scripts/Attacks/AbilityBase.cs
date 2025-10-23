@@ -24,14 +24,21 @@ public abstract class AbilityBase : ScriptableObject
         }
     }
     public abstract List<Effect> GetEffect(Unit caster);   
-    protected Effect GetMagicDamage(Unit caster, float damage)
+    protected float ScaleValueWithAP(Unit caster, float value)
     {
-        float magicDamage = damage * (caster.stats.abilityPower + caster.GetAD()) / 100f;
-        return new Effect(magicDamage, EffectType.MAGIC_DAMAGE);
+        return value * (caster.stats.abilityPower + caster.GetAD()) / 100f;
     }
-    protected Effect GetPhysicalDamage(Unit caster, float damage)
+    protected float ScaleValueWithAD(Unit caster, float value)
     {
-        float physicalDamage = damage * (caster.stats.attackDamage[(int) caster.stats.star] + caster.GetAP()) / 100f;
-        return new Effect(physicalDamage, EffectType.PHYSICAL_DAMAGE);
+        return value * (caster.stats.attackDamage[(int) caster.stats.star] + caster.GetAP()) / 100f;
+    }
+
+    protected Effect GetMagicDamage(float damage)
+    {
+        return new Effect(damage, EffectType.MAGIC_DAMAGE);
+    }
+    protected Effect GetPhysicalDamage(float damage)
+    {
+        return new Effect(damage, EffectType.PHYSICAL_DAMAGE);
     }
 }

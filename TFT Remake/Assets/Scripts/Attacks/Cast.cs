@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class Cast : MonoBehaviour
 {
+    private Unit _caster = null;
     private Unit _targetUnit = null;
     private Transform _target = null;
     private List<AbilityBase.Effect> _effects = null;
@@ -30,6 +31,7 @@ public class Cast : MonoBehaviour
         switch (effect.stat)
         {
             case AbilityBase.EffectType.HEALTH:
+                _caster.UpdateHealth(effect.damage);
                 break;
             case AbilityBase.EffectType.MAGIC_RESIST:
                 _targetUnit.UpdateMR(effect.damage);
@@ -46,8 +48,9 @@ public class Cast : MonoBehaviour
         }
     }
 
-    public void SetTarget(Unit targetUnit, List<AbilityBase.Effect> effects)
+    public void SetTarget(Unit caster, Unit targetUnit, List<AbilityBase.Effect> effects)
     {
+        _caster = caster;
         _targetUnit = targetUnit;
         _target = targetUnit.transform;
         _effects = effects;
