@@ -26,6 +26,7 @@ public class UnitsDisplay
     private Label _name;
     private Label _healthLabel;
     private VisualElement _healthBarMask;
+    private VisualElement _shieldBarMask;
     private Label _manaLabel;
     private VisualElement _manaBarMask;
     private Label _baseDamage;
@@ -61,6 +62,7 @@ public class UnitsDisplay
         InitTraits(ref _traitTextures, ref _traitLabels);
         _name = GetUIElement<Label>("Name");
 
+        _shieldBarMask = GetUIElement<VisualElement>("ShieldBarMask");
         _healthLabel = GetUIElement<Label>("HealthLabel");
         _healthBarMask = GetUIElement<VisualElement>("HealthBarMask");
         _manaLabel = GetUIElement<Label>("ManaLabel");
@@ -104,8 +106,15 @@ public class UnitsDisplay
 
         _name.text = stats.type.ToString();
 
+        float shield = unit.GetShield();
+        float maxHealth = unit.GetMaxHealth() + shield;
+
+        float shieldRatio = (unit.GetHealth() + shield) / maxHealth;
+        float shieldPercent = Mathf.Lerp(0, 100, shieldRatio);
+        _shieldBarMask.style.width = Length.Percent(shieldPercent);
+
         _healthLabel.text = $"{Mathf.Round(unit.GetHealth())}/{Mathf.Round(unit.GetMaxHealth())}";
-        float healthRatio = unit.GetHealth() / unit.GetMaxHealth();
+        float healthRatio = unit.GetHealth() / maxHealth;
         float healthPercent = Mathf.Lerp(0, 100, healthRatio);
         _healthBarMask.style.width = Length.Percent(healthPercent);
 

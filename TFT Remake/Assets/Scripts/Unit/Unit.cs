@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour
     float _ad;
     float _mr;
     List<Shield> _shields;
-    [SerializeField] readonly bool _isFromPlayerTeam;
+    [SerializeField] bool _isFromPlayerTeam;
     bool _hasMoved;
     float _lastAttack; // time since last basic attack
     float _lastAbility; // time since last special ability
@@ -36,7 +36,7 @@ public class Unit : MonoBehaviour
         _ap = 0f;
         _ad = 0f;
         _mr = stats.magicResist;
-        _shields = null;
+        _shields = new List<Shield>();
         _hasMoved = false;
         _lastAttack = 0.0f;
         _lastAbility = 0.0f;
@@ -50,8 +50,14 @@ public class Unit : MonoBehaviour
         _lastAbility += Time.deltaTime;
 
         for (int i = 0; i < _shields.Count; i++)
-            _shields[i].time -= Time.deltaTime;
-        _shields.RemoveAll(shield => shield.strength <= 0.0f || shield.time <= 0.0f);
+        {
+            if (_shields[i].duration > 0.0f) // if time is < 0 it means the shield does not expirate
+            {
+                _shields[i].duration -= Time.deltaTime;
+                _shields[i].duration = Mathf.Max(_shields[i].duration, 0.0f);
+            }
+        }
+        _shields.RemoveAll(shield => shield.strength <= 0.0f || shield.duration == 0.0f);
     }
 
     public float GetHealth()
@@ -96,9 +102,17 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void SetShield(float value, float time)
+    public float GetShield()
     {
-        _shields.Add(new Shield(value, time));
+        float totalShieldStrength = 0.0f;
+        foreach (Shield shield in _shields)
+            totalShieldStrength += shield.strength;
+        return totalShieldStrength;
+    }
+
+    public void SetShield(float strength, float duration)
+    {
+        _shields.Add(new Shield(strength, duration));
     }
 
     public float GetMaxHealth()
