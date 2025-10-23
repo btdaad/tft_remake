@@ -10,7 +10,8 @@ public class Unit : MonoBehaviour
     float _ap;
     float _ad;
     float _mr;
-    [SerializeField] bool _isFromPlayerTeam;
+    List<Shield> _shields;
+    [SerializeField] readonly bool _isFromPlayerTeam;
     bool _hasMoved;
     float _lastAttack; // time since last basic attack
     float _lastAbility; // time since last special ability
@@ -35,6 +36,7 @@ public class Unit : MonoBehaviour
         _ap = 0f;
         _ad = 0f;
         _mr = stats.magicResist;
+        _shields = null;
         _hasMoved = false;
         _lastAttack = 0.0f;
         _lastAbility = 0.0f;
@@ -46,6 +48,10 @@ public class Unit : MonoBehaviour
     {
         _lastAttack += Time.deltaTime;
         _lastAbility += Time.deltaTime;
+
+        for (int i = 0; i < _shields.Count; i++)
+            _shields[i].time -= Time.deltaTime;
+        _shields.RemoveAll(shield => shield.strength <= 0.0f || shield.time <= 0.0f);
     }
 
     public float GetHealth()
@@ -53,8 +59,34 @@ public class Unit : MonoBehaviour
         return _health;
     }
 
+    // Returns the rest of the damage that the shields couldn't take
+    private float ShieldDamage(float damage)
+    {
+        while (damage > 0.0f && _shields.Count > 0)
+        {
+            if (_shields[0].strength >= damage)
+            {
+                _shields[0].strength -= damage;
+                damage = 0.0f;
+            }
+            else
+            {
+                damage -= _shields[0].strength;
+                _shields.RemoveAt(0);
+            }
+        }
+        return damage;
+    }
+
     public void UpdateHealth(float value)
     {
+        if (value < 0.0f) // damage are taken by the shields
+        {
+            value = ShieldDamage(value);
+            if (value == 0.0f)
+                return;
+        }
+
         _health += value;
         if (_health <= 0.0f)
         {
@@ -62,6 +94,11 @@ public class Unit : MonoBehaviour
             OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
             OnDeath(null, onDeathEventArgs);
         }
+    }
+
+    public void SetShield(float value, float time)
+    {
+        _shields.Add(new Shield(value, time));
     }
 
     public float GetMaxHealth()
