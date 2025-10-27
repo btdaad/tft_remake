@@ -283,7 +283,13 @@ public class Unit : MonoBehaviour
     private void SpecialAbility(Transform opponentTransform)
     {
         List<AbilityBase.Effect> effects = ability.GetEffect(this);
+
+        // AoE can be either centered on caster or on target
+        if (ability.targetZone is AoE)
+            ((AoE) ability.targetZone).SetTarget(opponentTransform);
+            
         List<Unit> targets = ability.targetZone.GetTargets(this);
+
         if (targets == null) // == target is closest enemy
         {
             Unit opponent = opponentTransform.GetComponent<Unit>();

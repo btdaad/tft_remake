@@ -36,14 +36,14 @@ public class PathFindingInfo
         return dist;
     }
 
-    public List<Coords> GetCellsAt(int distance)
+    public List<Coords> GetCellsTo(int distance)
     {
         List<Coords> coords = new List<Coords>();
         for (int x = 0; x < _hexCellInfos.Length; x++)
         {
             for (int y = 0; y < _hexCellInfos[x].Length; y++)
             {
-                if (_hexCellInfos[x][y].dist == distance)
+                if (_hexCellInfos[x][y].dist <= distance)
                     coords.Add(_hexCellInfos[x][y].coords);
             }
         }
