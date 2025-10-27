@@ -18,26 +18,6 @@ public class FarthestEnemy : AbilityTargetBase
     } 
 }
 
-[CreateAssetMenu(menuName = "Targeting/AoE")]
-public class AoE : AbilityTargetBase
-{
-    [SerializeField] int radius;
-    public override List<Unit> GetTargets(Unit caster)
-    {
-        return new List<Unit>(); // TODO
-    } 
-}
-
-[CreateAssetMenu(menuName = "Targeting/Cone")]
-public class Cone : AbilityTargetBase
-{
-    [SerializeField] int radius;
-    public override List<Unit> GetTargets(Unit caster)
-    {
-        return new List<Unit>(); // TODO
-    } 
-}
-
 [CreateAssetMenu(menuName = "Targeting/Line")]
 public class Line : AbilityTargetBase
 {

@@ -32,6 +32,10 @@ public abstract class AbilityBase : ScriptableObject
     {
         return value * (caster.stats.attackDamage[(int) caster.stats.star] + caster.GetAP()) / 100f;
     }
+    protected float ScaleValueWithArmor(Unit caster, float value)
+    {
+        return (value * caster.GetArmor()) / 100f;
+    }
 
     protected Effect GetMagicDamage(float damage)
     {

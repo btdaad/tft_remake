@@ -66,6 +66,18 @@ public class BoardManager : MonoBehaviour
             _opponentBoardManager.OnDropUnit(unitTransform);
     }
 
+    // Implemented only for battlefield units
+    public List<Transform> GetUnitsAt(List<Coords> coords)
+    {
+        List<Transform> units = new List<Transform>();
+        foreach (Coords coord in coords)
+        {
+            if (_battlefieldGrid[coord.x][coord.y] != null)
+                units.Add(_battlefieldGrid[coord.x][coord.y]);
+        }
+        return units;
+    }
+
     public Transform GetUnitAt(int xPos, int yPos, bool isBattlefield)
     {
         if (isBattlefield)
@@ -116,6 +128,11 @@ public class BoardManager : MonoBehaviour
                 _pathFindingInfo[x][y].ComputeDistances(x, y);
     }
 
+    public PathFindingInfo GetPathFindingInfo(int xPos, int yPos)
+    {
+        return _pathFindingInfo[xPos][yPos];
+    }
+
     private Vector3Int CoordsToTilemapCell(Coords coords)
     {
         return new Vector3Int(coords.y - 1, coords.x, 0);
@@ -143,9 +160,15 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
+    // Careful : the function returns a xPos and yPos but when accessing values in the grid, they should be called with [yPos][xPos]
+    public (int, int) ToBattlefieldCoord(Vector3 position)
+    {
+        return _playerBoardManager.ToBattlefieldCoord(position); // using the playerBoard or the opponentBoard is equivalent
+    }
+
     public void RemoveUnit(Transform deadUnit)
     {
-        (int xPos, int yPos) = _playerBoardManager.ToBattlefieldCoord(deadUnit.position);
+        (int xPos, int yPos) = ToBattlefieldCoord(deadUnit.position);
         _battlefieldGrid[yPos][xPos] = null;
         deadUnit.gameObject.SetActive(false);
         _saveUnits.Add(deadUnit.gameObject);
