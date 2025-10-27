@@ -17,12 +17,3 @@ public class FarthestEnemy : AbilityTargetBase
         return new List<Unit>(); // TODO
     } 
 }
-
-[CreateAssetMenu(menuName = "Targeting/Line")]
-public class Line : AbilityTargetBase
-{
-    public override List<Unit> GetTargets(Unit caster)
-    {
-        return new List<Unit>(); // TODO
-    } 
-}

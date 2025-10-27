@@ -24,13 +24,13 @@ MonoBehaviour:
   - 0
   - 40
   attackDamage:
-  - 30
-  - 45
-  - 70
+  - 90
+  - 135
+  - 203
   abilityPower: 100
   armor: 60
   magicResist: 60
-  attackSpeed: 0.8
+  attackSpeed: 0.7
   critChance: 25
   critDamage: 140
   range: 1

@@ -8,22 +8,34 @@ public class Cast : MonoBehaviour
     private Transform _target = null;
     private List<AbilityBase.Effect> _effects = null;
     [SerializeField] float speed;
-
+    
+    // the following properties are used for casting along a line
+    private bool _canGoThroughEnemies = false;
+    private float _timeSinceLaunch = 0.0f;
+    [SerializeField] float timeBeforeDespawn = 0.0f; // used only if the sphere can go through multiple enemies
     void Start()
     { }
 
     void Update()
     {
-        if (_target != null)
+        if (_canGoThroughEnemies) // only set to true when SetTarget is called AND if it is not a basic attack
         {
-            if (_target.gameObject.activeSelf)
-            {
-                float step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, _target.position, step);
-            }
-            else
+            if (_timeSinceLaunch >= timeBeforeDespawn)
                 Destroy(this.gameObject);
+            float step = speed * Time.deltaTime;
+            transform.Translate(0.0f, 0.0f, step); // move in target direction (set in SetTarget) ; does not depend on target alive or not
+            _timeSinceLaunch += Time.deltaTime;
         }
+        else if (_target != null)
+            {
+                if (_target.gameObject.activeSelf)
+                {
+                    float step = speed * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(transform.position, _target.position, step);
+                }
+                else
+                    Destroy(this.gameObject);
+            }
     }
     
     private void ApplyEffect(AbilityBase.Effect effect)
@@ -48,12 +60,23 @@ public class Cast : MonoBehaviour
         }
     }
 
+    bool IsBasicAttack()
+    {
+        return GetComponent<Renderer>().material.name.Contains("BasicAttack");
+    }
+
     public void SetTarget(Unit caster, Unit targetUnit, List<AbilityBase.Effect> effects)
     {
         _caster = caster;
         _targetUnit = targetUnit;
         _target = targetUnit.transform;
         _effects = effects;
+
+        if (!IsBasicAttack() && timeBeforeDespawn != 0.0f)
+        {
+            _canGoThroughEnemies = true;
+            transform.LookAt(_target); // face target
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -62,7 +85,8 @@ public class Cast : MonoBehaviour
         {
             foreach (AbilityBase.Effect effect in _effects)
                 ApplyEffect(effect);
-            Destroy(this.gameObject);
+            if (IsBasicAttack() || !_canGoThroughEnemies)
+                Destroy(this.gameObject);
         }
     }
 }

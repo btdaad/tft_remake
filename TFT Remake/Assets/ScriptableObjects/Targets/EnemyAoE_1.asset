@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c1ce5282e3474749b34db22bf9b6b3c, type: 3}
   m_Name: EnemyAoE_1
   m_EditorClassIdentifier: Assembly-CSharp::AoE
-  radius: 0
-  centeredOnCaster: 1
+  radius: 1
+  centeredOnCaster: 0

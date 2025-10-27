@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cda31303e621da6e88b7762cc798af6, type: 3}
   m_Name: ThunderingHammerstrike
   m_EditorClassIdentifier: Assembly-CSharp::ThunderingHammerstrike
-  targetZone: {fileID: 0}
+  targetZone: {fileID: 11400000, guid: 4b6dbde6d98df344093fbd4c299e5dbf, type: 2}
