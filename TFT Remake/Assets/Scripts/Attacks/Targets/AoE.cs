@@ -6,8 +6,7 @@ public class AoE : AbilityTargetBase
 {
     [SerializeField] int radius;
     [SerializeField] bool centeredOnCaster = true; // otherwise centered on target
-    private Transform _target;
-    public void SetTarget(Transform target)
+    public override void SetTarget(Transform target)
     {
         _target = centeredOnCaster ? null : target;
     }
