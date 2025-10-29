@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Collections;            
 
 public class Unit : MonoBehaviour
 {
@@ -68,6 +69,7 @@ public class Unit : MonoBehaviour
     // Returns the rest of the damage that the shields couldn't take
     private float ShieldDamage(float damage)
     {
+        // TODO : damage is always < 0 ; need to fix this function !!!!
         while (damage > 0.0f && _shields.Count > 0)
         {
             if (_shields[0].strength >= damage)
@@ -82,6 +84,39 @@ public class Unit : MonoBehaviour
             }
         }
         return damage;
+    }
+
+    private IEnumerator UpdateHealthCoroutine(float value, float duration)
+    {
+        float timeElapsed = 0.0f;
+        float healthPerSec = value / duration;
+
+        while (timeElapsed < duration)
+        {
+            float deltaHealth = healthPerSec * Time.deltaTime;
+
+            if (deltaHealth < 0.0f) // damage are taken by the shields
+            {
+                deltaHealth = ShieldDamage(deltaHealth);
+                if (deltaHealth == 0.0f)
+                    continue; // if the damage have been shield, wait for the next one
+            }
+
+            // TODO : complete this function
+            // _health += value;
+            // if (_health <= 0.0f)
+            // {
+            //     _health = 0;
+            //     OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
+            //     OnDeath(null, onDeathEventArgs);
+            // }
+        }
+        yield return null;            
+    }
+
+    public void UpdateHealthOverTime(float value, float duration)
+    {
+        StartCoroutine(UpdateHealthCoroutine(value, duration));
     }
 
     public void UpdateHealth(float value)
@@ -113,6 +148,11 @@ public class Unit : MonoBehaviour
     public void SetShield(float strength, float duration)
     {
         _shields.Add(new Shield(strength, duration));
+    }
+
+    public void GainDurability(float strength, float duration)
+    {
+        // TODO : implement
     }
 
     public float GetMaxHealth()
