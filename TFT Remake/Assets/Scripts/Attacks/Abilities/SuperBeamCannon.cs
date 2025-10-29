@@ -15,17 +15,28 @@ public class SuperBeamCannon : AbilityBase
 {
     private int[] damageAP = { 40, 60, 95 };
     private int[] damageAD = { 360, 540, 875 };
-    private float secondaryDamageRatio = 0.22;
+    private float secondaryDamageRatio = 0.22f;
     
-    public override List<Effect> GetEffect(Unit caster)
+    public override List<List<Effect>> GetEffects(Unit caster)
     {
-        List<Effect> effects = new List<Effect>();
+        List<List<Effect>> listEffects = new List<List<Effect>>();
 
-        float physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
-        float physicalDamageAP = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
+        // Dammage to first target
+        List<Effect> firstTargetEffects = new List<Effect>();
+        float physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star] * (1 - secondaryDamageRatio));
+        float physicalDamageAP = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star] * (1 - secondaryDamageRatio));
         float physicalDamage = physicalDamageAD + physicalDamageAP;
-        effects.Add(GetPhysicalDamage(physicalDamage));
+        firstTargetEffects.Add(GetPhysicalDamage(physicalDamage));
+        listEffects.Add(firstTargetEffects);
 
-        return effects;
+        // Dammage to other targets
+        List<Effect> otherTargetsEffects = new List<Effect>();
+        physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star] * secondaryDamageRatio);
+        physicalDamageAP = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star] * secondaryDamageRatio);
+        physicalDamage = physicalDamageAD + physicalDamageAP;
+        otherTargetsEffects.Add(GetPhysicalDamage(physicalDamage));
+        listEffects.Add(otherTargetsEffects);
+
+        return listEffects;
     }
 }

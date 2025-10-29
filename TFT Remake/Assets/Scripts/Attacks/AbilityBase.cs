@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "AbilityBase", menuName = "Scriptable Objects/AbilityBase")]
 public abstract class AbilityBase : ScriptableObject
 {
-    [SerializeField] public AbilityTargetBase targetZone;
+    [SerializeField] public List<AbilityTargetBase> targetZones;
     public enum EffectType
     {
         HEALTH, // for healing purpose
@@ -23,7 +23,7 @@ public abstract class AbilityBase : ScriptableObject
             this.stat = stat;
         }
     }
-    public abstract List<Effect> GetEffect(Unit caster);   
+    public abstract List<List<Effect>> GetEffects(Unit caster);   
     protected float ScaleValueWithAP(Unit caster, float value)
     {
         return value * (caster.stats.abilityPower + caster.GetAD()) / 100f;

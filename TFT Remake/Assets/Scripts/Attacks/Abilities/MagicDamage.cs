@@ -5,12 +5,16 @@ using System.Collections.Generic;
 public class MagicDamage : AbilityBase 
 {
     private int[] damageAP = { 215, 350, 530 };
-    public override List<Effect> GetEffect(Unit caster)
+    public override List<List<Effect>> GetEffects(Unit caster)
     {
+        List<List<Effect>> listEffects = new List<List<Effect>>();
+
         List<Effect> effects = new List<Effect>();
         float magicDamage = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
         Effect effect = GetMagicDamage(magicDamage);
         effects.Add(effect);
-        return effects;
+
+        listEffects.Add(effects);
+        return listEffects;
     }
 }

@@ -246,7 +246,7 @@ public class Unit : MonoBehaviour
         return _lastAttack >= (1 / GetAS());
     }
 
-    private void CastSphere(Unit opponent, string material, List<AbilityBase.Effect> effects)
+    private void CastSphere(Unit opponent, string material, List<AbilityBase.Effect> effects, bool goThroughEnemies = false)
     {
         Transform opponentTransform = opponent.transform;
 
@@ -258,7 +258,7 @@ public class Unit : MonoBehaviour
 
         _basicAttackGO.GetComponent<MeshRenderer>().material = Resources.Load(material, typeof(Material)) as Material;
 
-        _basicAttackGO.GetComponent<Cast>().SetTarget(this, opponent, effects);
+        _basicAttackGO.GetComponent<Cast>().SetTarget(this, opponent, effects, goThroughEnemies);
     }
 
     private void BasicAttack(Transform opponentTransform)
@@ -282,12 +282,20 @@ public class Unit : MonoBehaviour
 
     private void SpecialAbility(Transform opponentTransform)
     {
-        List<AbilityBase.Effect> effects = ability.GetEffect(this);
-        ability.targetZone.SetTarget(opponentTransform);
-        List<Unit> targets = ability.targetZone.GetTargets(this);
+        List<List<AbilityBase.Effect>> effects = ability.GetEffects(this);
+        for (int i = 0; i < effects.Count; i++)
+        {
+            ability.targetZones[i].SetTarget(opponentTransform);
+            List<Unit> targets = ability.targetZones[i].GetTargets(this);
 
-        foreach (Unit opponent in targets)
-            CastSphere(opponent, "AbilityMat", effects);
+            if (ability.targetZones[i] is Line) // only one sphere is cast, but it goes **through** the enemies
+                CastSphere(targets[0], "AbilityMat", effects[i], true);
+            else
+            {
+                foreach (Unit opponent in targets)
+                    CastSphere(opponent, "AbilityMat", effects[i]);
+            }
+        }
 
         _mana = _manaOverflow;
         _manaOverflow = 0.0f;

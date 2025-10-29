@@ -15,8 +15,10 @@ public class BladeVigor : AbilityBase
     private int[] damageAD = { 100, 150, 250 };
     private int[] damageAP = { 25, 40, 55 };
     
-    public override List<Effect> GetEffect(Unit caster)
+    public override List<List<Effect>> GetEffects(Unit caster)
     {
+        List<List<Effect>> listEffects = new List<List<Effect>>();
+
         float missingHealth = - (caster.GetHealth() - caster.GetMaxHealth());
         float missingHealthRatio = missingHealth / caster.GetMaxHealth();
         float missingHealthPercent = Mathf.Lerp(0, 1, missingHealthRatio);
@@ -33,6 +35,7 @@ public class BladeVigor : AbilityBase
         physicalDamage += missingHealthPercent * physicalDamage;
         effects.Add(GetPhysicalDamage(physicalDamage));
 
-        return effects;
+        listEffects.Add(effects);
+        return listEffects;
     }
 }

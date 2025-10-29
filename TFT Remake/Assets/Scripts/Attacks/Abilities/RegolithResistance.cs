@@ -14,8 +14,10 @@ public class RegolithResistance : AbilityBase
     private int[] damageAP = { 40, 60, 90 };
     private int[] damageArmor = { 270, 405, 610 };
     
-    public override List<Effect> GetEffect(Unit caster)
+    public override List<List<Effect>> GetEffects(Unit caster)
     {
+        List<List<Effect>> listEffects = new List<List<Effect>>();
+
         List<Effect> effects = new List<Effect>();
 
         float physicalDamageAP = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
@@ -24,7 +26,7 @@ public class RegolithResistance : AbilityBase
         effects.Add(GetPhysicalDamage(physicalDamage));
 
         // TODO : implement passive effect "Passive: Gain 12 Armor for each item equipped."
-
-        return effects;
+        listEffects.Add(effects);
+        return listEffects;
     }
 }
