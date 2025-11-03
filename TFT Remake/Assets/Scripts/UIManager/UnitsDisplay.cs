@@ -37,6 +37,7 @@ public class UnitsDisplay
     private Label _atkSpeed;
     private Label _crit;
     private Label _range;
+    private Label _dr;
 
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -76,6 +77,7 @@ public class UnitsDisplay
         _atkSpeed = GetUIElement<Label>("AtkSpeed");
         _crit = GetUIElement<Label>("Crit");
         _range = GetUIElement<Label>("Range");
+        _dr = GetUIElement<Label>("DR");
 
         _unitDisplayBackground.visible = false;
     }
@@ -131,6 +133,7 @@ public class UnitsDisplay
         _atkSpeed.text = $"{unit.GetAS()}";
         _crit.text = $"{unit.GetCritChance()}%";
         _range.text = $"{unit.GetRange()}";
+        _dr.text = $"{unit.GetDurability() * 100.0f}%";
 
         // _unitArt.material = unit.GetComponent<Renderer>().material;
         _unitDisplayBackground.visible = true;

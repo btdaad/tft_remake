@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e75e9ad459c43c029da58365e9d984b, type: 3}
   m_Name: BladeVigor
   m_EditorClassIdentifier: Assembly-CSharp::BladeVigor
-  targetZone: {fileID: 11400000, guid: bd2ce9d30500a3d2bb934062f3ede279, type: 2}
+  targetZones:
+  - {fileID: 11400000, guid: bd2ce9d30500a3d2bb934062f3ede279, type: 2}

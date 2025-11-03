@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ca698d55b6a1382ba253b633a15ed3c, type: 3}
   m_Name: SuperBeamCannon
   m_EditorClassIdentifier: Assembly-CSharp::SuperBeamCannon
-  targetZones: []
+  targetZones:
+  - {fileID: 11400000, guid: bd2ce9d30500a3d2bb934062f3ede279, type: 2}
+  - {fileID: 11400000, guid: 89fe1ceb15c39a55bac9111ce427eaf6, type: 2}

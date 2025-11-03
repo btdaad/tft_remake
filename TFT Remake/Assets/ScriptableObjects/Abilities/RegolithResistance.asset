@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf910e82d9ef146fcaa16db7b27a5f5a, type: 3}
   m_Name: RegolithResistance
   m_EditorClassIdentifier: Assembly-CSharp::RegolitResistance
-  targetZone: {fileID: 11400000, guid: 4860804ecdeee37fc919d92516cd66f8, type: 2}
+  targetZones:
+  - {fileID: 11400000, guid: 4860804ecdeee37fc919d92516cd66f8, type: 2}

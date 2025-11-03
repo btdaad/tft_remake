@@ -12,6 +12,7 @@ public class Unit : MonoBehaviour
     float _ad;
     float _mr;
     List<Shield> _shields;
+    List<Shield> _durability;
     [SerializeField] bool _isFromPlayerTeam;
     bool _hasMoved;
     float _lastAttack; // time since last basic attack
@@ -38,6 +39,7 @@ public class Unit : MonoBehaviour
         _ad = 0f;
         _mr = stats.magicResist;
         _shields = new List<Shield>();
+        _durability = new List<Shield>();
         _hasMoved = false;
         _lastAttack = 0.0f;
         _lastAbility = 0.0f;
@@ -59,6 +61,16 @@ public class Unit : MonoBehaviour
             }
         }
         _shields.RemoveAll(shield => shield.strength <= 0.0f || shield.duration == 0.0f);
+
+        for (int i = 0; i < _durability.Count; i++)
+        {
+            if (_durability[i].duration > 0.0f) // if time is < 0 it means the shield does not expirate
+            {
+                _durability[i].duration -= Time.deltaTime;
+                _durability[i].duration = Mathf.Max(_durability[i].duration, 0.0f);
+            }
+        }
+        _durability.RemoveAll(durability => durability.strength <= 0.0f || durability.duration == 0.0f);
     }
 
     public float GetHealth()
@@ -66,10 +78,10 @@ public class Unit : MonoBehaviour
         return _health;
     }
 
-    // Returns the rest of the damage that the shields couldn't take
-    private float ShieldDamage(float damage)
+    // Returns the rest of the damage that the shields couldn't take, as a POSITIVE number
+    // @params float damage : a positive number interpreted as damage to the shield 
+    private float ShieldDamageAux(float damage)
     {
-        // TODO : damage is always < 0 ; need to fix this function !!!!
         while (damage > 0.0f && _shields.Count > 0)
         {
             if (_shields[0].strength >= damage)
@@ -86,6 +98,12 @@ public class Unit : MonoBehaviour
         return damage;
     }
 
+    // Wrapper around the actual shield damage handling in order to turn damage into positive values
+    private float ShieldDamage(float damage)
+    {
+        return -ShieldDamageAux(-damage);
+    }
+
     private IEnumerator UpdateHealthCoroutine(float value, float duration)
     {
         float timeElapsed = 0.0f;
@@ -94,24 +112,10 @@ public class Unit : MonoBehaviour
         while (timeElapsed < duration)
         {
             float deltaHealth = healthPerSec * Time.deltaTime;
-
-            if (deltaHealth < 0.0f) // damage are taken by the shields
-            {
-                deltaHealth = ShieldDamage(deltaHealth);
-                if (deltaHealth == 0.0f)
-                    continue; // if the damage have been shield, wait for the next one
-            }
-
-            // TODO : complete this function
-            // _health += value;
-            // if (_health <= 0.0f)
-            // {
-            //     _health = 0;
-            //     OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
-            //     OnDeath(null, onDeathEventArgs);
-            // }
+            UpdateHealth(deltaHealth);
+            timeElapsed += Time.deltaTime;
         }
-        yield return null;            
+        yield return null;
     }
 
     public void UpdateHealthOverTime(float value, float duration)
@@ -150,9 +154,17 @@ public class Unit : MonoBehaviour
         _shields.Add(new Shield(strength, duration));
     }
 
+    public float GetDurability()
+    {
+        float totalDurability = 1.0f;
+        foreach (Shield durability in _durability)
+            totalDurability *= (1.0f - durability.strength);
+        return 1.0f - totalDurability;
+    }
+
     public void GainDurability(float strength, float duration)
     {
-        // TODO : implement
+        _durability.Add(new Shield(strength, duration));
     }
 
     public float GetMaxHealth()
@@ -268,11 +280,13 @@ public class Unit : MonoBehaviour
         float r = isPhysicalDamage ? GetArmor() : GetMagicResist();
         float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
 
-        // (https://wiki.leagueoflegends.com/en-us/TFT:Mana)
+        dm *= (1.0f - GetDurability());
+
+        // (https://leagueoflegends.fandom.com/wiki/Mana_(Teamfight_Tactics))
         if (!IsManaLocked() && _mana != stats.mana[1])
         {
             float manaGenerated = 0.01f * damageRaw; // taking damage generates (1% of pre-mitigation damage taken
-            manaGenerated += 0.03f * dm; // and 3% of post-mitigation damage taken) mana
+            manaGenerated += 0.07f * dm; // and 7% of post-mitigation damage taken) mana
             manaGenerated = Mathf.Min(manaGenerated, 42.5f); // up to 42.5 Mana
             _mana += manaGenerated;
             HandleManaOverflow();
