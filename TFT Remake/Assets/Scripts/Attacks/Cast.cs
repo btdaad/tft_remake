@@ -54,6 +54,9 @@ public class Cast : MonoBehaviour
             case AbilityBase.EffectType.PHYSICAL_DAMAGE:
                 targetUnit.TakeDamage(effect.damage, true);
                 break;
+            case AbilityBase.EffectType.STUN:
+                targetUnit.Stun(effect.damage);
+                break;
             default:
                 Debug.LogError($"Ability Effect is not handled for this stat {effect.stat}");
                 break;

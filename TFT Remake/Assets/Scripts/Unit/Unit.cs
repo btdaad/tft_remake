@@ -15,6 +15,7 @@ public class Unit : MonoBehaviour
     List<Shield> _durability;
     [SerializeField] bool _isFromPlayerTeam;
     bool _hasMoved;
+    bool _isStun;
     float _lastAttack; // time since last basic attack
     float _lastAbility; // time since last special ability
     float _manaOverflow;
@@ -228,6 +229,23 @@ public class Unit : MonoBehaviour
     private float GetCritDamage()
     {
         return stats.critDamage;
+    }
+
+    private IEnumerator StunCoroutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        _isStun = false;
+    }
+
+    public void Stun(float duration)
+    {
+        _isStun = true;
+        StartCoroutine(StunCoroutine(duration));
+    }
+
+    public bool IsStun()
+    {
+        return _isStun;
     }
 
     public bool IsFromPlayerTeam()

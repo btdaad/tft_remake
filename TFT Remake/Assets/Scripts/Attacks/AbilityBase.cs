@@ -11,6 +11,7 @@ public abstract class AbilityBase : ScriptableObject
         MAGIC_RESIST,
         PHYSICAL_DAMAGE,
         MAGIC_DAMAGE,
+        STUN,
         NONE
     }
     public struct Effect

@@ -141,7 +141,7 @@ public class PvPManager : MonoBehaviour
             return false;
 
         Unit unit = unitTransform.GetComponent<Unit>();
-        if (unit.HasMoved()) // as we update unit positions and recalculate the list of coordinates every time, this property prevent from moving the same entity everytime
+        if (unit.HasMoved() || unit.IsStun()) // as we update unit positions and recalculate the list of coordinates every time, this property prevent from moving the same entity everytime
             return false;
         unit.SetHasMoved(true);
 
