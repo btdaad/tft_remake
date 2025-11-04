@@ -121,27 +121,28 @@ public class Unit : MonoBehaviour
         yield return null;
     }
 
-    public void UpdateHealthOverTime(float value, float duration)
+    public void UpdateHealth(float value, float duration = 0f)
     {
-        StartCoroutine(UpdateHealthCoroutine(value, duration));
-    }
-
-    public void UpdateHealth(float value)
-    {
-        if (value < 0.0f) // damage are taken by the shields
+        if (duration == 0f) // instantaneous
         {
-            value = ShieldDamage(value);
-            if (value == 0.0f)
-                return;
-        }
+            if (value < 0.0f) // damage are taken by the shields
+            {
+                value = ShieldDamage(value);
+                // TODO : implement magic and physical shield
+                if (value == 0.0f)
+                    return;
+            }
 
-        _health += value;
-        if (_health <= 0.0f)
-        {
-            _health = 0;
-            OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
-            OnDeath(null, onDeathEventArgs);
+            _health += value;
+            if (_health <= 0.0f)
+            {
+                _health = 0;
+                OnDeathEventArgs onDeathEventArgs = new OnDeathEventArgs(transform);
+                OnDeath(null, onDeathEventArgs);
+            }
         }
+        else
+            StartCoroutine(UpdateHealthCoroutine(value, duration));
     }
 
     public float GetShield()
@@ -295,24 +296,45 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damageRaw, bool isPhysicalDamage)
+    private IEnumerator TakeDamageCoroutine(float damageRaw, bool isPhysicalDamage, float duration)
     {
-        float r = isPhysicalDamage ? GetArmor() : GetMagicResist();
-        float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
+        float timeElapsed = 0.0f;
+        float damagePerSec = damageRaw / duration;
+        float deltaTime = 0.2f;
 
-        dm *= (1.0f - GetDurability());
-
-        // (https://leagueoflegends.fandom.com/wiki/Mana_(Teamfight_Tactics))
-        if (!IsManaLocked() && _mana != stats.mana[1])
+        while (timeElapsed < duration)
         {
-            float manaGenerated = 0.01f * damageRaw; // taking damage generates (1% of pre-mitigation damage taken
-            manaGenerated += 0.07f * dm; // and 7% of post-mitigation damage taken) mana
-            manaGenerated = Mathf.Min(manaGenerated, 42.5f); // up to 42.5 Mana
-            _mana += manaGenerated;
-            HandleManaOverflow();
+            float deltaDamage = damagePerSec * deltaTime;
+            TakeDamage(damagePerSec, isPhysicalDamage);
+            yield return new WaitForSeconds(deltaTime);
+            timeElapsed += deltaTime;
         }
+        yield return null;
+    }
 
-        UpdateHealth(-dm);
+    public void TakeDamage(float damageRaw, bool isPhysicalDamage, float duration = 0f)
+    {
+        if (duration == 0f) // instantaneous
+        {
+            float r = isPhysicalDamage ? GetArmor() : GetMagicResist();
+            float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
+
+            dm *= (1.0f - GetDurability());
+
+            // (https://leagueoflegends.fandom.com/wiki/Mana_(Teamfight_Tactics))
+            if (!IsManaLocked() && _mana != stats.mana[1])
+            {
+                float manaGenerated = 0.01f * damageRaw; // taking damage generates (1% of pre-mitigation damage taken
+                manaGenerated += 0.07f * dm; // and 7% of post-mitigation damage taken) mana
+                manaGenerated = Mathf.Min(manaGenerated, 42.5f); // up to 42.5 Mana
+                _mana += manaGenerated;
+                HandleManaOverflow();
+            }
+
+            UpdateHealth(-dm); // TODO : magic/pysical shield, add here the isPhysicalDamage info
+        }
+        else
+            StartCoroutine(TakeDamageCoroutine(damageRaw, isPhysicalDamage, duration));
     }
 
     private bool CanAttack()

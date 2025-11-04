@@ -43,19 +43,19 @@ public class Cast : MonoBehaviour
         switch (effect.stat)
         {
             case AbilityBase.EffectType.HEALTH:
-                _caster.UpdateHealth(effect.damage);
+                _caster.UpdateHealth(effect.damage, effect.duration);
                 break;
             case AbilityBase.EffectType.MAGIC_RESIST:
                 targetUnit.UpdateMR(effect.damage);
                 break;
             case AbilityBase.EffectType.MAGIC_DAMAGE:
-                targetUnit.TakeDamage(effect.damage, false);
+                targetUnit.TakeDamage(effect.damage, false, effect.duration);
                 break;
             case AbilityBase.EffectType.PHYSICAL_DAMAGE:
-                targetUnit.TakeDamage(effect.damage, true);
+                targetUnit.TakeDamage(effect.damage, true, effect.duration);
                 break;
             case AbilityBase.EffectType.STUN:
-                targetUnit.Stun(effect.damage);
+                targetUnit.Stun(effect.duration);
                 break;
             default:
                 Debug.LogError($"Ability Effect is not handled for this stat {effect.stat}");

@@ -28,7 +28,7 @@ public class ElTigreTornado : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        effects.Add(new Effect(stunTime, EffectType.STUN));
+        effects.Add(new Effect(0f, EffectType.STUN, stunTime));
         
         float physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
         float physicalDamageADHex = ScaleValueWithAD(caster, hexDamageAD[(int)caster.stats.star]);

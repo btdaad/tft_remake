@@ -18,7 +18,7 @@ public class FallingFlowerEruption : AbilityBase
     public override List<List<Effect>> GetEffects(Unit caster)
     {
         caster.GainDurability(durability, healTime);
-        caster.UpdateHealthOverTime(ScaleValueWithAD(caster, healAP[(int)caster.stats.star]), healTime);
+        caster.UpdateHealth(ScaleValueWithAD(caster, healAP[(int)caster.stats.star]), healTime);
 
         List<List<Effect>> listEffects = new List<List<Effect>>();
 

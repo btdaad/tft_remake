@@ -17,10 +17,12 @@ public abstract class AbilityBase : ScriptableObject
     public struct Effect
     {
         public float damage;
+        public float duration;
         public EffectType stat;
-        public Effect(float damage, EffectType stat)
+        public Effect(float damage, EffectType stat, float duration = 0f)
         {
             this.damage = damage;
+            this.duration = duration;
             this.stat = stat;
         }
     }
@@ -38,12 +40,12 @@ public abstract class AbilityBase : ScriptableObject
         return (value * caster.GetArmor()) / 100f;
     }
 
-    protected Effect GetMagicDamage(float damage)
+    protected Effect GetMagicDamage(float damage, float duration = 0f)
     {
-        return new Effect(damage, EffectType.MAGIC_DAMAGE);
+        return new Effect(damage, EffectType.MAGIC_DAMAGE, duration);
     }
-    protected Effect GetPhysicalDamage(float damage)
+    protected Effect GetPhysicalDamage(float damage, float duration = 0f)
     {
-        return new Effect(damage, EffectType.PHYSICAL_DAMAGE);
+        return new Effect(damage, EffectType.PHYSICAL_DAMAGE, duration);
     }
 }
