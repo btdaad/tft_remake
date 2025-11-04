@@ -10,9 +10,8 @@ public class MagicDamage : AbilityBase
         List<List<Effect>> listEffects = new List<List<Effect>>();
 
         List<Effect> effects = new List<Effect>();
-        float magicDamage = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
-        Effect effect = GetMagicDamage(magicDamage);
-        effects.Add(effect);
+        float damage = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
+        effects.Add(GetMagicDamage(damage));
 
         listEffects.Add(effects);
         return listEffects;

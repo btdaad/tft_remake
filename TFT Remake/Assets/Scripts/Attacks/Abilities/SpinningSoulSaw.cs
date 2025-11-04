@@ -17,8 +17,8 @@ public class SpinningSoulSaw : AbilityBase
         List<List<Effect>> listEffects = new List<List<Effect>>();
 
         List<Effect> effects = new List<Effect>();
-        float physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
-        effects.Add(GetPhysicalDamage(physicalDamageAD));
+        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
+        effects.Add(GetPhysicalDamage(damage));
 
         listEffects.Add(effects);
         return listEffects;
