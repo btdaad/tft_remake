@@ -20,9 +20,9 @@ public class RegolithResistance : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        float damageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.stats.star]);
-        float damageArmor = ScaleValueWithArmor(caster, this.damageArmor[(int)caster.stats.star]);
-        float damage = damageAP + damageArmor;
+        float physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.stats.star]);
+        float physicalDamageArmor = ScaleValueWithArmor(caster, this.damageArmor[(int)caster.stats.star]);
+        float damage = physicalDamageAP + physicalDamageArmor;
         effects.Add(GetPhysicalDamage(damage));
 
         // TODO : implement passive effect "Passive: Gain 12 Armor for each item equipped."

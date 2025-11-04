@@ -16,9 +16,9 @@ public class ThunderingHammerstrike : AbilityBase
         List<List<Effect>> listEffects = new List<List<Effect>>();
 
         List<Effect> effects = new List<Effect>();
-        float damageAD = ScaleValueWithAD(caster, this.damageAD[(int)caster.stats.star]);
-        float damageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.stats.star]);
-        float damage = damageAD + damageAP;
+        float physicalDamageAD = ScaleValueWithAD(caster, this.damageAD[(int)caster.stats.star]);
+        float physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.stats.star]);
+        float damage = physicalDamageAD + physicalDamageAP;
         effects.Add(GetPhysicalDamage(damage));
 
         listEffects.Add(effects);
