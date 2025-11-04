@@ -108,12 +108,14 @@ public class Unit : MonoBehaviour
     {
         float timeElapsed = 0.0f;
         float healthPerSec = value / duration;
+        float deltaTime = 0.2f;
 
         while (timeElapsed < duration)
         {
-            float deltaHealth = healthPerSec * Time.deltaTime;
+            float deltaHealth = healthPerSec * deltaTime;
             UpdateHealth(deltaHealth);
-            timeElapsed += Time.deltaTime;
+            yield return new WaitForSeconds(deltaTime);
+            timeElapsed += deltaTime;
         }
         yield return null;
     }
