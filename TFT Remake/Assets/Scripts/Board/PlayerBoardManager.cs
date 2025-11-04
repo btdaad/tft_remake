@@ -118,7 +118,7 @@ public class PlayerBoardManager
 
             if (swapUnitTransform != null)
             {
-                swapUnitTransform.position = _initUnitPos; // if the swap unit exists, move its position
+                swapUnitTransform.position = new Vector3(_initUnitPos.x, swapUnitTransform.position.y, _initUnitPos.z); // if the swap unit exists, move its position
 
                 // propagate info to subscribers (update synergies)
                 MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(swapUnitTransform, isInitUnitOnBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
@@ -135,7 +135,7 @@ public class PlayerBoardManager
 
             if (swapUnitTransform != null)
             {
-                swapUnitTransform.position = _initUnitPos;
+                swapUnitTransform.position = new Vector3(_initUnitPos.x, swapUnitTransform.position.y, _initUnitPos.z); // if the swap unit exists, move its position
 
                 MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(swapUnitTransform, isInitUnitOnBattlefield ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
                 _boardManager.CallMoveUnit(null, moveUnitEventArgs);
