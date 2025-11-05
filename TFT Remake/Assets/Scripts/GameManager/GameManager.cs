@@ -96,6 +96,11 @@ public class GameManager : MonoBehaviour
         return _goldManager;
     }
 
+    public PvPManager GetPvPManager()
+    {
+        return _pvpManager;
+    }
+
     public Player GetPlayer(bool isPlayer)
     {
         return isPlayer ? _player : _opponent;

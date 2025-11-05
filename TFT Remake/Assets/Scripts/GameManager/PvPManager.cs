@@ -91,8 +91,40 @@ public class PvPManager : MonoBehaviour
         return (minDistCoords, minDist);
     }
 
+    private Coords FindFarthestUnit(int[][] distances, List<Coords> coordsList)
+    {
+        Coords maxDistCoords = new Coords(0, 0);
+        int maxDist = 0;
+        for (int i = 0; i < coordsList.Count; i++)
+        {
+            int dist = distances[coordsList[i].x][coordsList[i].y];
+            if (dist > maxDist)
+            {
+                maxDist = dist;
+                maxDistCoords = coordsList[i];
+            }
+        }
+
+        return maxDistCoords;
+    }
+
+    public List<Coords> FindMultipleFarthestCoords(List<Coords> coordsList, int[][] distances, int nbUnit)
+    {
+        List<Coords> coordsListCopy = new List<Coords>(coordsList); // copy the list to be able to modify it without consequences
+
+        List<Coords> farthestCoords = new List<Coords>();
+        for (int i = 0; i < nbUnit && i < coordsList.Count; i++) // looking for nbUnit units but the max that can be found is coordsList.Count
+        {
+            Coords maxDistCoords = FindFarthestUnit(distances, coordsListCopy);
+            coordsListCopy.Remove(maxDistCoords); // remove farthest coords to be able to find the next farthest
+            farthestCoords.Add(maxDistCoords);
+        }
+
+        return farthestCoords;
+    }
+
     // Extracts unit coordinates from the board manager grid
-    private (List<Coords>, List<Coords>) GetUnitsCoords(Transform[][] units)
+    public (List<Coords>, List<Coords>) GetUnitsCoords(Transform[][] units)
     {
         List<Coords> playerTeamCoords = new List<Coords>();
         List<Coords> opponentTeamCoords = new List<Coords>();

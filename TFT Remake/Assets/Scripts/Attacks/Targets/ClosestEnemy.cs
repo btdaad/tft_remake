@@ -15,12 +15,3 @@ public class ClosestEnemy : AbilityTargetBase
         return targets;
     } 
 }
-
-// [CreateAssetMenu(menuName = "Targeting/Farthest Enemy")]
-// public class FarthestEnemy : AbilityTargetBase 
-// {
-//     public override List<Unit> GetTargets(Unit caster)
-//     {
-//         return new List<Unit>(); // TODO
-//     } 
-// }

@@ -130,7 +130,7 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: 51380739e72b471bda06bf197ac7be51, type: 2}
   _isFromPlayerTeam: 0
   _basicAttackPrefab: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
-  ability: {fileID: 11400000, guid: ea7cdd9713b22b455b00b259bcf1fa0c, type: 2}
+  ability: {fileID: 11400000, guid: a16bd8b03469539ab8cf6c04278cf5c9, type: 2}
 --- !u!54 &-8913828174108769317
 Rigidbody:
   m_ObjectHideFlags: 0
