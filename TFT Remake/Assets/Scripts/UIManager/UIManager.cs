@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     private Label _totalXP;
     private Button _buyXP;
     private Label _xpCost;
+    private VisualElement _unitShop;
+    private VisualElement _currentXP;
 
     public void Init()
     {
@@ -35,12 +37,16 @@ public class UIManager : MonoBehaviour
         Button dumpButton = UIDoc.rootVisualElement.Q<Button>("Dump");
         dumpButton.clickable.clicked += () => { GameManager.Instance.Dump(); };
 
+        _unitShop = UIDoc.rootVisualElement.Q<VisualElement>("UnitShop");
+        _currentXP = UIDoc.rootVisualElement.Q<VisualElement>("CurrentXP");
         _lvl = UIDoc.rootVisualElement.Q<Label>("LevelNb");
         _xp = UIDoc.rootVisualElement.Q<Label>("XP");
         _totalXP = UIDoc.rootVisualElement.Q<Label>("TotalXP");
         _xpCost = UIDoc.rootVisualElement.Q<Label>("XPCost");
         _buyXP = UIDoc.rootVisualElement.Q<Button>("BuyXP");
         _buyXP.clickable.clicked += () => { GameManager.Instance.BuyXP(); };
+
+        _unitShop.visible = false;
     }
 
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
@@ -61,7 +67,13 @@ public class UIManager : MonoBehaviour
 
     public void UpdateLevel(bool isPlayer)
     {
-        _lvl.text = $"{GameManager.Instance.GetXPManager().GetLevel(isPlayer)}";
+        int level = GameManager.Instance.GetXPManager().GetLevel(isPlayer);
+        _lvl.text = $"{level}";
+
+        if (level != 1)
+            _unitShop.visible = true; // shop is not visible during the very first round/level
+        if (level == GameManager.Instance.GetXPManager().GetMaxLevel())
+            _currentXP.visible = false;
     }
 
     public void ShowUnitDisplay(Transform unitTransform)

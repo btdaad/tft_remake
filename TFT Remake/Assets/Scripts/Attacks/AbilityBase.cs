@@ -29,12 +29,12 @@ public abstract class AbilityBase : ScriptableObject
     public abstract List<List<Effect>> GetEffects(Unit caster);   
     protected float ScaleValueWithAP(Unit caster, float value)
     {
-        Debug.Log($"[{Time.time}] ({caster.gameObject.name}): {value} scaled with AP of {caster.stats.abilityPower} + {caster.GetAP()}.");
+        // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): {value} scaled with AP of {caster.stats.abilityPower} + {caster.GetAP()}.");
         return value * (caster.stats.abilityPower + caster.GetAP()) / 100f;
     }
     protected float ScaleValueWithAD(Unit caster, float value)
     {
-        Debug.Log($"[{Time.time}] ({caster.gameObject.name}): {value} scaled with AD of {caster.GetAD()}%.");
+        // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): {value} scaled with AD of {caster.GetAD()}%.");
         return value + (value * caster.GetAD() / 100f);
     }
     protected float ScaleValueWithArmor(Unit caster, float value)

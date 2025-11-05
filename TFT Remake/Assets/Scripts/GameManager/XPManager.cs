@@ -3,15 +3,22 @@ using UnityEngine.Tilemaps;
 
 public class XPManager : MonoBehaviour
 {
-    private int[] XPperLevel = { 0, 0, 2, 6, 10, 20, 36, 48, 72, 84 };
-    [SerializeField] public int XP_COST = 4;
+    private int[] XPperLevel = { 0, 2, 2, 6, 10, 20, 36, 48, 72, 84 };
+    [SerializeField] public int xpCost = 4;
+    [SerializeField] public int endOfRoundXP = 2;
+
     public void Init()
     {
     }
 
+    public int GetMaxLevel()
+    {
+        return XPperLevel.Length;
+    }
+
     public int GetXPCost()
     {
-        return XP_COST;
+        return xpCost;
     }
 
     public int GetXP(bool isPlayer)
@@ -22,7 +29,7 @@ public class XPManager : MonoBehaviour
     public int GetTotalXP(bool isPlayer)
     {
         int curLevel = GameManager.Instance.GetPlayer(isPlayer).GetLevel();
-        if (curLevel != XPperLevel.Length)
+        if (curLevel != GetMaxLevel())
             return XPperLevel[curLevel];
         return 0; // TODO : should not be displayed at all !!!
     }
@@ -31,10 +38,19 @@ public class XPManager : MonoBehaviour
         return GameManager.Instance.GetPlayer(isPlayer).GetLevel();
     }
 
+    public void EndFight(Player player, Player opponent)
+    {
+        player.UpdateXP(endOfRoundXP);
+        opponent.UpdateXP(endOfRoundXP);
+
+        PassLevel(player);
+        PassLevel(opponent);
+    }
+
     public void PassLevel(Player player)
     {
         int curLevel = player.GetLevel();
-        if (curLevel != XPperLevel.Length)
+        if (curLevel != GetMaxLevel())
         {
             int xpForNextLevel = XPperLevel[curLevel];
             if (player.GetXP() >= xpForNextLevel)
@@ -43,19 +59,20 @@ public class XPManager : MonoBehaviour
                 player.UpdateXP(-xpForNextLevel);
 
                 GameManager.Instance.UpdateLevelDisplay();
+                PassLevel(player); // maybe there is an overflow of XP so the player can pass multiple levels at once
             }
         }
+        GameManager.Instance.UpdateXPDisplay();
     }
 
     public void BuyXP(Player player)
     {
-        if (player.GetGold() >= XP_COST)
+        if (player.GetGold() >= xpCost)
         {
             player.UpdateXP(4);
-            player.UpdateGold(-XP_COST);
+            player.UpdateGold(-xpCost);
 
             PassLevel(player);
-            GameManager.Instance.UpdateXPDisplay();
         }
     }
 }

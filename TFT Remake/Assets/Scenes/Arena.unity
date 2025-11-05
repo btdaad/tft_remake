@@ -3779,6 +3779,7 @@ GameObject:
   - component: {fileID: 1838082637}
   - component: {fileID: 1838082639}
   - component: {fileID: 1838082638}
+  - component: {fileID: 1838082640}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3859,6 +3860,20 @@ MonoBehaviour:
   - {fileID: 1737081666}
   - {fileID: 1983031282}
   - {fileID: 244341512}
+--- !u!114 &1838082640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838082635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870fbbe00fec2d5f0b254455956c060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XPManager
+  xpCost: 4
+  endOfRoundXP: 2
 --- !u!1001 &1983031280
 PrefabInstance:
   m_ObjectHideFlags: 0

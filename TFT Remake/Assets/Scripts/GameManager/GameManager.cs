@@ -203,6 +203,7 @@ public class GameManager : MonoBehaviour
             _opponent.Victory();
             _goldManager.BonusPvP(_opponent);
         }
+        _xpManager.EndFight(_player, _opponent);
     }
 
     public void Dump()
