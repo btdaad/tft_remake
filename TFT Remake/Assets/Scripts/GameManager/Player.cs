@@ -6,6 +6,8 @@ public class Player
     int _gold;
     int _winStreak;
     int _lossStreak;
+    int _exp;
+    int _level;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Init()
     {
@@ -13,6 +15,8 @@ public class Player
         _gold = 0;
         _winStreak = 0;
         _lossStreak = 0;
+        _exp = 0;
+        _level = 1;
     }
     public int GetHP()
     {
@@ -32,6 +36,11 @@ public class Player
     public int GetLossStreak()
     {
         return _lossStreak;
+    }
+
+    public int GetLevel()
+    {
+        return _level;
     }
 
     public void Defeat(int damage)
