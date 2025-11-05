@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     UIManager _uiManager;
     PvPManager _pvpManager;
     GoldManager _goldManager;
+    XPManager _xpManager;
     public bool isPlayer;
     Dictionary<Trait, List<Transform>> _playerSynergies = new Dictionary<Trait, List<Transform>>();
     Dictionary<Trait, List<Transform>> _opponentSynergies = new Dictionary<Trait, List<Transform>>();
@@ -66,6 +67,10 @@ public class GameManager : MonoBehaviour
         bool findGoldManager = FindManager<GoldManager>(ref _goldManager);
         if (findGoldManager)
             _goldManager.Init();
+        
+        bool findXPManager = FindManager<XPManager>(ref _xpManager);
+        if (findXPManager)
+            _xpManager.Init();
 
         isPlayer = true;
         _player = new Player();
@@ -99,6 +104,10 @@ public class GameManager : MonoBehaviour
     public PvPManager GetPvPManager()
     {
         return _pvpManager;
+    }
+    public XPManager GetXPManager()
+    {
+        return _xpManager;
     }
 
     public Player GetPlayer(bool isPlayer)
@@ -216,6 +225,21 @@ public class GameManager : MonoBehaviour
         _uiManager.HideUnitDisplay();
         _uiManager.ChangePlayer(isPlayer);
         UpdateSynergyDisplay();
+    }
+
+    public void BuyXP()
+    {
+        _xpManager.BuyXP(isPlayer ? _player : _opponent);
+    }
+
+    public void UpdateXPDisplay()
+    {
+        _uiManager.UpdateXP(isPlayer);
+    }
+
+    public void UpdateLevelDisplay()
+    {
+        _uiManager.UpdateLevel(isPlayer);
     }
 
     private void DumpSyergies(Dictionary<Trait, List<Transform>> synergies)

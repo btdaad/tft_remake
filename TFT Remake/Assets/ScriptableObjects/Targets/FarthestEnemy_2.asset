@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e24994bdb8bf8dcbb17eecafc83adc, type: 3}
   m_Name: FarthestEnemy_2
   m_EditorClassIdentifier: Assembly-CSharp::FarthestEnemy
-  nbTargets: 1
+  nbTargets: 2

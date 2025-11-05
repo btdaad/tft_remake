@@ -6,8 +6,8 @@ public class Player
     int _gold;
     int _winStreak;
     int _lossStreak;
-    int _exp;
-    int _level;
+    int _xp;
+    int _lvl;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Init()
     {
@@ -15,8 +15,8 @@ public class Player
         _gold = 0;
         _winStreak = 0;
         _lossStreak = 0;
-        _exp = 0;
-        _level = 1;
+        _xp = 0;
+        _lvl = 1;
     }
     public int GetHP()
     {
@@ -30,7 +30,7 @@ public class Player
 
     public int GetWinStreak()
     {
-        return _winStreak;   
+        return _winStreak;
     }
 
     public int GetLossStreak()
@@ -40,7 +40,12 @@ public class Player
 
     public int GetLevel()
     {
-        return _level;
+        return _lvl;
+    }
+
+    public int GetXP()
+    {
+        return _xp;
     }
 
     public void Defeat(int damage)
@@ -59,5 +64,15 @@ public class Player
     public void UpdateGold(int amount)
     {
         _gold += amount;
+    }
+
+    public void UpdateXP(int amount)
+    {
+        _xp += amount;
+    }
+
+    public void GainLevel()
+    {
+        _lvl++;
     }
 }

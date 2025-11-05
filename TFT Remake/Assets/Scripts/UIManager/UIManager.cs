@@ -14,6 +14,11 @@ public class UIManager : MonoBehaviour
     private Button _fight;
     private Button _changePlayer;
     private Label _gold;
+    private Label _lvl;
+    private Label _xp;
+    private Label _totalXP;
+    private Button _buyXP;
+    private Label _xpCost;
 
     public void Init()
     {
@@ -29,6 +34,13 @@ public class UIManager : MonoBehaviour
         _gold = UIDoc.rootVisualElement.Q<Label>("Gold");
         Button dumpButton = UIDoc.rootVisualElement.Q<Button>("Dump");
         dumpButton.clickable.clicked += () => { GameManager.Instance.Dump(); };
+
+        _lvl = UIDoc.rootVisualElement.Q<Label>("LevelNb");
+        _xp = UIDoc.rootVisualElement.Q<Label>("XP");
+        _totalXP = UIDoc.rootVisualElement.Q<Label>("TotalXP");
+        _xpCost = UIDoc.rootVisualElement.Q<Label>("XPCost");
+        _buyXP = UIDoc.rootVisualElement.Q<Button>("BuyXP");
+        _buyXP.clickable.clicked += () => { GameManager.Instance.BuyXP(); };
     }
 
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
@@ -39,6 +51,17 @@ public class UIManager : MonoBehaviour
     public void UpdateGold(bool isPlayer)
     {
         _gold.text = $"{GameManager.Instance.GetGoldManager().GetGold(isPlayer)}";
+    }
+
+    public void UpdateXP(bool isPlayer)
+    {
+        _xp.text = $"{GameManager.Instance.GetXPManager().GetXP(isPlayer)}";
+        _totalXP.text = $"{GameManager.Instance.GetXPManager().GetTotalXP(isPlayer)}";
+    }
+
+    public void UpdateLevel(bool isPlayer)
+    {
+        _lvl.text = $"{GameManager.Instance.GetXPManager().GetLevel(isPlayer)}";
     }
 
     public void ShowUnitDisplay(Transform unitTransform)
@@ -54,6 +77,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _xpCost.text = $"{GameManager.Instance.GetXPManager().GetXPCost()}";
     }
 
     public void ChangePlayer(bool isPlayer)
@@ -63,5 +87,7 @@ public class UIManager : MonoBehaviour
         else
             _changePlayer.text = "Play as yourself";
         UpdateGold(isPlayer);
+        UpdateXP(isPlayer);
+        UpdateLevel(isPlayer);
     }
 }

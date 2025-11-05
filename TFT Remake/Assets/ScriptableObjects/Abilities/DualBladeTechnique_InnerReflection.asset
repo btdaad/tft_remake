@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040ccaf9609a1e86190f4870f613cfff, type: 3}
   m_Name: DualBladeTechnique_InnerReflection
   m_EditorClassIdentifier: Assembly-CSharp::DualBladeTechnique_InnerReflection
-  targetZones: []
+  targetZones:
+  - {fileID: 11400000, guid: cbe2e4ad23a0d539ebccbeef4a35d897, type: 2}
