@@ -69,11 +69,14 @@ public class PlayerBoardManager
         {
             Vector3 cellCenterPos = boardZone.GetCellCenterWorld(cellPos);
             unitTransform.position = new Vector3(cellCenterPos.x, _initUnitPos.y, cellCenterPos.z);
-            PlaceUnitOnZone(unitTransform, cellPos, boardZone);
+            bool successfullyPlaced = PlaceUnitOnZone(unitTransform, cellPos, boardZone);
 
-            // propagate info to subscribers (update synergies)
-            MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(unitTransform, boardZone == _battlefieldTilemap ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
-            _boardManager.CallMoveUnit(null, moveUnitEventArgs);
+            if (successfullyPlaced) // can fail if the team size if already maximum
+            {
+                // propagate info to subscribers (update synergies)
+                MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(unitTransform, boardZone == _battlefieldTilemap ? MoveUnitEventArgs.Zone.Battlefield : MoveUnitEventArgs.Zone.Bench);
+                _boardManager.CallMoveUnit(null, moveUnitEventArgs);
+            }
 
             return true;
         }
@@ -99,7 +102,7 @@ public class PlayerBoardManager
         return (cellCoord.x + 1, cellCoord.y == -1 ? 0 : 1);
     }
 
-    private void PlaceUnitOnZone(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
+    private bool PlaceUnitOnZone(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
     {
         // assess init unit zone depending on the z coord
         bool isInitUnitOnBattlefield = _initUnitPos.z >= MIN_BATTLEFIELD_Z && _initUnitPos.z <= MAX_BATTLEFIELD_Z;
@@ -108,10 +111,17 @@ public class PlayerBoardManager
         Vector3Int initUnitCell = isInitUnitOnBattlefield ? _battlefieldTilemap.WorldToCell(_initUnitPos) : _benchTilemap.WorldToCell(_initUnitPos);
         (int xInitCellPos, int yInitCellPos) = isInitUnitOnBattlefield ? ToBattlefieldCoord(initUnitCell) : ToBenchCoord(initUnitCell);
 
-        if (boardZone == _battlefieldTilemap)
+        if (boardZone == _battlefieldTilemap) // unit is placed on the board
         {
             (int xPos, int yPos) = ToBattlefieldCoord(cellPos); // get grid coordinates for drop cell
             Transform swapUnitTransform = _boardManager.GetUnitAt(xPos, yPos, true); // get the unit on the drop cell
+
+            if (!isInitUnitOnBattlefield && swapUnitTransform == null // add new unit on the battlefield (no swap)
+                && _boardManager.IsMaxTeamSize()) // the team size is already maximum
+            {
+                unitTransform.position = _initUnitPos; // restore unit position
+                return false;
+            }
 
             _boardManager.SetUnitAt(xInitCellPos, yInitCellPos, swapUnitTransform, isInitUnitOnBattlefield); // set grid init cell to swap unit
             _boardManager.SetUnitAt(xPos, yPos, unitTransform, true); // set grid drop cell to unit
@@ -125,7 +135,7 @@ public class PlayerBoardManager
                 _boardManager.CallMoveUnit(null, moveUnitEventArgs);
             }
         }
-        else
+        else // unit is placed on the bench
         {
             (int xPos, int yPos) = ToBenchCoord(cellPos);
             Transform swapUnitTransform = _boardManager.GetUnitAt(xPos, yPos, false); // get the unit on the drop cell
@@ -141,6 +151,8 @@ public class PlayerBoardManager
                 _boardManager.CallMoveUnit(null, moveUnitEventArgs);
             }
         }
+
+        return true;
     }
 
     public bool MoveUnitTo(Transform unitTransform, Vector3Int targetCellPos)

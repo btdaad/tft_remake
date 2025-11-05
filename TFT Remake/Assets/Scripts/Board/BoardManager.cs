@@ -51,6 +51,24 @@ public class BoardManager : MonoBehaviour
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
+    public bool IsMaxTeamSize()
+    {
+        bool affiliation = GameManager.Instance.isPlayer;
+
+        int teamSize = 0;
+        for (int x = 0; x < _battlefieldGrid.Length; x++)
+        {
+            for (int y = 0; y < _battlefieldGrid[x].Length; y++)
+            {
+                Transform unitTransform = _battlefieldGrid[x][y];
+                if (unitTransform != null && unitTransform.GetComponent<Unit>().IsFromPlayerTeam() == affiliation)
+                    teamSize++;
+            }
+        }
+
+        return teamSize == GameManager.Instance.GetPlayer(affiliation).GetLevel(); // max team size == player level
+    }    
+
     public bool OnDragUnit(bool isPlayer, Transform unitTransform)
     {
         if (isPlayer)
