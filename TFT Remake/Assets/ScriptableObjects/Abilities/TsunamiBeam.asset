@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46cd056b9555eb19ea13ec543eb03f67, type: 3}
-  m_Name: ElTigreTornado
-  m_EditorClassIdentifier: Assembly-CSharp::ElTigreTornado
+  m_Script: {fileID: 11500000, guid: 3f8da66914895924190509e39db2d8ae, type: 3}
+  m_Name: TsunamiBeam
+  m_EditorClassIdentifier: Assembly-CSharp::TsunamiBeam
   targetZones:
   - {fileID: 11400000, guid: bd2ce9d30500a3d2bb934062f3ede279, type: 2}
-  - {fileID: 11400000, guid: cff51cc40553e15eea3c33494df5d974, type: 2}
   - {fileID: 11400000, guid: 4b6dbde6d98df344093fbd4c299e5dbf, type: 2}

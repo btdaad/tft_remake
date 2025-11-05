@@ -20,7 +20,6 @@ public class ElTigreTornado : AbilityBase
     private int[] damageAD = { 575, 865, 9001 };
     private int[] hexDamageAD = { 310, 465, 4501 };
     private int[] tossDamageAD = { 100, 150, 2000 };
-    // private float executeThreshold = 18;
     
     public override List<List<Effect>> GetEffects(Unit caster)
     {
