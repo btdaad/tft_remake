@@ -22,20 +22,27 @@ public class BladeVigor : AbilityBase
         float missingHealth = - (caster.GetHealth() - caster.GetMaxHealth());
         float missingHealthRatio = missingHealth / caster.GetMaxHealth();
         float missingHealthPercent = Mathf.Lerp(0, 1, missingHealthRatio);
+        // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): missingHealthPercent = {missingHealthPercent} for {caster.GetHealth()}/{caster.GetMaxHealth()}");
 
         List<Effect> effects = new List<Effect>();
 
         float physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
         float physicalDamageAP = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
         float physicalDamage = physicalDamageAD + physicalDamageAP;
+        // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): physicalDamage = {physicalDamageAD} + {physicalDamageAP} = {physicalDamage}");
         physicalDamage += missingHealthPercent * physicalDamage;
+        // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): physicalDamage += {missingHealthPercent}% = {physicalDamage}");
         effects.Add(GetPhysicalDamage(physicalDamage));
 
         listEffects.Add(effects);
 
         float heal = ScaleValueWithAP(caster, healAP[(int)caster.stats.star]) + healHealth * caster.GetMaxHealth();
+        // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): heal = {heal} + {missingHealthPercent}%");
         heal += missingHealthPercent * heal;
+
+        // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): caster health = {caster.GetHealth()}");
         caster.UpdateHealth(heal, 0f);
+        // Debug.Log($"[{Time.time}][HEALED] ({caster.gameObject.name}): caster health = {caster.GetHealth()}");
 
         return listEffects;
     }
