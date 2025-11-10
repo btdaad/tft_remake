@@ -34,7 +34,6 @@ public class SynergiesDisplay
     {
         return _uiDoc.rootVisualElement.Q<T>(name);
     }
-
     private void ShowMore()
     {
         _isShowMoreClicked = !_isShowMoreClicked;

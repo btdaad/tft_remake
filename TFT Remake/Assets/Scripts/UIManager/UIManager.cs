@@ -25,6 +25,10 @@ public class UIManager : MonoBehaviour
     private Label _1costPoolPercentage;
     private Label _3costPoolPercentage;
     private Label _5costPoolPercentage;
+    private VisualElement[] _slotsCost;
+    private VisualElement[] _slotsImage;
+    private Label[] _slotsName;
+    private Color[] _costColors;
     
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -60,6 +64,23 @@ public class UIManager : MonoBehaviour
         _3costPoolPercentage = GetUIElement<Label>("3CostPercentage");
         _5costPoolPercentage = GetUIElement<Label>("5CostPercentage");
 
+        int shop_size = GameManager.Instance.GetShopManager().SHOP_SIZE;
+        _slotsCost = new VisualElement[shop_size];
+        _slotsImage = new VisualElement[shop_size];
+        _slotsName = new Label[shop_size];
+        for (int i = 0; i < shop_size; i++)
+        {
+            int index = i + 1;
+            _slotsCost[i] = GetUIElement<VisualElement>($"Slot{index}Cost");
+            _slotsImage[i] = GetUIElement<VisualElement>($"Slot{index}Unit");
+            _slotsName[i] = GetUIElement<Label>($"Slot{index}UnitName");
+        }
+
+        _costColors = new Color[3];
+        ColorUtility.TryParseHtmlString("#96A194", out _costColors[0]);
+        ColorUtility.TryParseHtmlString("#40BBDD", out _costColors[1]);
+        ColorUtility.TryParseHtmlString("#FA9607", out _costColors[2]);
+
         _unitShop.visible = false;
     }
 
@@ -93,6 +114,23 @@ public class UIManager : MonoBehaviour
         _1costPoolPercentage.text = $"{oneCostPer*100}%";
         _3costPoolPercentage.text = $"{threeCostPer*100}%";
         _5costPoolPercentage.text = $"{fiveCostPer*100}%";
+    }
+
+    public void UpdateShop(bool isPlayer)
+    {
+        UnitType[] shop = GameManager.Instance.GetShopManager().GetShop(isPlayer);
+
+        for (int i = 0; i < shop.Length; i++)
+        {
+            UnitType unitType = shop[i];
+            _slotsName[i].text = unitType.ToString();
+            _slotsImage[i].style.backgroundImage = Resources.Load<Texture2D>($"{unitType.ToString()}");;
+            int costIndex = GameManager.Instance.GetShopManager().GetUnitCostIndexFromUnitType(unitType);
+            if (costIndex != -1) // unit is not a target dummy
+                _slotsCost[i].style.backgroundColor = _costColors[costIndex];
+            else
+                _slotsCost[i].style.backgroundColor = new Color(0, 0, 0);
+        }
     }
 
     public void ShowUnitDisplay(Transform unitTransform)

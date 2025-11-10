@@ -4,7 +4,7 @@ using System;
 
 public class ShopManager : MonoBehaviour
 {
-    private int SHOP_SIZE = 5;
+    public int SHOP_SIZE = 5;
     private int DIFF_COST = 3; // 1-cost, 3-cost, 5-cost
     private int firstThreeCostIndex = (int)UnitType.Cone;
     private int firstFiveCostIndex = (int)UnitType.Icosahedron;
@@ -40,6 +40,18 @@ public class ShopManager : MonoBehaviour
 
     private UnitType[][] _shop;
 
+    public int GetUnitCostIndexFromUnitType(UnitType unitType)
+    {
+        int index = (int)unitType;
+        if (index < firstThreeCostIndex) // unit is a 1-cost
+            return 0;
+        else if (index < firstFiveCostIndex) // unit is a 3-cost
+            return 1;
+        else if (index < outOfBoundIndex) // unit is a 5-cost
+            return 2;
+        return -1; // unit is a target dummy
+    }
+
     public void Init()
     {
         UnityEngine.Random.InitState(300600);
@@ -50,20 +62,22 @@ public class ShopManager : MonoBehaviour
 
         foreach (UnitType unitType in Enum.GetValues(typeof(UnitType)))
         {
-            int index = (int)unitType;
-            if (index < firstThreeCostIndex) // unit is a 1-cost
-                _unitsPool[0].Add(unitType, _poolSizes[0]);
-            else if (index < firstFiveCostIndex) // unit is a 3-cost
-                _unitsPool[1].Add(unitType, _poolSizes[1]);
-            else if (index < outOfBoundIndex) // unit is a 5-cost
-                _unitsPool[2].Add(unitType, _poolSizes[2]);
+            int costIndex = GetUnitCostIndexFromUnitType(unitType);
+            if (costIndex != -1) // unit is not a target dummy
+                _unitsPool[costIndex].Add(unitType, _poolSizes[costIndex]);
         }
 
         _shop = JaggedArrayUtil.InitJaggedArray<UnitType>(2, SHOP_SIZE, () => UnitType.TargetDummy);
     }
 
+    public UnitType[] GetShop(bool isPlayer)
+    {
+        int shopSide = isPlayer ? 0 : 1;
+        return _shop[shopSide];
+    }
+
     // Returns the index corresponding to the dictionary contaning the unit in the _unitsPool list
-    private int GetUnitCostIndex(float unitCost, float oneCostPercentage, float threeCostPercentage)
+    private int GetUnitCostIndexFromPercentage(float unitCost, float oneCostPercentage, float threeCostPercentage)
     {
         if (unitCost <= oneCostPercentage)
             return 0; // 1-cost unit
@@ -94,7 +108,7 @@ public class ShopManager : MonoBehaviour
         {
             foreach (UnitType unitType in _unitsPool[costIndex].Keys)
             {
-                if (_unitsPool[costIndex][unitType] > round) // pass UnitTypes that does not have enough units available
+                if (_unitsPool[costIndex][unitType] >= round) // pass UnitTypes that does not have enough units available
                 {
                     if (count == unitIndex)
                         return unitType;
@@ -103,51 +117,19 @@ public class ShopManager : MonoBehaviour
             }
             round++;
         }
+        Debug.LogError("Could not select a unit randomly");
         return UnitType.TargetDummy;
     }
-
-    private void PutBackInPool(UnitType unitType)
-    {
-        foreach (Dictionary<UnitType, int> pool in _unitsPool)
-        {
-            foreach (UnitType type in pool.Keys)
-            {
-                if (unitType == type)
-                {
-                    int nbUnitAvailable = pool[type];
-                    pool[type] = nbUnitAvailable + 1;
-                    return;
-                }
-            }
-        }
-    }
-
-    private void RemoveFromPool(UnitType unitType)
-    {
-        foreach (Dictionary<UnitType, int> pool in _unitsPool)
-        {
-            foreach (UnitType type in pool.Keys)
-            {
-                if (unitType == type)
-                {
-                    int nbUnitAvailable = pool[type];
-                    pool[type] = nbUnitAvailable - 1;
-                    return;
-                }
-            }
-        }
-    }
-
     public void RefreshShop(bool isPlayer)
     {
         int shopSide = isPlayer ? 0 : 1;
         (float oneCostPercentage, float threeCostPercentage, _) = GetPoolPercentage(GameManager.Instance.GetPlayer(isPlayer).GetLevel());
 
-        // put back units in the pool
+        // put units back in the pool
         for (int i = 0; i < SHOP_SIZE; i++)
         {
             if (_shop[shopSide][i] != UnitType.TargetDummy)
-                PutBackInPool(_shop[shopSide][i]);
+                UpdatePool(_shop[shopSide][i], 1);
         }
 
         for (int i = 0; i < SHOP_SIZE; i++)
@@ -159,7 +141,7 @@ public class ShopManager : MonoBehaviour
             {
                 // find what cost the unit will be
                 float unitCost = UnityEngine.Random.Range(0f, 1f);
-                costIndex = GetUnitCostIndex(unitCost, oneCostPercentage, threeCostPercentage);
+                costIndex = GetUnitCostIndexFromPercentage(unitCost, oneCostPercentage, threeCostPercentage);
                 totalUnitAvailable = GetTotalUnitAvailable(costIndex);
                 counter++;
             } while (totalUnitAvailable == 0 && counter < 10);
@@ -169,15 +151,29 @@ public class ShopManager : MonoBehaviour
                 // pick specific unit type
                 UnitType unitType = RandomSelectUnit(costIndex, totalUnitAvailable);
                 _shop[shopSide][i] = unitType;
-                RemoveFromPool(unitType);
+                UpdatePool(unitType, -1);
             }
             else
             {
                 Debug.LogError("Could not find a unit in less than 10 iterations.");
                 _shop[shopSide][i] = UnitType.TargetDummy;
             }
+        }
+    }
 
-            Debug.Log(_shop[shopSide][i]);
+    private void UpdatePool(UnitType unitType, int delta)
+    {
+        foreach (Dictionary<UnitType, int> pool in _unitsPool)
+        {
+            foreach (UnitType type in pool.Keys)
+            {
+                if (unitType == type)
+                {
+                    int nbUnitAvailable = pool[type];
+                    pool[type] = nbUnitAvailable + delta;
+                    return;
+                }
+            }
         }
     }
 

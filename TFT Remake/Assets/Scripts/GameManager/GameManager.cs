@@ -57,10 +57,6 @@ public class GameManager : MonoBehaviour
         if (findBoardManager)
             _boardManager.Init();
 
-        bool findUIManager = FindManager<UIManager>(ref _uiManager);
-        if (findUIManager)
-            _uiManager.Init();
-
         bool findPVPManager = FindManager<PvPManager>(ref _pvpManager);
         if (findPVPManager)
             _pvpManager.Init();
@@ -76,6 +72,10 @@ public class GameManager : MonoBehaviour
         bool findShopManager = FindManager<ShopManager>(ref _shopManager);
         if (findShopManager)
             _shopManager.Init();
+
+        bool findUIManager = FindManager<UIManager>(ref _uiManager);
+        if (findUIManager)
+            _uiManager.Init();
 
         isPlayer = true;
         _player = new Player();
@@ -246,6 +246,7 @@ public class GameManager : MonoBehaviour
     public void RefreshShop()
     {
         _shopManager.RefreshShop(isPlayer);
+        _uiManager.UpdateShop(isPlayer);
     }
 
     public void UpdateXPDisplay()
