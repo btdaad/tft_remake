@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ConeStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   type: 5
-  cost: 3
+  cost: 1
   star: 0
   traits: 030000000000000000000000
   health:

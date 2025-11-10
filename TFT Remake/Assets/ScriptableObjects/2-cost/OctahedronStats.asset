@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OctahedronStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   type: 7
-  cost: 3
+  cost: 1
   star: 0
   traits: 050000000300000006000000
   health:

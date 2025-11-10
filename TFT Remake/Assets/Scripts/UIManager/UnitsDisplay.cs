@@ -21,6 +21,7 @@ public class UnitsDisplay
     
     private int MAX_TRAITS_DISPLAYED = 3;
     private VisualElement _unitDisplayBackground;
+    private VisualElement _unitImage;
     private VisualElement[] _traitTextures;
     private Label[] _traitLabels;
     private Label _name;
@@ -38,6 +39,7 @@ public class UnitsDisplay
     private Label _crit;
     private Label _range;
     private Label _dr;
+    private Color[] _costColors;
 
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -61,6 +63,7 @@ public class UnitsDisplay
         _unitDisplayBackground = GetUIElement<VisualElement>("UnitDisplayBackground");
 
         InitTraits(ref _traitTextures, ref _traitLabels);
+        _unitImage = GetUIElement<VisualElement>("UnitImage");
         _name = GetUIElement<Label>("Name");
 
         _shieldBarMask = GetUIElement<VisualElement>("ShieldBarMask");
@@ -78,6 +81,14 @@ public class UnitsDisplay
         _crit = GetUIElement<Label>("Crit");
         _range = GetUIElement<Label>("Range");
         _dr = GetUIElement<Label>("DR");
+        
+        _costColors = new Color[3];
+        ColorUtility.TryParseHtmlString("#96A194", out _costColors[0]);
+        _costColors[0].a = 0.6f;
+        ColorUtility.TryParseHtmlString("#40BBDD", out _costColors[1]);
+        _costColors[1].a = 0.6f;
+        ColorUtility.TryParseHtmlString("#FA9607", out _costColors[2]);
+        _costColors[2].a = 0.6f;
 
         _unitDisplayBackground.visible = false;
     }
@@ -106,7 +117,9 @@ public class UnitsDisplay
 
         DisplayTraits(_traitTextures, _traitLabels, stats.traits);
 
+        _unitImage.style.backgroundImage = Resources.Load<Texture2D>($"{stats.type.ToString()}");;
         _name.text = stats.type.ToString();
+        _name.style.backgroundColor = _costColors[(int)stats.cost];
 
         float shield = unit.GetShield();
         float maxHealth = unit.GetMaxHealth() + shield;
