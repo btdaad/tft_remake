@@ -6,10 +6,8 @@ public class UnitStats : ScriptableObject
     public enum Cost
     {
         OneCost = 1,
-        TwoCost = 2,
         ThreeCost = 3,
-        // FourCost = 4,
-        // FiveCost = 5,
+        FiveCost = 5,
         None = 0
     };
 

@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
     private Label _xpCost;
     private VisualElement _unitShop;
     private VisualElement _currentXP;
+    private Label _1costPoolPercentage;
+    private Label _3costPoolPercentage;
+    private Label _5costPoolPercentage;
 
     public void Init()
     {
@@ -45,6 +48,9 @@ public class UIManager : MonoBehaviour
         _xpCost = UIDoc.rootVisualElement.Q<Label>("XPCost");
         _buyXP = UIDoc.rootVisualElement.Q<Button>("BuyXP");
         _buyXP.clickable.clicked += () => { GameManager.Instance.BuyXP(); };
+        _1costPoolPercentage = UIDoc.rootVisualElement.Q<Label>("1CostPercentage");
+        _3costPoolPercentage = UIDoc.rootVisualElement.Q<Label>("3CostPercentage");
+        _5costPoolPercentage = UIDoc.rootVisualElement.Q<Label>("5CostPercentage");
 
         _unitShop.visible = false;
     }
@@ -74,6 +80,11 @@ public class UIManager : MonoBehaviour
             _unitShop.visible = true; // shop is not visible during the very first round/level
         if (level == GameManager.Instance.GetXPManager().GetMaxLevel())
             _currentXP.visible = false;
+
+        (float oneCostPer, float threeCostPer, float fiveCostPer) = GameManager.Instance.GetPoolManager().GetPoolPercentage(level);
+        _1costPoolPercentage.text = $"{oneCostPer*100}%";
+        _3costPoolPercentage.text = $"{threeCostPer*100}%";
+        _5costPoolPercentage.text = $"{fiveCostPer*100}%";
     }
 
     public void ShowUnitDisplay(Transform unitTransform)

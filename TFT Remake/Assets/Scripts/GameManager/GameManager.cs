@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     PvPManager _pvpManager;
     GoldManager _goldManager;
     XPManager _xpManager;
+    PoolManager _poolManager;
     public bool isPlayer;
     Dictionary<Trait, List<Transform>> _playerSynergies = new Dictionary<Trait, List<Transform>>();
     Dictionary<Trait, List<Transform>> _opponentSynergies = new Dictionary<Trait, List<Transform>>();
@@ -71,6 +72,10 @@ public class GameManager : MonoBehaviour
         bool findXPManager = FindManager<XPManager>(ref _xpManager);
         if (findXPManager)
             _xpManager.Init();
+        
+        bool findPoolManager = FindManager<PoolManager>(ref _poolManager);
+        if (findPoolManager)
+            _poolManager.Init();
 
         isPlayer = true;
         _player = new Player();
@@ -108,6 +113,11 @@ public class GameManager : MonoBehaviour
     public XPManager GetXPManager()
     {
         return _xpManager;
+    }
+
+    public PoolManager GetPoolManager()
+    {
+        return _poolManager;
     }
 
     public Player GetPlayer(bool isPlayer)

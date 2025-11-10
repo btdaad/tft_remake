@@ -71,6 +71,7 @@ public class XPManager : MonoBehaviour
         {
             player.UpdateXP(4);
             player.UpdateGold(-xpCost);
+            GameManager.Instance.UpdateGoldDisplay();
 
             PassLevel(player);
         }
