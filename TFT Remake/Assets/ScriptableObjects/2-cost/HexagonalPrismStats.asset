@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HexagonalPrismStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   type: 6
-  cost: 1
+  cost: 3
   star: 0
   traits: 050000000100000000000000
   health:

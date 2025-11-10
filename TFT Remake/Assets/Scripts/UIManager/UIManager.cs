@@ -18,12 +18,18 @@ public class UIManager : MonoBehaviour
     private Label _xp;
     private Label _totalXP;
     private Button _buyXP;
+    private Button _refreshShop;
     private Label _xpCost;
     private VisualElement _unitShop;
     private VisualElement _currentXP;
     private Label _1costPoolPercentage;
     private Label _3costPoolPercentage;
     private Label _5costPoolPercentage;
+    
+    private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
+    {
+        return UIDoc.rootVisualElement.Q<T>(name);
+    }
 
     public void Init()
     {
@@ -32,25 +38,27 @@ public class UIManager : MonoBehaviour
         UISynergy = SynergiesDisplay.Instance(UIDoc);
         UISynergy.InitSynergyDisplay();
 
-        _fight = UIDoc.rootVisualElement.Q<Button>("Fight");
+        _fight = GetUIElement<Button>("Fight");
         _fight.clickable.clicked += () => { GameManager.Instance.Fight(); };
-        _changePlayer = UIDoc.rootVisualElement.Q<Button>("ChangePlayer");
+        _changePlayer = GetUIElement<Button>("ChangePlayer");
         _changePlayer.clickable.clicked += () => { GameManager.Instance.ChangePlayer(); };
-        _gold = UIDoc.rootVisualElement.Q<Label>("Gold");
-        Button dumpButton = UIDoc.rootVisualElement.Q<Button>("Dump");
+        Button dumpButton = GetUIElement<Button>("Dump");
         dumpButton.clickable.clicked += () => { GameManager.Instance.Dump(); };
 
-        _unitShop = UIDoc.rootVisualElement.Q<VisualElement>("UnitShop");
-        _currentXP = UIDoc.rootVisualElement.Q<VisualElement>("CurrentXP");
-        _lvl = UIDoc.rootVisualElement.Q<Label>("LevelNb");
-        _xp = UIDoc.rootVisualElement.Q<Label>("XP");
-        _totalXP = UIDoc.rootVisualElement.Q<Label>("TotalXP");
-        _xpCost = UIDoc.rootVisualElement.Q<Label>("XPCost");
-        _buyXP = UIDoc.rootVisualElement.Q<Button>("BuyXP");
+        _unitShop = GetUIElement<VisualElement>("UnitShop");
+        _currentXP = GetUIElement<VisualElement>("CurrentXP");
+        _gold = GetUIElement<Label>("Gold");
+        _lvl = GetUIElement<Label>("LevelNb");
+        _xp = GetUIElement<Label>("XP");
+        _totalXP = GetUIElement<Label>("TotalXP");
+        _xpCost = GetUIElement<Label>("XPCost");
+        _buyXP = GetUIElement<Button>("BuyXP");
         _buyXP.clickable.clicked += () => { GameManager.Instance.BuyXP(); };
-        _1costPoolPercentage = UIDoc.rootVisualElement.Q<Label>("1CostPercentage");
-        _3costPoolPercentage = UIDoc.rootVisualElement.Q<Label>("3CostPercentage");
-        _5costPoolPercentage = UIDoc.rootVisualElement.Q<Label>("5CostPercentage");
+        _refreshShop = GetUIElement<Button>("Refresh");
+        _refreshShop.clickable.clicked += () => { GameManager.Instance.RefreshShop(); };
+        _1costPoolPercentage = GetUIElement<Label>("1CostPercentage");
+        _3costPoolPercentage = GetUIElement<Label>("3CostPercentage");
+        _5costPoolPercentage = GetUIElement<Label>("5CostPercentage");
 
         _unitShop.visible = false;
     }
@@ -81,7 +89,7 @@ public class UIManager : MonoBehaviour
         if (level == GameManager.Instance.GetXPManager().GetMaxLevel())
             _currentXP.visible = false;
 
-        (float oneCostPer, float threeCostPer, float fiveCostPer) = GameManager.Instance.GetPoolManager().GetPoolPercentage(level);
+        (float oneCostPer, float threeCostPer, float fiveCostPer) = GameManager.Instance.GetShopManager().GetPoolPercentage(level);
         _1costPoolPercentage.text = $"{oneCostPer*100}%";
         _3costPoolPercentage.text = $"{threeCostPer*100}%";
         _5costPoolPercentage.text = $"{fiveCostPer*100}%";

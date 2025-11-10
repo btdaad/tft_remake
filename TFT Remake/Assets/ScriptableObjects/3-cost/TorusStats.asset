@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TorusStats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   type: 11
-  cost: 1
+  cost: 5
   star: 0
   traits: 020000000000000000000000
   health:
