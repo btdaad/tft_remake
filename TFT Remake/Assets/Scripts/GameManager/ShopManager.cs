@@ -39,7 +39,7 @@ public class ShopManager : MonoBehaviour
     }; // Lvl 11	1%	    2%	12%	50%	35%
 
     private UnitType[][] _shop;
-
+    [SerializeField] public GameObject[] _unitPrefabs;
     public int GetUnitCostIndexFromUnitType(UnitType unitType)
     {
         int index = (int)unitType;
@@ -74,6 +74,11 @@ public class ShopManager : MonoBehaviour
     {
         int shopSide = isPlayer ? 0 : 1;
         return _shop[shopSide];
+    }
+
+    public GameObject GetUnitFromUnitType(UnitType unitType)
+    {
+        return _unitPrefabs[(int)unitType];
     }
 
     // Returns the index corresponding to the dictionary contaning the unit in the _unitsPool list

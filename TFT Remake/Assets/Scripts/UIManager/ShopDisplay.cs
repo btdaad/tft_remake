@@ -44,13 +44,23 @@ public class ShopDisplay
         return _uiDoc.rootVisualElement.Q<T>(name);
     }
 
-    private void InitTraits(int shop_size)
+    private void InitShopSlots()
     {
+        int shop_size = GameManager.Instance.GetShopManager().SHOP_SIZE;
+
+        _slotsCost = new VisualElement[shop_size];
+        _slotsImage = new VisualElement[shop_size];
+        _slotsName = new Label[shop_size];
+
         _slotsTraitName = new Label[shop_size][];
         _slotsTraitTextures = new VisualElement[shop_size][];
         for (int i = 0; i < shop_size; i++)
         {
             int slotIndex = i + 1;
+            _slotsCost[i] = GetUIElement<VisualElement>($"Slot{slotIndex}Cost");
+            _slotsImage[i] = GetUIElement<VisualElement>($"Slot{slotIndex}Unit");
+            _slotsName[i] = GetUIElement<Label>($"Slot{slotIndex}UnitName");
+
             _slotsTraitName[i] = new Label[MAX_TRAITS_DISPLAYED];
             _slotsTraitTextures[i] = new VisualElement[MAX_TRAITS_DISPLAYED];
             for (int j = 0; j < MAX_TRAITS_DISPLAYED; j++)
@@ -60,23 +70,6 @@ public class ShopDisplay
                 _slotsTraitTextures[i][j] = GetUIElement<VisualElement>($"Slot{slotIndex}Trait{traitIndex}");
             }
         }
-    }
-
-    private void InitShopSlots()
-    {
-        int shop_size = GameManager.Instance.GetShopManager().SHOP_SIZE;
-        _slotsCost = new VisualElement[shop_size];
-        _slotsImage = new VisualElement[shop_size];
-        _slotsName = new Label[shop_size];
-        for (int i = 0; i < shop_size; i++)
-        {
-            int slotIndex = i + 1;
-            _slotsCost[i] = GetUIElement<VisualElement>($"Slot{slotIndex}Cost");
-            _slotsImage[i] = GetUIElement<VisualElement>($"Slot{slotIndex}Unit");
-            _slotsName[i] = GetUIElement<Label>($"Slot{slotIndex}UnitName");
-        }
-
-        InitTraits(shop_size);
     }
 
     private void InitCostColors()
@@ -139,18 +132,40 @@ public class ShopDisplay
         _5costPoolPercentage.text = $"{fiveCostPer*100}%";
     }
 
+    private void DisplayTraits(int index, UnitType unitType)
+    {
+        GameObject unitGO = GameManager.Instance.GetShopManager().GetUnitFromUnitType(unitType);
+        Trait[] traits = unitGO.GetComponent<Unit>().stats.traits;
+
+        for (int i = 0; i < _slotsTraitTextures[index].Length; i++)
+        {
+            if (i < traits.Length
+                && traits[i] != Trait.None)
+            {
+                Texture2D tex = Resources.Load<Texture2D>(TraitUtil.ToTexture(traits[i]));
+                _slotsTraitTextures[index][i].style.backgroundImage = tex;
+                _slotsTraitName[index][i].text = TraitUtil.ToString(traits[i]);
+                _slotsTraitTextures[index][i].visible = true;
+            }
+            else
+                _slotsTraitTextures[index][i].visible = false;
+        }
+    }
+
     public void UpdateShop(UnitType[] shop)
     {
         for (int i = 0; i < shop.Length; i++)
         {
             UnitType unitType = shop[i];
             _slotsName[i].text = unitType.ToString();
-            _slotsImage[i].style.backgroundImage = Resources.Load<Texture2D>($"{unitType.ToString()}");;
+            _slotsImage[i].style.backgroundImage = Resources.Load<Texture2D>($"{unitType.ToString()}"); ;
             int costIndex = GameManager.Instance.GetShopManager().GetUnitCostIndexFromUnitType(unitType);
             if (costIndex != -1) // unit is not a target dummy
                 _slotsCost[i].style.backgroundColor = _costColors[costIndex];
             else
                 _slotsCost[i].style.backgroundColor = new Color(0, 0, 0);
+
+            DisplayTraits(i, unitType);
         }
     }
 
@@ -159,22 +174,6 @@ public class ShopDisplay
         _xpCost.text = $"{xpCost}";
     }
 
-    // private void DisplayTraits(VisualElement[] visualElements, Label[] labels, Trait[] traits)
-    // {
-    //     for (int i = 0; i < visualElements.Length; i++)
-    //     {
-    //         if (i < traits.Length
-    //             && traits[i] != Trait.None)
-    //         {
-    //             Texture2D tex = Resources.Load<Texture2D>(TraitUtil.ToTexture(traits[i]));
-    //             visualElements[i].style.backgroundImage = tex;
-    //             labels[i].text = TraitUtil.ToString(traits[i]);
-    //             visualElements[i].visible = true;
-    //         }
-    //         else
-    //             visualElements[i].visible = false;
-    //     }
-    // }
 
     // public void ShowUnitDisplay(Transform unitTransform)
     // {

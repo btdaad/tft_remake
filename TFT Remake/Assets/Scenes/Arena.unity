@@ -3887,7 +3887,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fced0740c35170b2a8fe33bb1ad2e5e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolManager
+  SHOP_SIZE: 5
   _poolSizes: 1e0000001200000009000000
+  _unitPrefabs:
+  - {fileID: 4281920545085801843, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
+  - {fileID: 2960332821156560980, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+  - {fileID: 5709035468133690317, guid: 1f9533ade165aec609b146c34834aae0, type: 3}
+  - {fileID: 7872495705548493769, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
+  - {fileID: 6063662448118066848, guid: f6f8031bd291e8a959c01e67e5ae2368, type: 3}
+  - {fileID: 7995966119424386166, guid: 8b5f95badbbd6871bb15b40d0629770e, type: 3}
+  - {fileID: 6984781890196448501, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
+  - {fileID: 6077386214725400366, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
+  - {fileID: 8992936054688810843, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
+  - {fileID: 7664239013713654216, guid: a83cddc8dae38c368984ea0030714ea2, type: 3}
+  - {fileID: 5048283057872754160, guid: 724187251e056ada288cc1c42c6a28fb, type: 3}
+  - {fileID: 4614900328354995680, guid: 2c9b721bb0fe5270083abdb1bcc75fb0, type: 3}
+  - {fileID: 5020599900132245180, guid: 9e4888a3aa429efb5982ac9a0e2ebd3a, type: 3}
 --- !u!1001 &1983031280
 PrefabInstance:
   m_ObjectHideFlags: 0
