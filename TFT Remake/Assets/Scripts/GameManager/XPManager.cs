@@ -67,13 +67,7 @@ public class XPManager : MonoBehaviour
 
     public void BuyXP(Player player)
     {
-        if (player.GetGold() >= xpCost)
-        {
-            player.UpdateXP(4);
-            player.UpdateGold(-xpCost);
-            GameManager.Instance.UpdateGoldDisplay();
-
-            PassLevel(player);
-        }
+        player.UpdateXP(4);
+        PassLevel(player);
     }
 }

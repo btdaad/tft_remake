@@ -27,6 +27,7 @@ public class ShopDisplay
     private Button _buyXP;
     private Button _refreshShop;
     private Label _xpCost;
+    private Label _refreshCost;
     private VisualElement _unitShop;
     private VisualElement _currentXP;
     private Label _1costPoolPercentage;
@@ -46,7 +47,7 @@ public class ShopDisplay
 
     private void InitShopSlots()
     {
-        int shop_size = GameManager.Instance.GetShopManager().SHOP_SIZE;
+        int shop_size = GameManager.Instance.GetShopManager().GetShopSize();
 
         _slotsCost = new VisualElement[shop_size];
         _slotsImage = new VisualElement[shop_size];
@@ -90,6 +91,7 @@ public class ShopDisplay
         _xp = GetUIElement<Label>("XP");
         _totalXP = GetUIElement<Label>("TotalXP");
         _xpCost = GetUIElement<Label>("XPCost");
+        _refreshCost = GetUIElement<Label>("RefreshCost");
 
         _buyXP = GetUIElement<Button>("BuyXP");
         _buyXP.clickable.clicked += () => { GameManager.Instance.BuyXP(); };
@@ -172,5 +174,10 @@ public class ShopDisplay
     public void UpdateXPCostDisplay(int xpCost)
     {
         _xpCost.text = $"{xpCost}";
+    }
+    
+    public void UpdateRefreshCostDisplay(int refreshCost)
+    {
+        _refreshCost.text = $"{refreshCost}";
     }
 }

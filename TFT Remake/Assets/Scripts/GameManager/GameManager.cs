@@ -243,13 +243,21 @@ public class GameManager : MonoBehaviour
 
     public void BuyXP()
     {
-        _xpManager.BuyXP(isPlayer ? _player : _opponent);
+        if (_goldManager.GetGold(isPlayer) >= _xpManager.GetXPCost())
+        {
+            _xpManager.BuyXP(isPlayer ? _player : _opponent);
+            _goldManager.UpdateGold(isPlayer, -_xpManager.GetXPCost());
+        }
     }
 
     public void RefreshShop()
     {
-        _shopManager.RefreshShop(isPlayer);
-        _uiManager.UpdateShop(isPlayer);
+        if (_goldManager.GetGold(isPlayer) >= _shopManager.GetRefreshCost())
+        {
+            _shopManager.RefreshShop(isPlayer);
+            _uiManager.UpdateShop(isPlayer);
+            _goldManager.UpdateGold(isPlayer, -_shopManager.GetRefreshCost());
+        }
     }
 
     public void UpdateXPDisplay()

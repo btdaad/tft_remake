@@ -83,6 +83,8 @@ public class UIManager : MonoBehaviour
     {
         int xpCost = GameManager.Instance.GetXPManager().GetXPCost();
         UIShop.UpdateXPCostDisplay(xpCost);
+        int refreshCost = GameManager.Instance.GetShopManager().GetRefreshCost();
+        UIShop.UpdateRefreshCostDisplay(refreshCost);
     }
 
     public void ChangePlayer(bool isPlayer)

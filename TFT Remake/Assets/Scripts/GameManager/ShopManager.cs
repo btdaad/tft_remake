@@ -4,8 +4,9 @@ using System;
 
 public class ShopManager : MonoBehaviour
 {
-    public int SHOP_SIZE = 5;
+    private int SHOP_SIZE = 5;
     private int DIFF_COST = 3; // 1-cost, 3-cost, 5-cost
+    [SerializeField] public int refreshCost = 2;
     private int firstThreeCostIndex = (int)UnitType.Cone;
     private int firstFiveCostIndex = (int)UnitType.Icosahedron;
     private int outOfBoundIndex = (int)UnitType.TargetDummy;
@@ -68,6 +69,16 @@ public class ShopManager : MonoBehaviour
         }
 
         _shop = JaggedArrayUtil.InitJaggedArray<UnitType>(2, SHOP_SIZE, () => UnitType.TargetDummy);
+    }
+
+    public int GetShopSize()
+    {
+        return SHOP_SIZE;
+    }
+
+    public int GetRefreshCost()
+    {
+        return refreshCost;
     }
 
     public UnitType[] GetShop(bool isPlayer)

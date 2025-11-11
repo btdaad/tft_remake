@@ -48,13 +48,13 @@ public class GoldManager : MonoBehaviour
         return 3; // when at 6+ wins in a row.
     }
 
-    private void ComputeTotalIncome(Player player)
+    private int ComputeTotalIncome(Player player)
     {
         int income = ComputeStreakIncome(player.GetWinStreak());
         income += ComputeStreakIncome(player.GetLossStreak());
         income += ComputePassiveIncome(2, 2); // TODO: call actual round manager
         income += ComputeInterest(player);
-        player.UpdateGold(income);
+        return income;
     }
 
     public void BonusPvP(Player player)
@@ -79,16 +79,24 @@ public class GoldManager : MonoBehaviour
 
     public void ManageGold(Player player, Player opponent)
     {
-        ComputeTotalIncome(player);
-        UpdateGoldBank(player, playerGoldStacks);
-        ComputeTotalIncome(opponent);
-        UpdateGoldBank(opponent, opponentGoldStacks);
+        int playerIncome = ComputeTotalIncome(player);
+        UpdateGold(true, playerIncome);
 
-        GameManager.Instance.UpdateGoldDisplay();
+        int opponentIncome = ComputeTotalIncome(opponent);
+        UpdateGold(false, opponentIncome);
     }
 
     public int GetGold(bool isPlayer)
     {
         return GameManager.Instance.GetPlayer(isPlayer).GetGold();
+    }
+
+    public void UpdateGold(bool isPlayer, int amount)
+    {
+        Player curPlayer = GameManager.Instance.GetPlayer(isPlayer);
+        curPlayer.UpdateGold(amount);
+        UpdateGoldBank(curPlayer, isPlayer ? playerGoldStacks : opponentGoldStacks);
+
+        GameManager.Instance.UpdateGoldDisplay();
     }
 }
