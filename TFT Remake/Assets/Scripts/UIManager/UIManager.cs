@@ -94,5 +94,6 @@ public class UIManager : MonoBehaviour
         UpdateGold(isPlayer);
         UpdateXP(isPlayer);
         UpdateLevel(isPlayer);
+        UpdateShop(isPlayer);
     }
 }

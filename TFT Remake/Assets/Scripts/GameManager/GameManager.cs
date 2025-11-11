@@ -214,6 +214,9 @@ public class GameManager : MonoBehaviour
             _goldManager.BonusPvP(_opponent);
         }
         _xpManager.EndFight(_player, _opponent);
+        _shopManager.RefreshShop(true); // shop refreshes for all players when a fight ends
+        _shopManager.RefreshShop(false); // shop refreshes for all players when a fight ends
+        _uiManager.UpdateShop(isPlayer);
     }
 
     public void Dump()

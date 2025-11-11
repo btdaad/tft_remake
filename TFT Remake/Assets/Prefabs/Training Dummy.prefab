@@ -1682,7 +1682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3352ea82f5da12f83d1603da0e8ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
-  stats: {fileID: 0}
+  stats: {fileID: 11400000, guid: d921ba9806580a24dabdbd58d7697377, type: 2}
   _isFromPlayerTeam: 0
   _basicAttackPrefab: {fileID: 0}
   ability: {fileID: 0}
