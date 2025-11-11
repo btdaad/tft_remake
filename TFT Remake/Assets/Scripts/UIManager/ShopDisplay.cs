@@ -33,6 +33,7 @@ public class ShopDisplay
     private Label _1costPoolPercentage;
     private Label _3costPoolPercentage;
     private Label _5costPoolPercentage;
+    private Button[] _slots;
     private VisualElement[] _slotsCost;
     private VisualElement[] _slotsImage;
     private Label[] _slotsName;
@@ -49,6 +50,7 @@ public class ShopDisplay
     {
         int shop_size = GameManager.Instance.GetShopManager().GetShopSize();
 
+        _slots = new Button[shop_size];
         _slotsCost = new VisualElement[shop_size];
         _slotsImage = new VisualElement[shop_size];
         _slotsName = new Label[shop_size];
@@ -70,7 +72,15 @@ public class ShopDisplay
                 _slotsTraitName[i][j] = GetUIElement<Label>($"Slot{slotIndex}Trait{traitIndex}");
                 _slotsTraitTextures[i][j] = GetUIElement<VisualElement>($"Slot{slotIndex}Trait{traitIndex}");
             }
+            
+            _slots[i] = GetUIElement<Button>($"Slot{slotIndex}");
+            _slots[i].RegisterCallback<ClickEvent, int>(BuyUnit, i);
         }
+    }
+
+    private void BuyUnit(ClickEvent _, int i)
+    {
+        GameManager.Instance.BuyUnit(i);
     }
 
     private void InitCostColors()

@@ -87,6 +87,15 @@ public class ShopManager : MonoBehaviour
         return _shop[shopSide];
     }
 
+    public void BuyUnit(bool isPlayer, int i)
+    {
+        int shopSide = isPlayer ? 0 : 1;
+        UnitType unitType = _shop[shopSide][i];
+
+        Vector3 position = Vector3.zero;
+        GameObject unitGO = Instantiate(_unitPrefabs[(int)unitType], position, Quaternion.identity);
+    }
+
     public GameObject GetUnitFromUnitType(UnitType unitType)
     {
         return _unitPrefabs[(int)unitType];

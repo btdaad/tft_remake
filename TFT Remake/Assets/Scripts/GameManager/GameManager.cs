@@ -260,6 +260,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void BuyUnit(int i)
+    {
+        // check for money
+        // check for space on bench
+        // add shop[isPlayer][i] to bench
+        // remove from shop
+        _shopManager.BuyUnit(isPlayer, i);
+    }
+
     public void UpdateXPDisplay()
     {
         _uiManager.UpdateXP(isPlayer);
