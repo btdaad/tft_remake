@@ -153,7 +153,16 @@ public class BoardManager : MonoBehaviour
 
     public void AddUnitToBench(bool isPlayer, Transform unitTransform)
     {
-        int index = Array.IndexOf(_benchGrid[isPlayer ? 0 : 1], null);
+        int index = -1;
+        if (isPlayer)
+            index = Array.IndexOf(_benchGrid[0], null);
+        // else // opposite direction
+        // {
+        //     Transform[] opponentBench = new Transform[_benchGrid[1].Length];
+        //     Array.Copy(_benchGrid[1], opponentBench, _benchGrid[1].Length);
+        //     Array.Reverse(opponentBench);
+        //     index = Array.IndexOf(opponentBench, null);
+        // }
         if (index == -1)
             Debug.LogError("Should have place left on the bench!");
         _benchGrid[isPlayer ? 0 : 1][index] = unitTransform;
@@ -161,7 +170,17 @@ public class BoardManager : MonoBehaviour
 
     public bool GetBenchEmptySpot(bool isPlayer, out Vector3 benchPosition)
     {
-        int index = Array.IndexOf(_benchGrid[isPlayer ? 0 : 1], null);
+        int index = -1;
+        if (isPlayer)
+            index = Array.IndexOf(_benchGrid[0], null);
+        // else // opposite direction
+        // {
+        //     Transform[] opponentBench = new Transform[_benchGrid[1].Length];
+        //     Array.Copy(_benchGrid[1], opponentBench, _benchGrid[1].Length);
+        //     Array.Reverse(opponentBench);
+        //     index = Array.IndexOf(opponentBench, null);
+        // }
+
         if (index == -1)
         {
             benchPosition = Vector3.zero; // default value
