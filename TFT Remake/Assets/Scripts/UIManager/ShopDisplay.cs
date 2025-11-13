@@ -173,9 +173,12 @@ public class ShopDisplay
             _slotsImage[i].style.backgroundImage = Resources.Load<Texture2D>($"{unitType.ToString()}"); ;
             int costIndex = GameManager.Instance.GetShopManager().GetUnitCostIndexFromUnitType(unitType);
             if (costIndex != -1) // unit is not a target dummy
+            {
+                _slots[i].visible = true;
                 _slotsCost[i].style.backgroundColor = _costColors[costIndex];
+            }
             else
-                _slotsCost[i].style.backgroundColor = new Color(0, 0, 0);
+                _slots[i].visible = false;
 
             DisplayTraits(i, unitType);
         }

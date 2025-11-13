@@ -87,13 +87,39 @@ public class ShopManager : MonoBehaviour
         return _shop[shopSide];
     }
 
-    public void BuyUnit(bool isPlayer, int i)
+    public int GetUnitCost(bool isPlayer, int i)
     {
         int shopSide = isPlayer ? 0 : 1;
         UnitType unitType = _shop[shopSide][i];
+        GameObject unitPrefab = _unitPrefabs[(int)unitType];
+        UnitStats.Cost cost = unitPrefab.GetComponent<Unit>().stats.cost;
+        switch (cost)
+        {
+            case UnitStats.Cost.OneCost:
+                return 1;
+            case UnitStats.Cost.ThreeCost:
+                return 3;
+            case UnitStats.Cost.FiveCost:
+                return 5;
+            default:
+                return 0;
+        }
+    }
 
-        Vector3 position = Vector3.zero;
-        GameObject unitGO = Instantiate(_unitPrefabs[(int)unitType], position, Quaternion.identity);
+    public Transform BuyUnit(bool isPlayer, int i, Vector3 benchPosition)
+    {
+        int shopSide = isPlayer ? 0 : 1;
+        UnitType unitType = _shop[shopSide][i];
+        _shop[shopSide][i] = UnitType.TargetDummy; // remove from shop
+
+        GameObject unitPrefab = _unitPrefabs[(int)unitType];
+
+        float yPos = unitPrefab.transform.position.y;
+        benchPosition.y = yPos;
+
+        // find bench position
+        GameObject unitGO = Instantiate(_unitPrefabs[(int)unitType], benchPosition, Quaternion.identity);
+        return unitGO.transform;
     }
 
     public GameObject GetUnitFromUnitType(UnitType unitType)

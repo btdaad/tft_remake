@@ -151,6 +151,27 @@ public class BoardManager : MonoBehaviour
         return _pathFindingInfo[xPos][yPos];
     }
 
+    public void AddUnitToBench(bool isPlayer, Transform unitTransform)
+    {
+        int index = Array.IndexOf(_benchGrid[isPlayer ? 0 : 1], null);
+        if (index == -1)
+            Debug.LogError("Should have place left on the bench!");
+        _benchGrid[isPlayer ? 0 : 1][index] = unitTransform;
+    }
+
+    public bool GetBenchEmptySpot(bool isPlayer, out Vector3 benchPosition)
+    {
+        int index = Array.IndexOf(_benchGrid[isPlayer ? 0 : 1], null);
+        if (index == -1)
+        {
+            benchPosition = Vector3.zero; // default value
+            return false;
+        }
+        if (isPlayer)
+            return _playerBoardManager.ToBenchPosition(index, isPlayer, out benchPosition); // it might be out of the tilemap
+        return _opponentBoardManager.ToBenchPosition(index, isPlayer, out benchPosition); // it might be out of the tilemap
+    }
+
     private Vector3Int CoordsToTilemapCell(Coords coords)
     {
         return new Vector3Int(coords.y - 1, coords.x, 0);

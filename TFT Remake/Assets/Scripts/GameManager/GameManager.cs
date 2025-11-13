@@ -259,14 +259,30 @@ public class GameManager : MonoBehaviour
             _goldManager.UpdateGold(isPlayer, -_shopManager.GetRefreshCost());
         }
     }
+    
+    private bool GetBenchEmptySpot(out Vector3 benchPosition)
+    {
+        return _boardManager.GetBenchEmptySpot(isPlayer, out benchPosition);   
+    }
 
     public void BuyUnit(int i)
     {
         // check for money
-        // check for space on bench
-        // add shop[isPlayer][i] to bench
-        // remove from shop
-        _shopManager.BuyUnit(isPlayer, i);
+        int unitCost = _shopManager.GetUnitCost(isPlayer, i);
+        if (_goldManager.GetGold(isPlayer) >= unitCost)
+        {
+            Vector3 benchPosition;
+            bool validBenchPosition = GetBenchEmptySpot(out benchPosition); // check for place on bench 
+            if (validBenchPosition)
+            {
+                Transform unitTransform = _shopManager.BuyUnit(isPlayer, i, benchPosition);
+                _boardManager.AddUnitToBench(isPlayer, unitTransform); // add shop[isPlayer][i] to bench
+                _goldManager.UpdateGold(isPlayer, -unitCost);
+
+                // remove from shop
+                _uiManager.UpdateShop(isPlayer);
+            }
+        }
     }
 
     public void UpdateXPDisplay()

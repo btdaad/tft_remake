@@ -102,6 +102,14 @@ public class PlayerBoardManager
         return (cellCoord.x + 1, cellCoord.y == -1 ? 0 : 1);
     }
 
+    public bool ToBenchPosition(int index, bool isPlayer, out Vector3 benchPosition)
+    {
+        Vector3Int cellPos = new Vector3Int(index - 1, isPlayer ? -1 : 8, 0);
+        benchPosition = _benchTilemap.GetCellCenterWorld(cellPos);
+        bool isCellValid = _benchTilemap.cellBounds.Contains(cellPos) && _benchTilemap.HasTile(cellPos);
+        return isCellValid;
+    }
+
     private bool PlaceUnitOnZone(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
     {
         // assess init unit zone depending on the z coord
