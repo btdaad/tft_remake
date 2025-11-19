@@ -156,15 +156,15 @@ public class BoardManager : MonoBehaviour
         int index = -1;
         if (isPlayer)
             index = Array.IndexOf(_benchGrid[0], null);
-        // else // opposite direction
-        // {
-        //     Transform[] opponentBench = new Transform[_benchGrid[1].Length];
-        //     Array.Copy(_benchGrid[1], opponentBench, _benchGrid[1].Length);
-        //     Array.Reverse(opponentBench);
-        //     index = Array.IndexOf(opponentBench, null);
-        // }
-        if (index == -1)
-            Debug.LogError("Should have place left on the bench!");
+        else // opposite direction
+        {
+            Transform[] opponentBench = new Transform[_benchGrid[1].Length];
+            Array.Copy(_benchGrid[1], opponentBench, _benchGrid[1].Length);
+            Array.Reverse(opponentBench);
+            index = _benchGrid[1].Length - 1 - Array.IndexOf(opponentBench, null); // we want to find the first empty spot from the opposite direction but it is still indexed in the same direction
+        }
+        if (index == -1 || index == _benchGrid[1].Length)
+            Debug.LogError("There should be an empty spot on the bench!");
         _benchGrid[isPlayer ? 0 : 1][index] = unitTransform;
     }
 
@@ -173,15 +173,15 @@ public class BoardManager : MonoBehaviour
         int index = -1;
         if (isPlayer)
             index = Array.IndexOf(_benchGrid[0], null);
-        // else // opposite direction
-        // {
-        //     Transform[] opponentBench = new Transform[_benchGrid[1].Length];
-        //     Array.Copy(_benchGrid[1], opponentBench, _benchGrid[1].Length);
-        //     Array.Reverse(opponentBench);
-        //     index = Array.IndexOf(opponentBench, null);
-        // }
+        else // opposite direction
+        {
+            Transform[] opponentBench = new Transform[_benchGrid[1].Length];
+            Array.Copy(_benchGrid[1], opponentBench, _benchGrid[1].Length);
+            Array.Reverse(opponentBench);
+            index = _benchGrid[1].Length - 1 - Array.IndexOf(opponentBench, null); // we want to find the first empty spot from the opposite direction but it is still indexed in the same direction
+        }
 
-        if (index == -1)
+        if (index == -1 || index == _benchGrid[1].Length)
         {
             benchPosition = Vector3.zero; // default value
             return false;

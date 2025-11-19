@@ -99,12 +99,12 @@ public class PlayerBoardManager
     // also, on the y axis it goes from -1 to 9 but all rows between 0 and 8 are useless so the y coordinates are either 0 or 1 to match the array index
     private (int, int) ToBenchCoord(Vector3Int cellCoord)
     {
-        return (cellCoord.x + 1, cellCoord.y == -1 ? 0 : 1);
+        return (cellCoord.y == -1 ? cellCoord.x + 1 : cellCoord.x + 2, cellCoord.y == -1 ? 0 : 1);
     }
 
     public bool ToBenchPosition(int index, bool isPlayer, out Vector3 benchPosition)
     {
-        Vector3Int cellPos = new Vector3Int(index - 1, isPlayer ? -1 : 8, 0);
+        Vector3Int cellPos = new Vector3Int(isPlayer ? index - 1 : index - 2, isPlayer ? -1 : 8, 0);
         benchPosition = _benchTilemap.GetCellCenterWorld(cellPos);
         bool isCellValid = _benchTilemap.cellBounds.Contains(cellPos) && _benchTilemap.HasTile(cellPos);
         return isCellValid;
