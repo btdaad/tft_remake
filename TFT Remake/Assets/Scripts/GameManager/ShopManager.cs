@@ -5,8 +5,8 @@ using System;
 public class ShopManager : MonoBehaviour
 {
     private int SHOP_SIZE = 5;
-    private int DIFF_COST = 3; // 1-cost, 3-cost, 5-cost
     [SerializeField] public int refreshCost = 2;
+    [SerializeField] public int[] diffCost = {1, 3, 5};
     private int firstThreeCostIndex = (int)UnitType.Cone;
     private int firstFiveCostIndex = (int)UnitType.Icosahedron;
     private int outOfBoundIndex = (int)UnitType.TargetDummy;
@@ -58,7 +58,7 @@ public class ShopManager : MonoBehaviour
         UnityEngine.Random.InitState(300600);
 
         _unitsPool = new List<Dictionary<UnitType, int>>();
-        for (int i = 0; i < DIFF_COST; i++)
+        for (int i = 0; i < diffCost.Length; i++)
             _unitsPool.Add(new Dictionary<UnitType, int>());
 
         foreach (UnitType unitType in Enum.GetValues(typeof(UnitType)))
@@ -93,17 +93,14 @@ public class ShopManager : MonoBehaviour
         UnitType unitType = _shop[shopSide][i];
         GameObject unitPrefab = _unitPrefabs[(int)unitType];
         UnitStats.Cost cost = unitPrefab.GetComponent<Unit>().stats.cost;
-        switch (cost)
-        {
-            case UnitStats.Cost.OneCost:
-                return 1;
-            case UnitStats.Cost.ThreeCost:
-                return 3;
-            case UnitStats.Cost.FiveCost:
-                return 5;
-            default:
-                return 0;
-        }
+        if ((int) cost < 0 || (int) cost >= diffCost.Length)
+            return 0;
+        return diffCost[(int)cost];
+    }
+
+    public int[] GetDiffCost()
+    {
+        return diffCost;
     }
 
     public Transform BuyUnit(bool isPlayer, int i, Vector3 benchPosition)

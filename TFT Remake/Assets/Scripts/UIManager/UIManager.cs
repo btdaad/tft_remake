@@ -37,6 +37,17 @@ public class UIManager : MonoBehaviour
         dumpButton.clickable.clicked += () => { GameManager.Instance.Dump(); };
     }
 
+    // Used to have a responsive ui display of the xp cost if ever it is changed in the Editor
+    void Update()
+    {
+        int xpCost = GameManager.Instance.GetXPManager().GetXPCost();
+        UIShop.UpdateXPCostDisplay(xpCost);
+        int refreshCost = GameManager.Instance.GetShopManager().GetRefreshCost();
+        UIShop.UpdateRefreshCostDisplay(refreshCost);
+        int[] unitCost = GameManager.Instance.GetShopManager().GetDiffCost();
+        UIShop.UpdateUnitCostDisplay(unitCost);
+    }
+
     public void UpdateSynergyDisplay(Dictionary<Trait, List<Transform>> unsortedSynergies, UnitTraitSO[] unitTraits)
     {
         UISynergy.UpdateSynergyDisplay(unsortedSynergies, unitTraits);
@@ -76,15 +87,6 @@ public class UIManager : MonoBehaviour
     public void HideUnitDisplay()
     {
         UIUnit.HideUnitDisplay();
-    }
-
-    // Used to have a responsive ui display of the xp cost if ever it is changed in the Editor
-    void Update()
-    {
-        int xpCost = GameManager.Instance.GetXPManager().GetXPCost();
-        UIShop.UpdateXPCostDisplay(xpCost);
-        int refreshCost = GameManager.Instance.GetShopManager().GetRefreshCost();
-        UIShop.UpdateRefreshCostDisplay(refreshCost);
     }
 
     public void ChangePlayer(bool isPlayer)

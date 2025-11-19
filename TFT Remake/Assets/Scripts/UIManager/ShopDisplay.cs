@@ -34,12 +34,14 @@ public class ShopDisplay
     private Label _3costPoolPercentage;
     private Label _5costPoolPercentage;
     private Button[] _slots;
-    private VisualElement[] _slotsCost;
+    private VisualElement[] _slotsWindow;
+    private Label[] _slotsCost;
     private VisualElement[] _slotsImage;
     private Label[] _slotsName;
     private Color[] _costColors;
     private Label[][] _slotsTraitName;
     private VisualElement[][] _slotsTraitTextures;
+    private int[] _unitCost = {1, 3, 5}; // price of units {1, 3, 5}
 
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -51,18 +53,20 @@ public class ShopDisplay
         int shop_size = GameManager.Instance.GetShopManager().GetShopSize();
 
         _slots = new Button[shop_size];
-        _slotsCost = new VisualElement[shop_size];
+        _slotsWindow = new VisualElement[shop_size];
         _slotsImage = new VisualElement[shop_size];
         _slotsName = new Label[shop_size];
+        _slotsCost = new Label[shop_size];
 
         _slotsTraitName = new Label[shop_size][];
         _slotsTraitTextures = new VisualElement[shop_size][];
         for (int i = 0; i < shop_size; i++)
         {
             int slotIndex = i + 1;
-            _slotsCost[i] = GetUIElement<VisualElement>($"Slot{slotIndex}Cost");
+            _slotsWindow[i] = GetUIElement<VisualElement>($"Slot{slotIndex}Window");
             _slotsImage[i] = GetUIElement<VisualElement>($"Slot{slotIndex}Unit");
             _slotsName[i] = GetUIElement<Label>($"Slot{slotIndex}UnitName");
+            _slotsCost[i] = GetUIElement<Label>($"Slot{slotIndex}Cost");
 
             _slotsTraitName[i] = new Label[MAX_TRAITS_DISPLAYED];
             _slotsTraitTextures[i] = new VisualElement[MAX_TRAITS_DISPLAYED];
@@ -175,7 +179,8 @@ public class ShopDisplay
             if (costIndex != -1) // unit is not a target dummy
             {
                 _slots[i].visible = true;
-                _slotsCost[i].style.backgroundColor = _costColors[costIndex];
+                _slotsWindow[i].style.backgroundColor = _costColors[costIndex];
+                _slotsCost[i].text = $"{_unitCost[costIndex]}";
             }
             else
                 _slots[i].visible = false;
@@ -192,5 +197,17 @@ public class ShopDisplay
     public void UpdateRefreshCostDisplay(int refreshCost)
     {
         _refreshCost.text = $"{refreshCost}";
+    }
+    public void UpdateUnitCostDisplay(int[] diffCost)
+    {
+        for (int i = 0; i < _slotsCost.Length; i++)
+        {
+            int cost = Int32.Parse(_slotsCost[i].text);
+            int index = Array.IndexOf(_unitCost, cost);
+            if (index != -1)
+                _slotsCost[i].text = $"{diffCost[index]}";
+            // if index == -1, it could be seen as an error but truthfully, this code is called before the shop open so the prices are not correct at first anyway
+        }
+        _unitCost = (int[]) diffCost.Clone(); // need to clone otherwise it is a deep copy and it is updated as soon as diffCost is updated
     }
 }
