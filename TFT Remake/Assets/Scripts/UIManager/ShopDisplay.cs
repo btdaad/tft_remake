@@ -39,6 +39,7 @@ public class ShopDisplay
     private VisualElement[] _slotsImage;
     private Label[] _slotsName;
     private Color[] _costColors;
+    private Color _hoverBackgroundColorDelta = new Color(0.02f, 0.02f, 0.02f);
     private Label[][] _slotsTraitName;
     private VisualElement[][] _slotsTraitTextures;
     private int[] _unitCost = {1, 3, 5}; // price of units {1, 3, 5}
@@ -79,6 +80,8 @@ public class ShopDisplay
             
             _slots[i] = GetUIElement<Button>($"Slot{slotIndex}");
             _slots[i].RegisterCallback<ClickEvent, int>(BuyUnit, i);
+            _slots[i].RegisterCallback<MouseOverEvent, int>(HoverUnit, i);;
+            _slots[i].RegisterCallback<MouseOutEvent, int>(LeaveUnit, i);;
         }
     }
 
@@ -86,14 +89,23 @@ public class ShopDisplay
     {
         GameManager.Instance.BuyUnit(i);
     }
+    
+    private void HoverUnit(MouseOverEvent _, int i)
+    {
+        _slotsWindow[i].style.backgroundColor = _slotsWindow[i].style.backgroundColor.value + _hoverBackgroundColorDelta;
+    }
+    private void LeaveUnit(MouseOutEvent _, int i)
+    {
+        _slotsWindow[i].style.backgroundColor = _slotsWindow[i].style.backgroundColor.value - _hoverBackgroundColorDelta;
+    }
 
     private void InitCostColors()
-    {
-        _costColors = new Color[3];
-        ColorUtility.TryParseHtmlString("#96A194", out _costColors[0]);
-        ColorUtility.TryParseHtmlString("#40BBDD", out _costColors[1]);
-        ColorUtility.TryParseHtmlString("#FA9607", out _costColors[2]);
-    }
+{
+    _costColors = new Color[3];
+    ColorUtility.TryParseHtmlString("#96A194", out _costColors[0]);
+    ColorUtility.TryParseHtmlString("#40BBDD", out _costColors[1]);
+    ColorUtility.TryParseHtmlString("#FA9607", out _costColors[2]);
+}
 
     public void InitShopDisplay()
     {
