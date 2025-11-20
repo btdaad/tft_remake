@@ -317,6 +317,7 @@ public class GameManager : MonoBehaviour
     {
         _boardManager.SellUnit(isPlayer, soldUnit);
         _goldManager.UpdateGold(isPlayer, cost);
+        UpdateSynergyDisplay();
     }
 
     public void UpdateXPDisplay()

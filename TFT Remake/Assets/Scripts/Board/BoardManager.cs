@@ -259,6 +259,8 @@ public class BoardManager : MonoBehaviour
                 _benchGrid[yPos][xPos] = null;
             }
         }
+        MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(soldUnit, MoveUnitEventArgs.Zone.Bench);
+        CallMoveUnit(null, moveUnitEventArgs);
         Destroy(soldUnit.gameObject);
     }
 
