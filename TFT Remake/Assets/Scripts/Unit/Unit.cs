@@ -6,6 +6,7 @@ using System.Collections;
 public class Unit : MonoBehaviour
 {
     [SerializeField] public UnitStats stats;
+    [SerializeField] public float scaleFactor = 1.14f;
     float _health;
     float _mana;
     float _ap;
@@ -72,6 +73,12 @@ public class Unit : MonoBehaviour
             }
         }
         _durability.RemoveAll(durability => durability.strength <= 0.0f || durability.duration == 0.0f);
+    }
+
+    public void UpLevel()
+    {
+        stats.star = (UnitStats.Star) (int)stats.star + 1;
+        transform.localScale = transform.localScale * scaleFactor;
     }
 
     public float GetHealth()

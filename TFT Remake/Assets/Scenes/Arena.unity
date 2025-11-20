@@ -3936,6 +3936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolManager
   refreshCost: 2
+  diffCost: 010000000300000005000000
   _poolSizes: 1e0000001200000009000000
   _unitPrefabs:
   - {fileID: 4281920545085801843, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
@@ -4122,6 +4123,18 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9113513224944391427, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113513224944391427, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113513224944391427, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113513224944391427, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.2
       objectReference: {fileID: 0}
@@ -4160,6 +4173,10 @@ PrefabInstance:
     - target: {fileID: 9113513224944391427, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113513224944391427, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

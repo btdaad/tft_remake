@@ -151,6 +151,66 @@ public class BoardManager : MonoBehaviour
         return _pathFindingInfo[xPos][yPos];
     }
 
+    private List<Transform> FindSameLevelUnit(bool isPlayer, UnitType type, UnitStats.Star star)
+    {
+        List<Transform> sameLevelUnits = new List<Transform>();
+
+        if (star == UnitStats.Star.ThreeStar) // we don't want to combine units if they are at three star
+            return sameLevelUnits;
+
+        int benchRow = isPlayer ? 0 : 1;
+        int minBattlefieldRow = isPlayer ? 0 : 4;
+        int maxBattlefieldRow = isPlayer ? 3 : 7;
+
+        for (int x = minBattlefieldRow; x <= maxBattlefieldRow; x++)
+        {
+            for (int y = 0; y < _battlefieldGrid[x].Length; y++)
+            {
+                if (_battlefieldGrid[x][y] != null)
+                {
+                    UnitStats unitStats = _battlefieldGrid[x][y].GetComponent<Unit>().stats;
+                    if (unitStats.type == type && unitStats.star == star)
+                        sameLevelUnits.Add(_battlefieldGrid[x][y]);
+                }
+            }
+        }
+
+        for (int y = 0; y < _benchGrid[benchRow].Length; y++)
+        {
+            if (_benchGrid[benchRow][y] != null)
+            {
+                UnitStats unitStats = _benchGrid[benchRow][y].GetComponent<Unit>().stats;
+                if (unitStats.type == type && unitStats.star == star)
+                    sameLevelUnits.Add(_benchGrid[benchRow][y]);
+            }
+        }
+
+        return sameLevelUnits;
+    }
+
+    private void FuseUnits(bool isPlayer, List<Transform> sameLevelUnits)
+    {
+        sameLevelUnits[0].GetComponent<Unit>().UpLevel();
+
+        RemoveUnitAt(isPlayer, sameLevelUnits[1].position); 
+        Destroy(sameLevelUnits[1].gameObject);
+
+        RemoveUnitAt(isPlayer, sameLevelUnits[2].position); 
+        Destroy(sameLevelUnits[2].gameObject);
+    }
+
+    private void TryToFuseUnits(bool isPlayer, UnitType unitType, UnitStats.Star star)
+    {
+        List<Transform> sameLevelUnits = FindSameLevelUnit(isPlayer, unitType, star);
+        Debug.Log(sameLevelUnits);
+        if (sameLevelUnits.Count == 3)
+        {
+            FuseUnits(isPlayer, sameLevelUnits);
+            TryToFuseUnits(isPlayer, unitType, (UnitStats.Star) (int)star + 1);
+        }
+    }
+
+    // Called when buying a new unit
     public void AddUnitToBench(bool isPlayer, Transform unitTransform)
     {
         int index = -1;
@@ -166,6 +226,8 @@ public class BoardManager : MonoBehaviour
         if (index == -1 || index == _benchGrid[1].Length)
             Debug.LogError("There should be an empty spot on the bench!");
         _benchGrid[isPlayer ? 0 : 1][index] = unitTransform;
+
+        TryToFuseUnits(isPlayer, unitTransform.GetComponent<Unit>().stats.type, UnitStats.Star.OneStar);
     }
 
     public bool GetBenchEmptySpot(bool isPlayer, out Vector3 benchPosition)
@@ -231,36 +293,14 @@ public class BoardManager : MonoBehaviour
 
     public void SellUnit(bool isPlayer, Transform soldUnit)
     {
-        if (isPlayer)
-        {
-            Vector3 initUnitPos = _playerBoardManager.GetInitUnitPos();
-            if (_playerBoardManager.IsUnitOnBattlefield(initUnitPos.z))
-            {
-                (int xPos, int yPos) = ToBattlefieldCoord(initUnitPos);
-                _battlefieldGrid[yPos][xPos] = null;
-            }
-            else
-            {
-                (int xPos, int yPos) = ToBenchCoord(initUnitPos);
-                _benchGrid[yPos][xPos] = null;
-            }
-        }
-        else
-        {
-            Vector3 initUnitPos = _opponentBoardManager.GetInitUnitPos();
-            if (_opponentBoardManager.IsUnitOnBattlefield(initUnitPos.z))
-            {
-                (int xPos, int yPos) = ToBattlefieldCoord(initUnitPos);
-                _battlefieldGrid[yPos][xPos] = null;
-            }
-            else
-            {
-                (int xPos, int yPos) = ToBenchCoord(initUnitPos);
-                _benchGrid[yPos][xPos] = null;
-            }
-        }
+        // Triggers the update of synergies for this UnitType specifically
         MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(soldUnit, MoveUnitEventArgs.Zone.Bench);
         CallMoveUnit(null, moveUnitEventArgs);
+
+        // Removes from board
+        Vector3 initUnitPos = isPlayer ? _playerBoardManager.GetInitUnitPos() : _opponentBoardManager.GetInitUnitPos();
+        RemoveUnitAt(isPlayer, initUnitPos);
+
         Destroy(soldUnit.gameObject);
     }
 
@@ -272,13 +312,44 @@ public class BoardManager : MonoBehaviour
         _saveUnits.Add(deadUnit.gameObject);
     }
 
-    public void RemoveUnitAt(Coords unitCoords)
+    // Does not destroy the corresponding GameObject
+    private void RemoveUnitAt(bool isPlayer, Vector3 unitPosition)
     {
-        Transform deadUnit = _battlefieldGrid[unitCoords.x][unitCoords.y];
-        _battlefieldGrid[unitCoords.x][unitCoords.y] = null;
-        deadUnit.gameObject.SetActive(false);
-        _saveUnits.Add(deadUnit.gameObject);
+        if (isPlayer)
+        {
+            if (_playerBoardManager.IsUnitOnBattlefield(unitPosition.z))
+            {
+                (int xPos, int yPos) = ToBattlefieldCoord(unitPosition);
+                _battlefieldGrid[yPos][xPos] = null;
+            }
+            else
+            {
+                (int xPos, int yPos) = ToBenchCoord(unitPosition);
+                _benchGrid[yPos][xPos] = null;
+            }
+        }
+        else
+        {
+            if (_opponentBoardManager.IsUnitOnBattlefield(unitPosition.z))
+            {
+                (int xPos, int yPos) = ToBattlefieldCoord(unitPosition);
+                _battlefieldGrid[yPos][xPos] = null;
+            }
+            else
+            {
+                (int xPos, int yPos) = ToBenchCoord(unitPosition);
+                _benchGrid[yPos][xPos] = null;
+            }
+        }
     }
+
+    // public void RemoveUnitAt(Coords unitCoords)
+    // {
+    //     Transform deadUnit = _battlefieldGrid[unitCoords.x][unitCoords.y];
+    //     _battlefieldGrid[unitCoords.x][unitCoords.y] = null;
+    //     deadUnit.gameObject.SetActive(false);
+    //     _saveUnits.Add(deadUnit.gameObject);
+    // }
 
     public void SavePositions()
     {
