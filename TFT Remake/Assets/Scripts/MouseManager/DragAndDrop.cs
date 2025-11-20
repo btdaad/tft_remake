@@ -48,16 +48,17 @@ public class DragAndDrop : MonoBehaviour
                     return;
                 }
                 else
-                    _gameManager.GetUIManager().SellUnit((int)_unitTransform.GetComponent<Unit>().stats.cost);
+                    _gameManager.GetUIManager().UpdateSellDisplay(true, (int)_unitTransform.GetComponent<Unit>().stats.cost);
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
             if (_gameManager.GetShopManager().IsMouseOverSellingZone())
                 _gameManager.GetShopManager().SellUnit(_unitTransform);
+            else
+                _boardManager.OnDropUnit(_gameManager.isPlayer, _unitTransform);
 
-            _gameManager.GetUIManager().CancelSellUnit();
-            _boardManager.OnDropUnit(_gameManager.isPlayer, _unitTransform);
+            _gameManager.GetUIManager().UpdateSellDisplay(false);
             ResetInfo();
         }
         else if (_unitTransform != null)

@@ -41,7 +41,7 @@ public class ShopManager : MonoBehaviour
 
     private UnitType[][] _shop;
     [SerializeField] public GameObject[] _unitPrefabs;
-    bool _isSellingUnit = false;
+    bool _isMouseOverSellingZone = false;
     public int GetUnitCostIndexFromUnitType(UnitType unitType)
     {
         int index = (int)unitType;
@@ -104,19 +104,14 @@ public class ShopManager : MonoBehaviour
         return diffCost;
     }
 
-    public void SetIsSellingUnit(bool isSellingUnit)
+    public void SetIsMouseOverSellingZone(bool isMouseOverSellingZone)
     {
-        _isSellingUnit = isSellingUnit;
+        _isMouseOverSellingZone = isMouseOverSellingZone;
     }
 
     public bool IsMouseOverSellingZone()
     {
-        return _isSellingUnit;
-    }
-
-    public void SellUnit(Transform unitTransform)
-    {
-        Debug.Log($"{unitTransform.name} sold !");
+        return _isMouseOverSellingZone;
     }
 
     public Transform BuyUnit(bool isPlayer, int i, Vector3 benchPosition)
@@ -133,6 +128,15 @@ public class ShopManager : MonoBehaviour
         // find bench position
         GameObject unitGO = Instantiate(_unitPrefabs[(int)unitType], benchPosition, Quaternion.identity);
         return unitGO.transform;
+    }
+
+    public void SellUnit(Transform unitTransform)
+    {
+        Unit unit = unitTransform.GetComponent<Unit>();
+        int costIndex = (int)unit.stats.cost;
+        int cost = diffCost[costIndex];
+        UpdatePool(unit.stats.type, 1);
+        GameManager.Instance.SellUnit(unitTransform, cost);
     }
 
     public GameObject GetUnitFromUnitType(UnitType unitType)

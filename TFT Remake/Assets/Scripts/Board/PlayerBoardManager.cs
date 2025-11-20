@@ -31,6 +31,17 @@ public class PlayerBoardManager
 
         _boardManager = BoardManager.Instance(_battlefieldTilemap, _benchTilemap);
     }
+
+    public bool IsUnitOnBattlefield(float zPos)
+    {
+        return zPos >= MIN_BATTLEFIELD_Z && zPos <= MAX_BATTLEFIELD_Z;
+    }
+
+    public Vector3 GetInitUnitPos()
+    {
+        return _initUnitPos;
+    }
+
     public bool OnDragUnit(Transform unitTransform)
     {
         _initUnitPos = unitTransform.position;
@@ -88,6 +99,12 @@ public class PlayerBoardManager
         Vector3Int cellPos = _battlefieldTilemap.WorldToCell(position);
         return ToBattlefieldCoord(cellPos);
     }
+    
+    public (int, int) ToBenchCoord(Vector3 position)
+    {
+        Vector3Int cellPos = _benchTilemap.WorldToCell(position);
+        return ToBenchCoord(cellPos);
+    }
 
     // Careful : the battlefield cell width coords go from -1 to 6 so the index on the x axis are incremented by 1
     private (int, int) ToBattlefieldCoord(Vector3Int cellCoord)
@@ -113,7 +130,7 @@ public class PlayerBoardManager
     private bool PlaceUnitOnZone(Transform unitTransform, Vector3Int cellPos, Tilemap boardZone)
     {
         // assess init unit zone depending on the z coord
-        bool isInitUnitOnBattlefield = _initUnitPos.z >= MIN_BATTLEFIELD_Z && _initUnitPos.z <= MAX_BATTLEFIELD_Z;
+        bool isInitUnitOnBattlefield = IsUnitOnBattlefield(_initUnitPos.z);
 
         // get cell coords of the init position of the dropped unit, depending on the zone (battlefield of bench)
         Vector3Int initUnitCell = isInitUnitOnBattlefield ? _battlefieldTilemap.WorldToCell(_initUnitPos) : _benchTilemap.WorldToCell(_initUnitPos);

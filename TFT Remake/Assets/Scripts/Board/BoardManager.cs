@@ -224,9 +224,47 @@ public class BoardManager : MonoBehaviour
         return _playerBoardManager.ToBattlefieldCoord(position); // using the playerBoard or the opponentBoard is equivalent
     }
 
+    public (int, int) ToBenchCoord(Vector3 position)
+    {
+        return _playerBoardManager.ToBenchCoord(position);
+    }
+
+    public void SellUnit(bool isPlayer, Transform soldUnit)
+    {
+        if (isPlayer)
+        {
+            Vector3 initUnitPos = _playerBoardManager.GetInitUnitPos();
+            if (_playerBoardManager.IsUnitOnBattlefield(initUnitPos.z))
+            {
+                (int xPos, int yPos) = ToBattlefieldCoord(initUnitPos);
+                _battlefieldGrid[yPos][xPos] = null;
+            }
+            else
+            {
+                (int xPos, int yPos) = ToBenchCoord(initUnitPos);
+                _benchGrid[yPos][xPos] = null;
+            }
+        }
+        else
+        {
+            Vector3 initUnitPos = _opponentBoardManager.GetInitUnitPos();
+            if (_opponentBoardManager.IsUnitOnBattlefield(initUnitPos.z))
+            {
+                (int xPos, int yPos) = ToBattlefieldCoord(initUnitPos);
+                _battlefieldGrid[yPos][xPos] = null;
+            }
+            else
+            {
+                (int xPos, int yPos) = ToBenchCoord(initUnitPos);
+                _benchGrid[yPos][xPos] = null;
+            }
+        }
+        Destroy(soldUnit.gameObject);
+    }
+
     public void RemoveUnit(Transform deadUnit)
     {
-        (int xPos, int yPos) = ToBattlefieldCoord(deadUnit.position);
+        (int xPos, int yPos) = ToBattlefieldCoord(deadUnit.position); // because a unit can only die on the battlefield
         _battlefieldGrid[yPos][xPos] = null;
         deadUnit.gameObject.SetActive(false);
         _saveUnits.Add(deadUnit.gameObject);

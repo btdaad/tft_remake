@@ -89,14 +89,9 @@ public class UIManager : MonoBehaviour
         UIUnit.HideUnitDisplay();
     }
 
-    public void SellUnit(int costIndex)
+    public void UpdateSellDisplay(bool displayed, int costIndex = -1)
     {
-        UIShop.SellUnit(costIndex);
-    }
-
-    public void CancelSellUnit()
-    {
-        UIShop.CancelSellUnit();
+        UIShop.UpdateSellDisplay(displayed, costIndex);
     }
 
     public void ChangePlayer(bool isPlayer)

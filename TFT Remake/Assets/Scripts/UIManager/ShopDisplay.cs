@@ -122,8 +122,8 @@ public class ShopDisplay
         _refreshCost = GetUIElement<Label>("RefreshCost");
 
         _sellPrice = GetUIElement<Button>("SellPrice");
-        _sellPrice.RegisterCallback<MouseOverEvent>(GameManager.Instance.SellUnit);
-        _sellPrice.RegisterCallback<MouseOutEvent>(GameManager.Instance.CancelSellUnit);
+        _sellPrice.RegisterCallback<MouseOverEvent>(GameManager.Instance.MouseOverSellingZone);
+        _sellPrice.RegisterCallback<MouseOutEvent>(GameManager.Instance.MouseOutSellingZone);
 
         _buyXP = GetUIElement<Button>("BuyXP");
         _buyXP.clickable.clicked += () => { GameManager.Instance.BuyXP(); };
@@ -193,7 +193,15 @@ public class ShopDisplay
         }
     }
 
-    public void SellUnit(int costIndex)
+    public void UpdateSellDisplay(bool displayed, int costIndex)
+    {
+        if (displayed)
+            ShowSellDisplay(costIndex);
+        else
+            HideSellDisplay();
+    }
+
+    public void ShowSellDisplay(int costIndex)
     {
         if (!isShopDisplayed)
             return;
@@ -208,7 +216,7 @@ public class ShopDisplay
         _sellPrice.visible = true;
     }
 
-    public void CancelSellUnit()
+    public void HideSellDisplay()
     {
         if (!isShopDisplayed)
             return;

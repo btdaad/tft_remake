@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     Camera playerCamera;
     Player _player;
     Player _opponent;
+    private bool _fightOngoing = false;
 
     public UnitTraitSO[] traits;
 
@@ -141,14 +142,16 @@ public class GameManager : MonoBehaviour
         _goldManager.ManageGold(_player, _opponent);
     }
 
-    public void SellUnit(MouseOverEvent _)
+    // Callback from ShopDisplay
+    public void MouseOverSellingZone(MouseOverEvent _)
     {
-        _shopManager.SetIsSellingUnit(true);
+        _shopManager.SetIsMouseOverSellingZone(true);
     }
 
-    public void CancelSellUnit(MouseOutEvent _)
+    // Callback from ShopDisplay
+    public void MouseOutSellingZone(MouseOutEvent _)
     {
-        _shopManager.SetIsSellingUnit(false);
+        _shopManager.SetIsMouseOverSellingZone(false);
     }
 
     public void UpdateSynergies(object sender, EventArgs e)
@@ -204,6 +207,8 @@ public class GameManager : MonoBehaviour
 
     public void Fight()
     {
+        _fightOngoing = true;
+
         opponentCamera.GetComponent<DragAndDrop>().enabled = false;
         playerCamera.GetComponent<DragAndDrop>().enabled = false;
 
@@ -213,6 +218,8 @@ public class GameManager : MonoBehaviour
 
     public void EndFight(bool hasPlayerWon, int damage)
     {
+        _fightOngoing = false;
+
         if (hasPlayerWon)
         {
             _opponent.Defeat(damage);
@@ -248,11 +255,13 @@ public class GameManager : MonoBehaviour
         isPlayer = !isPlayer;
 
         opponentCamera.enabled = !opponentCamera.enabled;
-        opponentCamera.GetComponent<DragAndDrop>().enabled = !opponentCamera.GetComponent<DragAndDrop>().enabled;
+        if (!_fightOngoing)
+            opponentCamera.GetComponent<DragAndDrop>().enabled = !opponentCamera.GetComponent<DragAndDrop>().enabled;
         opponentCamera.GetComponent<DisplayUnitStats>().enabled = !opponentCamera.GetComponent<DisplayUnitStats>().enabled;
 
         playerCamera.enabled = !playerCamera.enabled;
-        playerCamera.GetComponent<DragAndDrop>().enabled = !playerCamera.GetComponent<DragAndDrop>().enabled;
+        if (!_fightOngoing)
+            playerCamera.GetComponent<DragAndDrop>().enabled = !playerCamera.GetComponent<DragAndDrop>().enabled;
         playerCamera.GetComponent<DisplayUnitStats>().enabled = !playerCamera.GetComponent<DisplayUnitStats>().enabled;
 
         _uiManager.HideUnitDisplay();
@@ -302,6 +311,12 @@ public class GameManager : MonoBehaviour
                 _uiManager.UpdateShop(isPlayer);
             }
         }
+    }
+
+    public void SellUnit(Transform soldUnit, int cost)
+    {
+        _boardManager.SellUnit(isPlayer, soldUnit);
+        _goldManager.UpdateGold(isPlayer, cost);
     }
 
     public void UpdateXPDisplay()
