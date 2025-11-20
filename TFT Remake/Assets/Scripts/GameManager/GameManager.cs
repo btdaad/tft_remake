@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 using System;
 using System.Collections.Generic;
 
@@ -140,6 +141,16 @@ public class GameManager : MonoBehaviour
         _goldManager.ManageGold(_player, _opponent);
     }
 
+    public void SellUnit(MouseOverEvent _)
+    {
+        _shopManager.SetIsSellingUnit(true);
+    }
+
+    public void CancelSellUnit(MouseOutEvent _)
+    {
+        _shopManager.SetIsSellingUnit(false);
+    }
+
     public void UpdateSynergies(object sender, EventArgs e)
     {
         MoveUnitEventArgs eventArgs = (MoveUnitEventArgs)e;
@@ -195,6 +206,7 @@ public class GameManager : MonoBehaviour
     {
         opponentCamera.GetComponent<DragAndDrop>().enabled = false;
         playerCamera.GetComponent<DragAndDrop>().enabled = false;
+
         _boardManager.SavePositions();
         _pvpManager.Fight();
     }
@@ -217,6 +229,11 @@ public class GameManager : MonoBehaviour
         _shopManager.RefreshShop(true); // shop refreshes for all players when a fight ends
         _shopManager.RefreshShop(false); // shop refreshes for all players when a fight ends
         _uiManager.UpdateShop(isPlayer);
+
+        if (isPlayer)
+            playerCamera.GetComponent<DragAndDrop>().enabled = true;
+        else
+            opponentCamera.GetComponent<DragAndDrop>().enabled = true;
     }
 
     public void Dump()
@@ -229,9 +246,11 @@ public class GameManager : MonoBehaviour
     public void ChangePlayer()
     {
         isPlayer = !isPlayer;
+
         opponentCamera.enabled = !opponentCamera.enabled;
         opponentCamera.GetComponent<DragAndDrop>().enabled = !opponentCamera.GetComponent<DragAndDrop>().enabled;
         opponentCamera.GetComponent<DisplayUnitStats>().enabled = !opponentCamera.GetComponent<DisplayUnitStats>().enabled;
+
         playerCamera.enabled = !playerCamera.enabled;
         playerCamera.GetComponent<DragAndDrop>().enabled = !playerCamera.GetComponent<DragAndDrop>().enabled;
         playerCamera.GetComponent<DisplayUnitStats>().enabled = !playerCamera.GetComponent<DisplayUnitStats>().enabled;

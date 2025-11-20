@@ -33,6 +33,7 @@ public class ShopDisplay
     private Label _1costPoolPercentage;
     private Label _3costPoolPercentage;
     private Label _5costPoolPercentage;
+    private Button _sellPrice;
     private Button[] _slots;
     private VisualElement[] _slotsWindow;
     private Label[] _slotsCost;
@@ -43,6 +44,7 @@ public class ShopDisplay
     private Label[][] _slotsTraitName;
     private VisualElement[][] _slotsTraitTextures;
     private int[] _unitCost = {1, 3, 5}; // price of units {1, 3, 5}
+    private bool isShopDisplayed = false; // not displayed on level 1
 
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -80,8 +82,8 @@ public class ShopDisplay
             
             _slots[i] = GetUIElement<Button>($"Slot{slotIndex}");
             _slots[i].RegisterCallback<ClickEvent, int>(BuyUnit, i);
-            _slots[i].RegisterCallback<MouseOverEvent, int>(HoverUnit, i);;
-            _slots[i].RegisterCallback<MouseOutEvent, int>(LeaveUnit, i);;
+            _slots[i].RegisterCallback<MouseOverEvent, int>(HoverUnit, i);
+            _slots[i].RegisterCallback<MouseOutEvent, int>(LeaveUnit, i);
         }
     }
 
@@ -119,6 +121,10 @@ public class ShopDisplay
         _xpCost = GetUIElement<Label>("XPCost");
         _refreshCost = GetUIElement<Label>("RefreshCost");
 
+        _sellPrice = GetUIElement<Button>("SellPrice");
+        _sellPrice.RegisterCallback<MouseOverEvent>(GameManager.Instance.SellUnit);
+        _sellPrice.RegisterCallback<MouseOutEvent>(GameManager.Instance.CancelSellUnit);
+
         _buyXP = GetUIElement<Button>("BuyXP");
         _buyXP.clickable.clicked += () => { GameManager.Instance.BuyXP(); };
 
@@ -133,6 +139,7 @@ public class ShopDisplay
         InitCostColors();
 
         _unitShop.visible = false;
+        _sellPrice.visible = false;
     }
     public void UpdateGold(int gold)
     {
@@ -150,7 +157,10 @@ public class ShopDisplay
         _lvl.text = $"{level}";
 
         if (level != 1)
+        {
             _unitShop.visible = true; // shop is not visible during the very first round/level
+            isShopDisplayed = true;
+        }
         if (level == maxLevel)
             _currentXP.visible = false;
 
@@ -176,8 +186,46 @@ public class ShopDisplay
                 _slotsTraitTextures[index][i].visible = true;
             }
             else
+            {
+                _slotsTraitName[index][i].text = "None";
                 _slotsTraitTextures[index][i].visible = false;
+            }
         }
+    }
+
+    public void SellUnit(int costIndex)
+    {
+        if (!isShopDisplayed)
+            return;
+
+        for (int i = 0; i < _slots.Length; i++)
+        {
+            _slots[i].visible = false;
+            for (int j = 0; j < _slotsTraitTextures[i].Length; j++)
+                _slotsTraitTextures[i][j].visible = false;
+        }
+        _sellPrice.text = $"Sell for {_unitCost[costIndex]}g";
+        _sellPrice.visible = true;
+    }
+
+    public void CancelSellUnit()
+    {
+        if (!isShopDisplayed)
+            return;
+
+        for (int i = 0; i < _slots.Length; i++)
+        {
+            if (_slotsName[i].text != "TargetDummy")
+            {
+                _slots[i].visible = true;
+                for (int j = 0; j < _slotsTraitTextures[i].Length; j++)
+                {
+                    if (_slotsTraitName[i][j].text != "None")
+                        _slotsTraitTextures[i][j].visible = true;
+                }
+            }
+        }
+        _sellPrice.visible = false;
     }
 
     public void UpdateShop(UnitType[] shop)

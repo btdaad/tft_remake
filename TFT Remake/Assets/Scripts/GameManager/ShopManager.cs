@@ -41,6 +41,7 @@ public class ShopManager : MonoBehaviour
 
     private UnitType[][] _shop;
     [SerializeField] public GameObject[] _unitPrefabs;
+    bool _isSellingUnit = false;
     public int GetUnitCostIndexFromUnitType(UnitType unitType)
     {
         int index = (int)unitType;
@@ -101,6 +102,21 @@ public class ShopManager : MonoBehaviour
     public int[] GetDiffCost()
     {
         return diffCost;
+    }
+
+    public void SetIsSellingUnit(bool isSellingUnit)
+    {
+        _isSellingUnit = isSellingUnit;
+    }
+
+    public bool IsMouseOverSellingZone()
+    {
+        return _isSellingUnit;
+    }
+
+    public void SellUnit(Transform unitTransform)
+    {
+        Debug.Log($"{unitTransform.name} sold !");
     }
 
     public Transform BuyUnit(bool isPlayer, int i, Vector3 benchPosition)
