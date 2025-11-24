@@ -21,6 +21,7 @@ public class UnitsDisplay
     
     private int MAX_TRAITS_DISPLAYED = 3;
     private VisualElement _unitDisplayBackground;
+    private VisualElement _star;
     private VisualElement _unitImage;
     private VisualElement[] _traitTextures;
     private Label[] _traitLabels;
@@ -62,6 +63,7 @@ public class UnitsDisplay
     {
         _unitDisplayBackground = GetUIElement<VisualElement>("UnitDisplayBackground");
 
+        _star = GetUIElement<VisualElement>("StarLogo");
         InitTraits(ref _traitTextures, ref _traitLabels);
         _unitImage = GetUIElement<VisualElement>("UnitImage");
         _name = GetUIElement<Label>("Name");
@@ -110,6 +112,21 @@ public class UnitsDisplay
         }
     }
 
+    private string GetStarImageName(Star star)
+    {
+        switch (star)
+        {
+            case Star.OneStar:
+                return "1star";
+            case Star.TwoStar:
+                return "2stars";
+            case Star.ThreeStar:
+                return "3stars";
+            default:
+                return "";
+        }
+    }
+
     public void ShowUnitDisplay(Transform unitTransform)
     {
         Unit unit = unitTransform.GetComponent<Unit>();
@@ -117,7 +134,8 @@ public class UnitsDisplay
 
         DisplayTraits(_traitTextures, _traitLabels, stats.traits);
 
-        _unitImage.style.backgroundImage = Resources.Load<Texture2D>($"{stats.type.ToString()}");;
+        _star.style.backgroundImage = Resources.Load<Texture2D>($"{GetStarImageName(unit.GetStar())}");
+        _unitImage.style.backgroundImage = Resources.Load<Texture2D>($"{stats.type.ToString()}");
         _name.text = stats.type.ToString();
         _name.style.backgroundColor = _costColors[(int)stats.cost];
 

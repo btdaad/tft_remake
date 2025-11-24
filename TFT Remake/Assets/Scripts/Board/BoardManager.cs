@@ -157,7 +157,7 @@ public class BoardManager : MonoBehaviour
 
         if (star == Star.ThreeStar) // we don't want to combine units if they are at three star
         {
-            Debug.Log("Already 3-star");
+            // Debug.Log("Already 3-star");
             return sameLevelUnits;
         }
 

@@ -36,7 +36,7 @@ public class Unit : MonoBehaviour
 
     void Init()
     {
-        _health = stats.health[(int)GetStar()];
+        _health = stats.health[(int)_star];
         _mana = stats.mana[0];
         _ap = 0f;
         _ad = 0f;
@@ -79,6 +79,7 @@ public class Unit : MonoBehaviour
     public void UpLevel()
     {
         _star = (Star) (int)_star + 1;
+        _health = stats.health[(int)_star];
         transform.localScale = transform.localScale * scaleFactor;
     }
 
