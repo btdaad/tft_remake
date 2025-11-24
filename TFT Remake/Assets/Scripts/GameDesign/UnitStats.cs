@@ -11,17 +11,8 @@ public class UnitStats : ScriptableObject
         None
     };
 
-    public enum Star
-    {
-        OneStar = 0,
-        TwoStar = 1,
-        ThreeStar = 2,
-        None = -1
-    };
-
     public UnitType type;
     public Cost cost;
-    public Star star;
 
     public Trait[] traits = new Trait[3];
 

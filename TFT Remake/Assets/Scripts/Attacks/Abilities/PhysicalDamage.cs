@@ -10,7 +10,7 @@ public class PhysicalDamage : AbilityBase
         List<List<Effect>> listEffects = new List<List<Effect>>();
 
         List<Effect> effects = new List<Effect>();
-        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
+        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.GetStar()]);
         effects.Add(GetPhysicalDamage(damage));
 
         listEffects.Add(effects);

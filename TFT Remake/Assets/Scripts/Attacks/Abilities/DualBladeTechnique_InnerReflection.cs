@@ -20,7 +20,7 @@ public class DualBladeTechnique_InnerReflection : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
+        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.GetStar()]);
         effects.Add(GetPhysicalDamage(damage));
 
         effects.Add(new Effect(0f, EffectType.STUN, stunTime));

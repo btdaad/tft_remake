@@ -151,12 +151,15 @@ public class BoardManager : MonoBehaviour
         return _pathFindingInfo[xPos][yPos];
     }
 
-    private List<Transform> FindSameLevelUnit(bool isPlayer, UnitType type, UnitStats.Star star)
+    private List<Transform> FindSameLevelUnit(bool isPlayer, UnitType type, Star star)
     {
         List<Transform> sameLevelUnits = new List<Transform>();
 
-        if (star == UnitStats.Star.ThreeStar) // we don't want to combine units if they are at three star
+        if (star == Star.ThreeStar) // we don't want to combine units if they are at three star
+        {
+            Debug.Log("Already 3-star");
             return sameLevelUnits;
+        }
 
         int benchRow = isPlayer ? 0 : 1;
         int minBattlefieldRow = isPlayer ? 0 : 4;
@@ -168,8 +171,8 @@ public class BoardManager : MonoBehaviour
             {
                 if (_battlefieldGrid[x][y] != null)
                 {
-                    UnitStats unitStats = _battlefieldGrid[x][y].GetComponent<Unit>().stats;
-                    if (unitStats.type == type && unitStats.star == star)
+                    Unit unit = _battlefieldGrid[x][y].GetComponent<Unit>();
+                    if (unit.stats.type == type && unit.GetStar() == star)
                         sameLevelUnits.Add(_battlefieldGrid[x][y]);
                 }
             }
@@ -179,8 +182,8 @@ public class BoardManager : MonoBehaviour
         {
             if (_benchGrid[benchRow][y] != null)
             {
-                UnitStats unitStats = _benchGrid[benchRow][y].GetComponent<Unit>().stats;
-                if (unitStats.type == type && unitStats.star == star)
+                Unit unit = _benchGrid[benchRow][y].GetComponent<Unit>();
+                if (unit.stats.type == type && unit.GetStar() == star)
                     sameLevelUnits.Add(_benchGrid[benchRow][y]);
             }
         }
@@ -199,14 +202,13 @@ public class BoardManager : MonoBehaviour
         Destroy(sameLevelUnits[2].gameObject);
     }
 
-    private void TryToFuseUnits(bool isPlayer, UnitType unitType, UnitStats.Star star)
+    private void TryToFuseUnits(bool isPlayer, UnitType unitType, Star star)
     {
         List<Transform> sameLevelUnits = FindSameLevelUnit(isPlayer, unitType, star);
-        Debug.Log(sameLevelUnits);
         if (sameLevelUnits.Count == 3)
         {
             FuseUnits(isPlayer, sameLevelUnits);
-            TryToFuseUnits(isPlayer, unitType, (UnitStats.Star) (int)star + 1);
+            TryToFuseUnits(isPlayer, unitType, (Star)(int)star + 1);
         }
     }
 
@@ -227,7 +229,7 @@ public class BoardManager : MonoBehaviour
             Debug.LogError("There should be an empty spot on the bench!");
         _benchGrid[isPlayer ? 0 : 1][index] = unitTransform;
 
-        TryToFuseUnits(isPlayer, unitTransform.GetComponent<Unit>().stats.type, UnitStats.Star.OneStar);
+        TryToFuseUnits(isPlayer, unitTransform.GetComponent<Unit>().stats.type, Star.OneStar);
     }
 
     public bool GetBenchEmptySpot(bool isPlayer, out Vector3 benchPosition)

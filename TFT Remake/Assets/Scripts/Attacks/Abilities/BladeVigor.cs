@@ -26,8 +26,8 @@ public class BladeVigor : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        float physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
-        float physicalDamageAP = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
+        float physicalDamageAD = ScaleValueWithAD(caster, damageAD[(int)caster.GetStar()]);
+        float physicalDamageAP = ScaleValueWithAP(caster, damageAP[(int)caster.GetStar()]);
         float physicalDamage = physicalDamageAD + physicalDamageAP;
         // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): physicalDamage = {physicalDamageAD} + {physicalDamageAP} = {physicalDamage}");
         physicalDamage += missingHealthPercent * physicalDamage;
@@ -36,7 +36,7 @@ public class BladeVigor : AbilityBase
 
         listEffects.Add(effects);
 
-        float heal = ScaleValueWithAP(caster, healAP[(int)caster.stats.star]) + healHealth * caster.GetMaxHealth();
+        float heal = ScaleValueWithAP(caster, healAP[(int)caster.GetStar()]) + healHealth * caster.GetMaxHealth();
         // Debug.Log($"[{Time.time}] ({caster.gameObject.name}): heal = {heal} + {missingHealthPercent}%");
         heal += missingHealthPercent * heal;
 

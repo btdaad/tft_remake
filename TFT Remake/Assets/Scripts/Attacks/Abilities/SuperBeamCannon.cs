@@ -23,16 +23,16 @@ public class SuperBeamCannon : AbilityBase
 
         // Dammage to first target
         List<Effect> firstTargetEffects = new List<Effect>();
-        float physicalDamageAD = ScaleValueWithAD(caster, this.damageAD[(int)caster.stats.star] * (1 - secondaryDamageRatio));
-        float physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.stats.star] * (1 - secondaryDamageRatio));
+        float physicalDamageAD = ScaleValueWithAD(caster, this.damageAD[(int)caster.GetStar()] * (1 - secondaryDamageRatio));
+        float physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.GetStar()] * (1 - secondaryDamageRatio));
         float damage = physicalDamageAD + physicalDamageAP;
         firstTargetEffects.Add(GetPhysicalDamage(damage));
         listEffects.Add(firstTargetEffects);
 
         // Dammage to other targets AMD first target
         List<Effect> otherTargetsEffects = new List<Effect>();
-        physicalDamageAD = ScaleValueWithAD(caster, this.damageAD[(int)caster.stats.star] * secondaryDamageRatio);
-        physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.stats.star] * secondaryDamageRatio);
+        physicalDamageAD = ScaleValueWithAD(caster, this.damageAD[(int)caster.GetStar()] * secondaryDamageRatio);
+        physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.GetStar()] * secondaryDamageRatio);
         damage = physicalDamageAD + physicalDamageAP;
         otherTargetsEffects.Add(GetPhysicalDamage(damage));
         listEffects.Add(otherTargetsEffects);

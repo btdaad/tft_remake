@@ -12,7 +12,7 @@ public class BrightStarBlast : AbilityBase
         List<List<Effect>> listEffects = new List<List<Effect>>();
 
         List<Effect> effects = new List<Effect>();
-        float damage = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
+        float damage = ScaleValueWithAP(caster, damageAP[(int)caster.GetStar()]);
         effects.Add(GetMagicDamage(damage));
         effects.Add(new Effect(-10, EffectType.MAGIC_RESIST));
 

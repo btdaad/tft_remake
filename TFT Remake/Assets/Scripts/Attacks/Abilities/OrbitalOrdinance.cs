@@ -18,7 +18,7 @@ public class OrbitalOrdinance : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        float damage = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
+        float damage = ScaleValueWithAP(caster, damageAP[(int)caster.GetStar()]);
         effects.Add(GetMagicDamage(damage));
 
         listEffects.Add(effects);

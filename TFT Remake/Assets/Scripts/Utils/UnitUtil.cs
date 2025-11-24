@@ -16,6 +16,15 @@ public enum UnitType
     Torus,
     TargetDummy // no cost
 };
+    
+public enum Star
+{
+    OneStar = 0,
+    TwoStar = 1,
+    ThreeStar = 2,
+    None = -1
+};
+
 public static class UnitUtil
 {
 }

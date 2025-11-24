@@ -20,8 +20,8 @@ public class RegolithResistance : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        float physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.stats.star]);
-        float physicalDamageArmor = ScaleValueWithArmor(caster, this.damageArmor[(int)caster.stats.star]);
+        float physicalDamageAP = ScaleValueWithAP(caster, this.damageAP[(int)caster.GetStar()]);
+        float physicalDamageArmor = ScaleValueWithArmor(caster, this.damageArmor[(int)caster.GetStar()]);
         float damage = physicalDamageAP + physicalDamageArmor;
         effects.Add(GetPhysicalDamage(damage));
 

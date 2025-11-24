@@ -29,8 +29,8 @@ public class ElTigreTornado : AbilityBase
 
         effects.Add(new Effect(0f, EffectType.STUN, stunTime));
         
-        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
-        float hexDamage = ScaleValueWithAD(caster, hexDamageAD[(int)caster.stats.star]);
+        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.GetStar()]);
+        float hexDamage = ScaleValueWithAD(caster, hexDamageAD[(int)caster.GetStar()]);
         effects.Add(GetPhysicalDamage(damage - hexDamage));
 
         listEffects.Add(effects); // apply damage to target
@@ -41,7 +41,7 @@ public class ElTigreTornado : AbilityBase
         listEffects.Add(hexEffects); // apply damage in 2-hex radius
 
         List<Effect> tossEffects = new List<Effect>();
-        float tossDamage = ScaleValueWithAD(caster, tossDamageAD[(int)caster.stats.star]);
+        float tossDamage = ScaleValueWithAD(caster, tossDamageAD[(int)caster.GetStar()]);
         tossEffects.Add(GetPhysicalDamage(tossDamage));
 
         listEffects.Add(tossEffects); // apply damage in 1-hex radius

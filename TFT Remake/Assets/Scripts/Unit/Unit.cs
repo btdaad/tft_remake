@@ -7,6 +7,7 @@ public class Unit : MonoBehaviour
 {
     [SerializeField] public UnitStats stats;
     [SerializeField] public float scaleFactor = 1.14f;
+    Star _star = Star.OneStar;
     float _health;
     float _mana;
     float _ap;
@@ -35,7 +36,7 @@ public class Unit : MonoBehaviour
 
     void Init()
     {
-        _health = stats.health[(int)stats.star];
+        _health = stats.health[(int)GetStar()];
         _mana = stats.mana[0];
         _ap = 0f;
         _ad = 0f;
@@ -77,8 +78,13 @@ public class Unit : MonoBehaviour
 
     public void UpLevel()
     {
-        stats.star = (UnitStats.Star) (int)stats.star + 1;
+        _star = (Star) (int)_star + 1;
         transform.localScale = transform.localScale * scaleFactor;
+    }
+
+    public Star GetStar()
+    {
+        return _star;
     }
 
     public float GetHealth()
@@ -180,7 +186,7 @@ public class Unit : MonoBehaviour
 
     public float GetMaxHealth()
     {
-        return stats.health[(int)stats.star]; // apply modifiers
+        return stats.health[(int)GetStar()]; // apply modifiers
     }
 
     public float GetMana()
@@ -367,7 +373,7 @@ public class Unit : MonoBehaviour
     private void BasicAttack(Transform opponentTransform)
     {
         Unit opponent = opponentTransform.GetComponent<Unit>();
-        float basicAttack = stats.attackDamage[(int)stats.star];
+        float basicAttack = stats.attackDamage[(int)GetStar()];
 
         bool crit = UnityEngine.Random.Range(1, 100) <= GetCritChance();
         basicAttack *= crit ? GetCritDamage() / 100 : 1;

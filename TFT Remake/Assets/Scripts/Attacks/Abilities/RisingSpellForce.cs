@@ -14,10 +14,10 @@ public class RisingSpellForce : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        float magicDamage = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
+        float magicDamage = ScaleValueWithAP(caster, damageAP[(int)caster.GetStar()]);
         effects.Add(GetMagicDamage(magicDamage));
 
-        float physicalDamage = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
+        float physicalDamage = ScaleValueWithAD(caster, damageAD[(int)caster.GetStar()]);
         effects.Add(GetPhysicalDamage(physicalDamage));
 
         listEffects.Add(effects);

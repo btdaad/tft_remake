@@ -12,12 +12,12 @@ public class SpinningSoulSaw : AbilityBase
     
     public override List<List<Effect>> GetEffects(Unit caster)
     {
-        caster.SetShield(ScaleValueWithAP(caster, shieldAP[(int)caster.stats.star]), shieldTime);
+        caster.SetShield(ScaleValueWithAP(caster, shieldAP[(int)caster.GetStar()]), shieldTime);
 
         List<List<Effect>> listEffects = new List<List<Effect>>();
 
         List<Effect> effects = new List<Effect>();
-        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.stats.star]);
+        float damage = ScaleValueWithAD(caster, damageAD[(int)caster.GetStar()]);
         effects.Add(GetPhysicalDamage(damage));
 
         listEffects.Add(effects);

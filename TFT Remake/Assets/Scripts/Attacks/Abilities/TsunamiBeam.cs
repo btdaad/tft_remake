@@ -17,8 +17,8 @@ public class TsunamiBeam : AbilityBase
 
         List<Effect> effects = new List<Effect>();
 
-        float damage = ScaleValueWithAP(caster, damageAP[(int)caster.stats.star]);
-        float hexDamage = ScaleValueWithAP(caster, hexDamageAP[(int)caster.stats.star]);
+        float damage = ScaleValueWithAP(caster, damageAP[(int)caster.GetStar()]);
+        float hexDamage = ScaleValueWithAP(caster, hexDamageAP[(int)caster.GetStar()]);
         effects.Add(GetMagicDamage(damage - hexDamage, duration));
 
         listEffects.Add(effects);

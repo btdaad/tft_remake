@@ -140,7 +140,7 @@ public class UnitsDisplay
 
         _ap.text = $"{unit.GetAP()}%";
         _ad.text = $"{unit.GetAD()}%";
-        _baseDamage.text = $"{stats.attackDamage[(int)stats.star]}";
+        _baseDamage.text = $"{stats.attackDamage[(int)unit.GetStar()]}";
         _armor.text = $"{unit.GetArmor()}";
         _mr.text = $"{unit.GetMR()}";
         _atkSpeed.text = $"{unit.GetAS()}";
