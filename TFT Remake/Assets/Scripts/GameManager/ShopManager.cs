@@ -127,6 +127,7 @@ public class ShopManager : MonoBehaviour
 
         // find bench position
         GameObject unitGO = Instantiate(_unitPrefabs[(int)unitType], benchPosition, Quaternion.identity);
+        unitGO.GetComponent<Unit>().SetAffiliation(isPlayer);
         return unitGO.transform;
     }
 

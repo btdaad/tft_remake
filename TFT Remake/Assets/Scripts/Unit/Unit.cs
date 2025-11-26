@@ -15,7 +15,7 @@ public class Unit : MonoBehaviour
     float _mr;
     List<Shield> _shields;
     List<Shield> _durability;
-    [SerializeField] bool _isFromPlayerTeam;
+    [SerializeField] bool isFromPlayerTeam;
     bool _hasMoved;
     bool _isStun;
     float _lastAttack; // time since last basic attack
@@ -81,6 +81,11 @@ public class Unit : MonoBehaviour
         _star = (Star) (int)_star + 1;
         _health = stats.health[(int)_star];
         transform.localScale = transform.localScale * scaleFactor;
+    }
+
+    public void SetAffiliation(bool isPlayer)
+    {
+        isFromPlayerTeam = isPlayer;
     }
 
     public Star GetStar()
@@ -265,7 +270,7 @@ public class Unit : MonoBehaviour
 
     public bool IsFromPlayerTeam()
     {
-        return _isFromPlayerTeam;
+        return isFromPlayerTeam;
     }
 
     public bool HasMoved()
