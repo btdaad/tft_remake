@@ -106,8 +106,10 @@ public class SynergiesDisplay
             List<Transform> units = new List<Transform>();
             foreach (Transform transform in kvp.Value)
             {
-                if (!units.Exists(unit => unit.gameObject.GetComponent<Unit>().stats.type == transform.gameObject.GetComponent<Unit>().stats.type))
-                    units.Add(transform); 
+                // TODO : should null transform be removed from the kvp.Value list ???
+                if (transform != null // if the unit has been deleted for a fusion
+                    && !units.Exists(unit => unit.gameObject.GetComponent<Unit>().stats.type == transform.gameObject.GetComponent<Unit>().stats.type))
+                        units.Add(transform); 
             }
             dict[trait] = units;
         }

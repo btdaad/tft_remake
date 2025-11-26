@@ -195,8 +195,16 @@ public class BoardManager : MonoBehaviour
     {
         sameLevelUnits[0].GetComponent<Unit>().UpLevel();
 
+        // Triggers the update of synergies for this UnitType specifically
+        MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(sameLevelUnits[1], MoveUnitEventArgs.Zone.Bench);
+        CallMoveUnit(null, moveUnitEventArgs);
+
         RemoveUnitAt(isPlayer, sameLevelUnits[1].position); 
         Destroy(sameLevelUnits[1].gameObject);
+
+        // Triggers the update of synergies for this UnitType specifically
+        moveUnitEventArgs = new MoveUnitEventArgs(sameLevelUnits[2], MoveUnitEventArgs.Zone.Bench);
+        CallMoveUnit(null, moveUnitEventArgs);
 
         RemoveUnitAt(isPlayer, sameLevelUnits[2].position); 
         Destroy(sameLevelUnits[2].gameObject);
@@ -315,6 +323,7 @@ public class BoardManager : MonoBehaviour
     }
 
     // Does not destroy the corresponding GameObject
+    // Does not update the synergies 
     private void RemoveUnitAt(bool isPlayer, Vector3 unitPosition)
     {
         if (isPlayer)
