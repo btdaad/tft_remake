@@ -2049,6 +2049,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
+      propertyPath: isFromPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
       propertyPath: _isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
@@ -2127,6 +2131,10 @@ PrefabInstance:
       objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
       propertyPath: _isPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
+      propertyPath: isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5805554733394382411, guid: 50887fba2d9e47033a808eea0f17304a, type: 3}
@@ -2295,6 +2303,10 @@ PrefabInstance:
       objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
       propertyPath: _isPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
+      propertyPath: isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5868544141775274302, guid: 6b04a8e5d8ffc0f1f8164897591cde1e, type: 3}
@@ -3073,6 +3085,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5836744150668194490, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
+      propertyPath: isFromPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836744150668194490, guid: cc394de7cd34080c4a787024085ec1e5, type: 3}
       propertyPath: _isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
@@ -3111,6 +3127,10 @@ PrefabInstance:
       objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 4421677248716869196, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
       propertyPath: _isPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4421677248716869196, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
+      propertyPath: isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4421677248716869196, guid: 22917fa3489b29527b3feb825ae4eda4, type: 3}
@@ -4107,6 +4127,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1089804176776716037, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
+      propertyPath: isFromPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1089804176776716037, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}
       propertyPath: _isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
@@ -4526,6 +4550,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3487050497496565493, guid: 8b5f95badbbd6871bb15b40d0629770e, type: 3}
+      propertyPath: isFromPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487050497496565493, guid: 8b5f95badbbd6871bb15b40d0629770e, type: 3}
       propertyPath: _isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
@@ -4755,6 +4783,10 @@ PrefabInstance:
       objectReference: {fileID: 689668037933560449, guid: 9f16309ed4593c91495206d81544be9b, type: 3}
     - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
       propertyPath: _isPlayerTeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}
+      propertyPath: isFromPlayerTeam
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1127553772160448723, guid: 361a7e712383ef921aff9cecdeebe1d5, type: 3}

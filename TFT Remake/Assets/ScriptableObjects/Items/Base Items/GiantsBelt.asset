@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383d97453f3af8300b300610d19b9db2, type: 3}
   m_Name: GiantsBelt
   m_EditorClassIdentifier: Assembly-CSharp::BaseItemSO
-  itemName: "Ceinture du G\xE9ant"
+  itemName: "Ceinture du g\xE9ant"
   icon: {fileID: 2800000, guid: 8e9997f1e2d9c2eb68cd7fdf6e919d21, type: 3}
   destription: 
   modifiers:
-  - stat: 2
-    value: 20
+  - stat: 3
+    value: 150
     isPercentFormat: 0
