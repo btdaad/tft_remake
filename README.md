@@ -24,9 +24,9 @@ Remake with Unity of Teamfight Tactics, an autobattler game produced by Riot. Th
 - [x] Limitation du nombre d'unités sur le banc (par rapport au niveau du joueur)
 - [x] Création de la pool
 - [x] Ajout et affichage de la boutique
-- [ ] Achat d'unités contraint à la place sur le banc
-- [ ] Revente d'unités
-- [ ] Fusion d'unités (1-star, 2-star, 3-star)
+- [x] Achat d'unités contraint à la place sur le banc
+- [x] Revente d'unités
+- [x] Fusion d'unités (1-star, 2-star, 3-star)
 
 ### Items et synergies
 - [ ] Ajout et affichage des items de base
