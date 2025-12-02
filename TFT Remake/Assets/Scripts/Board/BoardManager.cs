@@ -17,10 +17,14 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
     private static Transform[][] _battlefieldGrid = null;
     private static Transform[][] _benchGrid = null;
+    private static Transform[][] _itemGrid = null;
     private static Transform[][] _saveBattlefieldGrid = null;
     private static List<GameObject> _saveUnits = null;
     private static PathFindingInfo[][] _pathFindingInfo = null;
-    public static BoardManager Instance(Tilemap battlefieldTilemap, Tilemap benchTilemap)
+
+    // To be called by PlayerBoardManager
+    // Init boards
+    public static BoardManager GetInstanceAndInit(Tilemap battlefieldTilemap, Tilemap benchTilemap)
     {
         if (_battlefieldGrid == null || _benchGrid == null)
         {
@@ -31,8 +35,19 @@ public class BoardManager : MonoBehaviour
         return _instance;
     }
 
+    // To be called by the ItemBoardManager
+    // Init item boards
+    public static BoardManager GetInstanceAndInit(Tilemap itemTilemap)
+    {
+        if (_itemGrid == null)
+            _itemGrid = JaggedArrayUtil.InitJaggedArray<Transform>(18, 23, () => null);
+        return _instance;
+    }
+
     private PlayerBoardManager _playerBoardManager;
     private PlayerBoardManager _opponentBoardManager;
+    private ItemBoardManager _playerItemBoardManager;
+    private ItemBoardManager _opponentItemBoardManager;
     public event EventHandler MoveUnit = delegate { };
     [SerializeField] GameObject arrowHelperPrefab;
 
@@ -48,6 +63,8 @@ public class BoardManager : MonoBehaviour
 
         _playerBoardManager = new PlayerBoardManager("Player", this);
         _opponentBoardManager = new PlayerBoardManager("Opponent", this);
+        _playerItemBoardManager = new ItemBoardManager("Player", this);
+        _opponentItemBoardManager = new ItemBoardManager("Opponent", this);
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
@@ -83,6 +100,21 @@ public class BoardManager : MonoBehaviour
         else
             _opponentBoardManager.OnDropUnit(unitTransform);
     }
+    
+    public bool OnDragItem(bool isPlayer, Transform itemTransform)
+    {
+        if (isPlayer)
+            return _playerItemBoardManager.OnDragItem(itemTransform);
+        else
+            return _opponentItemBoardManager.OnDragItem(itemTransform);
+    }
+    public void OnDropItem(bool isPlayer, Transform itemTransform)
+    {
+        if (isPlayer)
+            _playerItemBoardManager.OnDropItem(itemTransform);
+        else
+            _opponentItemBoardManager.OnDropItem(itemTransform);
+    }
 
     // Implemented only for battlefield units
     public List<Transform> GetUnitsAt(List<Coords> coords)
@@ -103,7 +135,7 @@ public class BoardManager : MonoBehaviour
         else
             return _benchGrid[yPos][xPos];
     }
-
+    
     public void SetUnitAt(int xPos, int yPos, Transform unitTransform, bool isBattlefield)
     {
         if (isBattlefield)
@@ -115,6 +147,16 @@ public class BoardManager : MonoBehaviour
     public void CallMoveUnit(object sender, MoveUnitEventArgs moveUnitEventArgs)
     {
         MoveUnit(sender, moveUnitEventArgs);
+    }
+
+    public Transform GetItemAt(int xPos, int yPos)
+    {
+        return _itemGrid[yPos][xPos];
+    }
+    public void SetItemAt(int xPos, int yPos, Transform itemTransform)
+    {
+        _itemGrid[yPos][xPos] = itemTransform;
+        JaggedArrayUtil.Dump<Transform>(_itemGrid);
     }
 
     public Transform[][] GetBattlefield()
@@ -135,6 +177,7 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < board.Length; i++)
             board[i] = new Transform[boardSize.x + 1];
     }
+
     private static void InitPathFindingInfo()
     {
         int rowsNb = _battlefieldGrid.Length;

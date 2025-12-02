@@ -29,7 +29,7 @@ public class PlayerBoardManager
             || _benchTilemap == null)
             Debug.LogError("Could not find every part of the board");
 
-        _boardManager = BoardManager.Instance(_battlefieldTilemap, _benchTilemap);
+        _boardManager = BoardManager.GetInstanceAndInit(_battlefieldTilemap, _benchTilemap);
     }
 
     public bool IsUnitOnBattlefield(float zPos)

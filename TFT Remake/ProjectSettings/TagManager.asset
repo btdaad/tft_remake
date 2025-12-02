@@ -9,6 +9,8 @@ TagManager:
   - Opponent Battlefield
   - Opponent Bench
   - Attack
+  - Player Item
+  - Opponent Item
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - Water
   - UI
   - Unit
-  - 
+  - Item
   - 
   - 
   - 

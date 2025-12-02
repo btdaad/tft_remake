@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8604284676836562246}
   - component: {fileID: 6168419852545349283}
   - component: {fileID: 3120925180843947232}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 3472101109726542928}
   - component: {fileID: 6607525169574120345}
   - component: {fileID: 8900185942569165609}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 523891322431993048}
   - component: {fileID: 4388831302204744062}
   - component: {fileID: 6165406224514749206}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 5638636945696995693}
   - component: {fileID: 5438940620382253546}
   - component: {fileID: 4462313597471024786}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +455,9 @@ GameObject:
   - component: {fileID: 7992410276196959012}
   - component: {fileID: 5957730617316413943}
   - component: {fileID: 662774457116934740}
-  m_Layer: 0
+  - component: {fileID: 8857374592477159455}
+  - component: {fileID: 985972616213030481}
+  m_Layer: 7
   m_Name: ItemCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,6 +541,54 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8857374592477159455
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958282914313110424}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &985972616213030481
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958282914313110424}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6534507010017443131
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +601,7 @@ GameObject:
   - component: {fileID: 5737489180193349295}
   - component: {fileID: 6889936243466483813}
   - component: {fileID: 9080899803234703371}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -662,7 +712,7 @@ GameObject:
   - component: {fileID: 86320137912676909}
   - component: {fileID: 2944692854487586933}
   - component: {fileID: 4082057076383601259}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face6
   m_TagString: Untagged
   m_Icon: {fileID: 0}

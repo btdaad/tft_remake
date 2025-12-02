@@ -133,6 +133,9 @@ public class ShopManager : MonoBehaviour
 
     public void SellUnit(Transform unitTransform)
     {
+        if (unitTransform == null)
+            return;
+
         Unit unit = unitTransform.GetComponent<Unit>();
         int costIndex = (int)unit.stats.cost;
         int cost = diffCost[costIndex];

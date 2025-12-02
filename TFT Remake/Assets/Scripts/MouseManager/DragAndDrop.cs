@@ -3,7 +3,8 @@ using System;
 
 public class DragAndDrop : MonoBehaviour
 {
-    [SerializeField] LayerMask mask;
+    [SerializeField] LayerMask unitMask;
+    [SerializeField] LayerMask itemMask;
     [SerializeField] float dragHeight = 0.0f;
     GameManager _gameManager;
     BoardManager _boardManager;
@@ -11,6 +12,9 @@ public class DragAndDrop : MonoBehaviour
     Transform _unitTransform;
     float _unitHeight;
     float _unitDistanceFromCamera;
+    Transform _itemTransform;
+    float _itemHeight;
+    float _itemDistanceFromCamera;
 
     void Start()
     {
@@ -20,22 +24,31 @@ public class DragAndDrop : MonoBehaviour
         ResetInfo();
     }
 
-    void ResetInfo()
+    void ResetInfo(bool resetUnitInfo = true, bool resetItemInfo = true)
     {
-        _unitTransform = null;
-        _unitHeight = 0.0f;
-        _unitDistanceFromCamera = 0.0f;
+        if (resetUnitInfo)
+        {
+            _unitTransform = null;
+            _unitHeight = 0.0f;
+            _unitDistanceFromCamera = 0.0f;
+        }
+        if (resetItemInfo)
+        {
+            _itemTransform = null;
+            _itemHeight = 0.0f;
+            _itemDistanceFromCamera = 0.0f;
+        }
     }
 
     void Update()
     {
-        if (_unitTransform == null
+        if (_unitTransform == null && _itemTransform == null
             && Input.GetMouseButtonDown(0))
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100, mask))
+            if (Physics.Raycast(ray, out hit, 100, unitMask))
             {
                 _unitTransform = hit.transform;
                 _unitHeight = _unitTransform.position.y;
@@ -44,11 +57,27 @@ public class DragAndDrop : MonoBehaviour
                 bool isUnitPickable = _boardManager.OnDragUnit(_gameManager.isPlayer, _unitTransform);
                 if (!isUnitPickable) // if unit is on the opponent board
                 {
-                    ResetInfo();
+                    ResetInfo(true, false);
                     return;
                 }
                 else
                     _gameManager.GetUIManager().UpdateSellDisplay(true, (int)_unitTransform.GetComponent<Unit>().stats.cost);
+            }
+
+            else if (Physics.Raycast(ray, out hit, 100, itemMask))
+            {
+                _itemTransform = hit.transform;
+                _itemHeight = _itemTransform.position.y;
+                _itemDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
+
+                Debug.Log(_itemTransform);
+
+                bool isItemPickable = _boardManager.OnDragItem(_gameManager.isPlayer, _itemTransform);
+                if (!isItemPickable) // if item is on the opponent board
+                {
+                    ResetInfo(false, true);
+                    return;
+                }
             }
         }
         else if (Input.GetMouseButtonUp(0))
@@ -56,7 +85,10 @@ public class DragAndDrop : MonoBehaviour
             if (_gameManager.GetShopManager().IsMouseOverSellingZone())
                 _gameManager.GetShopManager().SellUnit(_unitTransform);
             else
+            {
                 _boardManager.OnDropUnit(_gameManager.isPlayer, _unitTransform);
+                _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform);
+            }
 
             _gameManager.GetUIManager().UpdateSellDisplay(false);
             ResetInfo();
@@ -69,6 +101,15 @@ public class DragAndDrop : MonoBehaviour
             unitPosition.y = Math.Max(unitPosition.y, _unitHeight);
             unitPosition.y = Math.Min(unitPosition.y, _unitHeight + dragHeight);
             _unitTransform.position = unitPosition;
+        }
+        else if (_itemTransform != null)
+        {
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = _itemDistanceFromCamera;
+            Vector3 itemPosition = _camera.ScreenToWorldPoint(mousePos);
+            itemPosition.y = Math.Max(itemPosition.y, _itemHeight);
+            itemPosition.y = Math.Min(itemPosition.y, _itemHeight + dragHeight);
+            _itemTransform.position = itemPosition;
         }
     }
 }
