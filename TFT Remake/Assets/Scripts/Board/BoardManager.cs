@@ -40,7 +40,7 @@ public class BoardManager : MonoBehaviour
     public static BoardManager GetInstanceAndInit(Tilemap itemTilemap)
     {
         if (_itemGrid == null)
-            _itemGrid = JaggedArrayUtil.InitJaggedArray<Transform>(18, 23, () => null);
+            _itemGrid = JaggedArrayUtil.InitJaggedArray<Transform>(18, 23, () => null); // empirically found dimensions
         return _instance;
     }
 
@@ -156,7 +156,6 @@ public class BoardManager : MonoBehaviour
     public void SetItemAt(int xPos, int yPos, Transform itemTransform)
     {
         _itemGrid[yPos][xPos] = itemTransform;
-        JaggedArrayUtil.Dump<Transform>(_itemGrid);
     }
 
     public Transform[][] GetBattlefield()

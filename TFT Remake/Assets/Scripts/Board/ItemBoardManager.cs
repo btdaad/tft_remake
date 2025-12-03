@@ -76,8 +76,7 @@ public class ItemBoardManager
 
     private (int, int) ToItemCoord(Vector3Int cellCoord)
     {
-        Debug.Log(cellCoord + " => " + (cellCoord.x + 5, cellCoord.y + 2));
-        return (cellCoord.x + 5, cellCoord.y + 2);
+        return (cellCoord.x + 5, cellCoord.y + 2); // empirically found values
     }
 
     private void PlaceItemOnZone(Transform itemTransform, Vector3Int cellPos)

@@ -15,6 +15,7 @@ public class DragAndDrop : MonoBehaviour
     Transform _itemTransform;
     float _itemHeight;
     float _itemDistanceFromCamera;
+    Vector3 _dragOffset;
 
     void Start()
     {
@@ -69,8 +70,11 @@ public class DragAndDrop : MonoBehaviour
                 _itemTransform = hit.transform;
                 _itemHeight = _itemTransform.position.y;
                 _itemDistanceFromCamera = Vector3.Distance(_camera.transform.position, hit.point);
-
-                Debug.Log(_itemTransform);
+            
+                Vector3 mousePos = Input.mousePosition;
+                mousePos.z = _itemDistanceFromCamera;
+                Vector3 clickPos = _camera.ScreenToWorldPoint(mousePos);
+                _dragOffset = _itemTransform.position - clickPos;
 
                 bool isItemPickable = _boardManager.OnDragItem(_gameManager.isPlayer, _itemTransform);
                 if (!isItemPickable) // if item is on the opponent board
@@ -98,18 +102,19 @@ public class DragAndDrop : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = _unitDistanceFromCamera;
             Vector3 unitPosition = _camera.ScreenToWorldPoint(mousePos);
-            unitPosition.y = Math.Max(unitPosition.y, _unitHeight);
-            unitPosition.y = Math.Min(unitPosition.y, _unitHeight + dragHeight);
+            unitPosition.y = Mathf.Clamp(unitPosition.y, _unitHeight, _unitHeight + dragHeight);
             _unitTransform.position = unitPosition;
         }
         else if (_itemTransform != null)
         {
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = _itemDistanceFromCamera;
-            Vector3 itemPosition = _camera.ScreenToWorldPoint(mousePos);
-            itemPosition.y = Math.Max(itemPosition.y, _itemHeight);
-            itemPosition.y = Math.Min(itemPosition.y, _itemHeight + dragHeight);
-            _itemTransform.position = itemPosition;
+            Vector3 worldPos = _camera.ScreenToWorldPoint(mousePos);
+
+            Vector3 targetPos = worldPos + _dragOffset;
+            targetPos.y = Mathf.Clamp(targetPos.y, _itemHeight, _itemHeight + dragHeight);
+
+            _itemTransform.position = targetPos;
         }
     }
 }
