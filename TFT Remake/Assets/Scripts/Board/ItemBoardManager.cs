@@ -44,8 +44,8 @@ public class ItemBoardManager
         if (itemTransform == null)
             return;
 
-        Vector3 unitPos = new Vector3(itemTransform.position.x, _initItemPos.y, itemTransform.position.z);
-        if (!DropOnZone(itemTransform, unitPos, _itemTilemap)) // item is not dropped on the item board
+        Vector3 itemPos = new Vector3(itemTransform.position.x, _initItemPos.y, itemTransform.position.z);
+        if (!DropOnZone(itemTransform, itemPos, _itemTilemap)) // item is not dropped on the item board
             itemTransform.position = _initItemPos; // restore item position
     }
 

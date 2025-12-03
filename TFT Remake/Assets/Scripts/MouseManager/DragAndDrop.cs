@@ -25,20 +25,15 @@ public class DragAndDrop : MonoBehaviour
         ResetInfo();
     }
 
-    void ResetInfo(bool resetUnitInfo = true, bool resetItemInfo = true)
+    void ResetInfo()
     {
-        if (resetUnitInfo)
-        {
-            _unitTransform = null;
-            _unitHeight = 0.0f;
-            _unitDistanceFromCamera = 0.0f;
-        }
-        if (resetItemInfo)
-        {
-            _itemTransform = null;
-            _itemHeight = 0.0f;
-            _itemDistanceFromCamera = 0.0f;
-        }
+        _unitTransform = null;
+        _unitHeight = 0.0f;
+        _unitDistanceFromCamera = 0.0f;
+
+        _itemTransform = null;
+        _itemHeight = 0.0f;
+        _itemDistanceFromCamera = 0.0f;
     }
 
     void Update()
@@ -58,7 +53,7 @@ public class DragAndDrop : MonoBehaviour
                 bool isUnitPickable = _boardManager.OnDragUnit(_gameManager.isPlayer, _unitTransform);
                 if (!isUnitPickable) // if unit is on the opponent board
                 {
-                    ResetInfo(true, false);
+                    ResetInfo();
                     return;
                 }
                 else
@@ -79,7 +74,7 @@ public class DragAndDrop : MonoBehaviour
                 bool isItemPickable = _boardManager.OnDragItem(_gameManager.isPlayer, _itemTransform);
                 if (!isItemPickable) // if item is on the opponent board
                 {
-                    ResetInfo(false, true);
+                    ResetInfo();
                     return;
                 }
             }
@@ -91,7 +86,24 @@ public class DragAndDrop : MonoBehaviour
             else
             {
                 _boardManager.OnDropUnit(_gameManager.isPlayer, _unitTransform);
-                _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform);
+
+                if (_itemTransform != null)
+                {
+                    Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, 100, unitMask))
+                    {
+                        Unit unit = hit.transform.GetComponent<Unit>();
+                        bool successful = unit.SetItem(_itemTransform.GetComponent<Item>());
+                        if (successful)
+                            _boardManager.RemoveItem(_gameManager.isPlayer, _itemTransform);
+                        else
+                            _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform);
+                    }
+                    else
+                        _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform);
+                }
             }
 
             _gameManager.GetUIManager().UpdateSellDisplay(false);

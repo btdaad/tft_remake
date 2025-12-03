@@ -457,6 +457,7 @@ GameObject:
   - component: {fileID: 662774457116934740}
   - component: {fileID: 8857374592477159455}
   - component: {fileID: 985972616213030481}
+  - component: {fileID: 7582131662690666331}
   m_Layer: 7
   m_Name: ItemCube
   m_TagString: Untagged
@@ -589,6 +590,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7582131662690666331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958282914313110424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbe563399da3505ad992bff3be63e1d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  baseItemSO: {fileID: 0}
 --- !u!1 &6534507010017443131
 GameObject:
   m_ObjectHideFlags: 0

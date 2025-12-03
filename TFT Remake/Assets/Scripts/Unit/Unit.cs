@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private GameObject _basicAttackPrefab;
     [SerializeField] AbilityBase ability;
     public event EventHandler OnDeath = delegate { };
+    [SerializeField] private Item[] _items = new Item[3]{null, null, null};
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -86,6 +87,27 @@ public class Unit : MonoBehaviour
     public void SetAffiliation(bool isPlayer)
     {
         isFromPlayerTeam = isPlayer;
+    }
+
+    public bool SetItem(Item item)
+    {
+        int i = 0;
+        while (i < _items.Length)
+        {
+            if (_items[i] != null)
+                Debug.Log("Try merge");
+            else
+            {
+                _items[i] = item;
+                break;
+            }
+            i++;
+        }
+        if (i == _items.Length)
+            return false; // item was not given to unit
+
+        item.Dematerialize();
+        return true;
     }
 
     public Star GetStar()

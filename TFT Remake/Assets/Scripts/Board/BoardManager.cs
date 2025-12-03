@@ -337,6 +337,11 @@ public class BoardManager : MonoBehaviour
     {
         return _playerBoardManager.ToBattlefieldCoord(position); // using the playerBoard or the opponentBoard is equivalent
     }
+    
+    public (int, int) ToItemCoord(Vector3 position)
+    {
+        return _playerItemBoardManager.ToItemCoord(position); // using the playerBoard or the opponentBoard is equivalent
+    }
 
     public (int, int) ToBenchCoord(Vector3 position)
     {
@@ -362,6 +367,13 @@ public class BoardManager : MonoBehaviour
         _battlefieldGrid[yPos][xPos] = null;
         deadUnit.gameObject.SetActive(false);
         _saveUnits.Add(deadUnit.gameObject);
+    }
+
+    public void RemoveItem(bool isPlayer, Transform givenItem)
+    {
+        Vector3 initItemPos = isPlayer ? _playerItemBoardManager.GetInitItemPos() : _opponentItemBoardManager.GetInitItemPos();
+        (int xPos, int yPos) = ToItemCoord(givenItem.position);
+        _itemGrid[yPos][xPos] = null;
     }
 
     // Does not destroy the corresponding GameObject
