@@ -183,7 +183,7 @@ public class UnitsDisplay
         _baseDamage.text = $"{stats.attackDamage[(int)unit.GetStar()]}";
         _armor.text = $"{unit.GetArmor()}";
         _mr.text = $"{unit.GetMR()}";
-        _atkSpeed.text = $"{unit.GetAS()}";
+        _atkSpeed.text = $"{Mathf.Round(unit.GetAS() * 100f) / 100f}"; // round to 2 digits
         _crit.text = $"{unit.GetCritChance()}%";
         _range.text = $"{unit.GetRange()}";
         _dr.text = $"{unit.GetDurability() * 100.0f}%";

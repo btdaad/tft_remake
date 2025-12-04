@@ -6,14 +6,14 @@ public class BaseItemSO : ScriptableObject
 {
     public enum Stat
     {
-        ATK_DMG,
-        ARMOR,
-        MAGIC_RESIST,
-        PV,
-        DAMAGE_AMP,
-        ATK_SPEED,
-        ABILITY_POWER,
-        OMNIVAMP,
+        ATK_DMG, // OK
+        ARMOR, // OK
+        MAGIC_RESIST, // OK
+        PV, // OK
+        DAMAGE_AMP, // TODO
+        ATK_SPEED, // OK
+        ABILITY_POWER, // OK
+        OMNIVAMP, // TODO
     };
 
     [System.Serializable]

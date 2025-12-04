@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour
     private float _armor_modifier;
     private float _mr_modifier;
     private float _pv_modifier;
+    private float _atk_speed_modifier;
     private ItemDatabase _itemDatabase;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -104,6 +105,7 @@ public class Unit : MonoBehaviour
         _ap = 0.0f;
         _armor_modifier = 0.0f;
         _mr_modifier = 0.0f;
+        _atk_speed_modifier = 0.0f;
 
         _health -= _pv_modifier;
         _pv_modifier = 0.0f;
@@ -139,6 +141,18 @@ public class Unit : MonoBehaviour
                             _pv_modifier += modifier.value;
                         else
                             Debug.Log("Do something");
+                        break;
+                    case BaseItemSO.Stat.ABILITY_POWER:
+                        if (modifier.isFlat)
+                            _ap += modifier.value;
+                        else
+                            Debug.Log("Do something");
+                        break;
+                    case BaseItemSO.Stat.ATK_SPEED:
+                        if (modifier.isFlat)
+                            _atk_speed_modifier += modifier.value;
+                        else
+                            _atk_speed_modifier = (stats.attackSpeed * modifier.value) / 100f;
                         break;
                     default:
                         Debug.Log("Stat not handled yet");
@@ -333,7 +347,7 @@ public class Unit : MonoBehaviour
 
     public float GetAS()
     {
-        return stats.attackSpeed; // apply modifiers here
+        return stats.attackSpeed + _atk_speed_modifier; // apply modifiers here
     }
 
     public float GetCritChance()
