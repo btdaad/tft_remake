@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 662774457116934740, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 34cbe965f311550ccb00cc291b55d3f9, type: 2}
+      objectReference: {fileID: 2100000, guid: a6ffd8f981c1b4e6abfb9045275eb717, type: 2}
     - target: {fileID: 3958282914313110424, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
       propertyPath: m_Name
       value: ItemCube (2)

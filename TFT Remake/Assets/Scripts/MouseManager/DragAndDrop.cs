@@ -95,14 +95,19 @@ public class DragAndDrop : MonoBehaviour
                     if (Physics.Raycast(ray, out hit, 100, unitMask))
                     {
                         Unit unit = hit.transform.GetComponent<Unit>();
-                        bool successful = unit.SetItem(_itemTransform.GetComponent<Item>());
-                        if (successful)
-                            _boardManager.RemoveItem(_gameManager.isPlayer, _itemTransform);
-                        else
-                            _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform);
+                        if (_gameManager.isPlayer == unit.IsFromPlayerTeam())
+                        {
+                            bool successful = unit.SetItem(_itemTransform.GetComponent<Item>());
+                            if (successful)
+                                _boardManager.RemoveItem(_gameManager.isPlayer, _itemTransform);
+                            else // could not give item to unit (already full)
+                                _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform); // put item back to place
+                        }
+                        else // unit is not player's unit
+                            _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform); // put item back to place
                     }
-                    else
-                        _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform);
+                    else // did not drop item on valid spot
+                        _boardManager.OnDropItem(_gameManager.isPlayer, _itemTransform); // put item back to place
                 }
             }
 

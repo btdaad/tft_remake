@@ -18,4 +18,4 @@ MonoBehaviour:
   modifiers:
   - stat: 3
     value: 150
-    isPercentFormat: 0
+    isFlat: 1

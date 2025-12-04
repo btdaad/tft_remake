@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    [SerializeField] BaseItemSO baseItemSO;
+    [SerializeField] public BaseItemSO baseItemSO;
 
     public void Dematerialize()
     {

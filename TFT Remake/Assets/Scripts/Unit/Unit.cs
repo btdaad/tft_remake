@@ -25,7 +25,11 @@ public class Unit : MonoBehaviour
     [SerializeField] private GameObject _basicAttackPrefab;
     [SerializeField] AbilityBase ability;
     public event EventHandler OnDeath = delegate { };
+    
     [SerializeField] private Item[] _items = new Item[3]{null, null, null};
+    private float _armor_modifier;
+    private float _mr_modifier;
+    private float _pv_modifier;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,8 +43,6 @@ public class Unit : MonoBehaviour
     {
         _health = stats.health[(int)_star];
         _mana = stats.mana[0];
-        _ap = 0f;
-        _ad = 0f;
         _mr = stats.magicResist;
         _shields = new List<Shield>();
         _durability = new List<Shield>();
@@ -48,6 +50,9 @@ public class Unit : MonoBehaviour
         _lastAttack = 0.0f;
         _lastAbility = 0.0f;
         _manaOverflow = 0.0f;
+        
+        _pv_modifier = 0.0f;
+        UpdateModifiers();
     }
 
     // Update is called once per frame
@@ -89,24 +94,82 @@ public class Unit : MonoBehaviour
         isFromPlayerTeam = isPlayer;
     }
 
+    private void UpdateModifiers()
+    {
+        _ad = 0.0f;
+        _ap = 0.0f;
+        _armor_modifier = 0.0f;
+        _mr_modifier = 0.0f;
+
+        UpdateHealth(-_pv_modifier);
+
+        int i = 0;
+        while (i < _items.Length && _items[i] != null)
+        {
+            BaseItemSO baseItemSO = _items[i].baseItemSO;
+            foreach (BaseItemSO.Modifier modifier in baseItemSO.modifiers)
+            {
+                switch (modifier.stat)
+                {
+                    case BaseItemSO.Stat.ATK_DMG:
+                        if (modifier.isFlat)
+                            _ad += modifier.value;
+                        else
+                            Debug.Log("Do something");
+                        break;
+                    case BaseItemSO.Stat.ARMOR:
+                        if (modifier.isFlat)
+                            _armor_modifier += modifier.value;
+                        else
+                            Debug.Log("Do something");
+                        break;
+                    case BaseItemSO.Stat.MAGIC_RESIST:
+                        if (modifier.isFlat)
+                            _mr_modifier += modifier.value;
+                        else
+                            Debug.Log("Do something");
+                        break;
+                    case BaseItemSO.Stat.PV:
+                        if (modifier.isFlat)
+                            _pv_modifier += modifier.value;
+                        else
+                            Debug.Log("Do something");
+                        break;
+                    default:
+                        Debug.Log("Stat not handled yet");
+                        break;
+                }
+            }
+
+            i++;
+        }
+
+        UpdateHealth(_pv_modifier);
+    }
+
     public bool SetItem(Item item)
     {
         int i = 0;
-        while (i < _items.Length)
+        while (i < _items.Length && _items[i] != null)
         {
-            if (_items[i] != null)
-                Debug.Log("Try merge");
-            else
-            {
-                _items[i] = item;
-                break;
-            }
+            // if (_items[i] != null)
+            //     Debug.Log("Try merge");
+            // if (_items[i] == null)
+            // {
+            //     _items[i] = item;
+            //     break;
+            // }
             i++;
         }
+
         if (i == _items.Length)
             return false; // item was not given to unit
 
+        _items[i] = item;
         item.Dematerialize();
+
+        UpdateModifiers();
+
         return true;
     }
 
@@ -214,7 +277,7 @@ public class Unit : MonoBehaviour
 
     public float GetMaxHealth()
     {
-        return stats.health[(int)GetStar()]; // apply modifiers
+        return stats.health[(int)GetStar()] + _pv_modifier; // apply modifiers
     }
 
     public float GetMana()
@@ -234,7 +297,7 @@ public class Unit : MonoBehaviour
 
     public float GetMR()
     {
-        return _mr;
+        return _mr + _mr_modifier;
     }
 
     public void UpdateMR(float value)
@@ -245,12 +308,7 @@ public class Unit : MonoBehaviour
 
     public float GetArmor()
     {
-        return stats.armor; // apply modifiers here
-    }
-
-    public float GetMagicResist()
-    {
-        return stats.magicResist; // apply modifiers here
+        return stats.armor + _armor_modifier;
     }
 
     public float GetAS()
@@ -357,7 +415,7 @@ public class Unit : MonoBehaviour
     {
         if (duration == 0f) // instantaneous
         {
-            float r = isPhysicalDamage ? GetArmor() : GetMagicResist();
+            float r = isPhysicalDamage ? GetArmor() : GetMR();
             float dm = damageRaw / (1 + (r / 100)); // damage post-mitigation (https://wiki.leagueoflegends.com/en-us/Armor)
 
             dm *= (1.0f - GetDurability());

@@ -17,12 +17,12 @@ public class BaseItemSO : ScriptableObject
     {
         public Stat stat;
         public float value;
-        public bool isPercentFormat;
-        public Modifier(Stat stat, float value, bool isPercentFormat)
+        public bool isFlat;
+        public Modifier(Stat stat, float value, bool isFlat)
         {
             this.stat = stat;
             this.value = value;
-            this.isPercentFormat = isPercentFormat;
+            this.isFlat = isFlat;
         }
     }
 
