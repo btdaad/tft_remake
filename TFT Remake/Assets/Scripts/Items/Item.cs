@@ -9,8 +9,6 @@ public class Item : MonoBehaviour
     public void Dematerialize()
     {
         gameObject.SetActive(false);
-        // this.GetComponent<MeshRenderer>().enabled = false;
-        // this.GetComponent<Collider>().enabled = false;
     }
 
     public void BecomesCombined(CombinedItemSO combinedItemSO)
@@ -24,4 +22,6 @@ public class Item : MonoBehaviour
     {
         return isCombinedItem ? combinedItemSO : baseItemSO;
     }
+
+    // TODO : implement passive
 }

@@ -29,11 +29,12 @@ Remake with Unity of Teamfight Tactics, an autobattler game produced by Riot. Th
 - [x] Fusion d'unités (1-star, 2-star, 3-star)
 
 ### Items et synergies
-- [ ] Ajout et affichage des items de base
+- [x] Ajout et affichage des items de base (4/10)
 - [ ] Equipement et déséquipement des items
-- [ ] Prise en compte des items sur les stastiques
+- [x] Prise en compte des items sur les stastiques (sauf damage amp et
+  omnivamp)
 - [ ] Prise en compte des synergies sur les statistiques
-- [ ] Fusion d'items
+- [x] Fusion d'items (10/55)
 
 ### Round spéciaux
 - [ ] Ajout et affichage des différentes phases de jeu
