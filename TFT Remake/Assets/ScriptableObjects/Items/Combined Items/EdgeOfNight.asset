@@ -12,9 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133422152442b995194a01a5a8a02ebc, type: 3}
   m_Name: EdgeOfNight
   m_EditorClassIdentifier: Assembly-CSharp::CombinedItemSO
-  itemName: 
-  icon: {fileID: 0}
-  destription: 
-  modifiers: []
-  item1: {fileID: 0}
-  item2: {fileID: 0}
+  itemName: Manteau de la nuit
+  icon: {fileID: 2800000, guid: c847cb1c87443ab16aeb5f8577a89328, type: 3}
+  destription: "Quand le porteur tombe \xE0 60% de ses PV, il devient bri\xE8vement
+    impossible \xE0 cibler et dissipe les effets n\xE9gatifs qui l'affectent."
+  modifiers:
+  - stat: 1
+    value: 20
+    isFlat: 1
+  - stat: 0
+    value: 10
+    isFlat: 1
+  - stat: 5
+    value: 15
+    isFlat: 0
+  - stat: 6
+    value: 10
+    isFlat: 1
+  item1: {fileID: 11400000, guid: 947338cc5e2bcc90f918e6deb1756c93, type: 2}
+  item2: {fileID: 11400000, guid: 071511a43ba7b36989b5625c96cbb449, type: 2}

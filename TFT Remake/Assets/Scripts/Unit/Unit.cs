@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour
     private float _armor_modifier;
     private float _mr_modifier;
     private float _pv_modifier;
+    private ItemDatabase _itemDatabase;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,6 +52,9 @@ public class Unit : MonoBehaviour
         _lastAbility = 0.0f;
         _manaOverflow = 0.0f;
         
+        _itemDatabase = (ItemDatabase) GameObject.FindFirstObjectByType (typeof(ItemDatabase));
+        if (_itemDatabase == null)
+            Debug.Log("Could not find the item database.");
         _pv_modifier = 0.0f;
         UpdateModifiers();
     }
@@ -106,7 +110,7 @@ public class Unit : MonoBehaviour
         int i = 0;
         while (i < _items.Length && _items[i] != null)
         {
-            BaseItemSO baseItemSO = _items[i].baseItemSO;
+            BaseItemSO baseItemSO = _items[i].GetItem();
             foreach (BaseItemSO.Modifier modifier in baseItemSO.modifiers)
             {
                 switch (modifier.stat)
@@ -147,26 +151,36 @@ public class Unit : MonoBehaviour
         UpdateHealth(_pv_modifier);
     }
 
-    public bool SetItem(Item item)
+    public bool SetItem(Item newItem)
     {
         int i = 0;
-        while (i < _items.Length && _items[i] != null)
+        while (i < _items.Length)
         {
-            // if (_items[i] != null)
-            //     Debug.Log("Try merge");
-            // if (_items[i] == null)
-            // {
-            //     _items[i] = item;
-            //     break;
-            // }
+            if (!newItem.isCombinedItem
+                && _items[i] != null
+                && !_items[i].isCombinedItem)
+            {
+                CombinedItemSO combinedItemSO = _itemDatabase.GetCombined(_items[i].baseItemSO, newItem.baseItemSO);
+                if (combinedItemSO == null)
+                {
+                    Debug.Log("These items does not combine");
+                    return false;
+                }
+                _items[i].BecomesCombined(combinedItemSO);
+                break;
+            }
+            else if (_items[i] == null) // implies either newItem is combined or not, it does not matter
+            {
+                _items[i] = newItem;
+                break;
+            }
             i++;
         }
 
         if (i == _items.Length)
             return false; // item was not given to unit
 
-        _items[i] = item;
-        item.Dematerialize();
+        newItem.Dematerialize();
 
         UpdateModifiers();
 

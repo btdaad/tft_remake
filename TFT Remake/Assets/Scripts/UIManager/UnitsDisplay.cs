@@ -142,7 +142,7 @@ public class UnitsDisplay
                 _items[i].visible = false;
             else
             {
-                _items[i].style.backgroundImage = items[i].baseItemSO.icon;
+                _items[i].style.backgroundImage = items[i].GetItem().icon;
                 _items[i].visible = true;
             }
             i++;

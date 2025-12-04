@@ -4627,6 +4627,7 @@ GameObject:
   - component: {fileID: 1838082638}
   - component: {fileID: 1838082640}
   - component: {fileID: 1838082641}
+  - component: {fileID: 1838082642}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4750,6 +4751,23 @@ MonoBehaviour:
   - {fileID: 5048283057872754160, guid: 724187251e056ada288cc1c42c6a28fb, type: 3}
   - {fileID: 4614900328354995680, guid: 2c9b721bb0fe5270083abdb1bcc75fb0, type: 3}
   - {fileID: 5020599900132245180, guid: 9e4888a3aa429efb5982ac9a0e2ebd3a, type: 3}
+--- !u!114 &1838082642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838082635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391cc0119844482c5a2e4fc6d10970a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDatabase
+  combinedItems:
+  - {fileID: 11400000, guid: 9d319044ee28aafa4804cac5b53c3302, type: 2}
+  - {fileID: 11400000, guid: c61a69fd50b5ed7ec85ec4ede70382f7, type: 2}
+  - {fileID: 11400000, guid: 59a5c1a32cedd520997eb3affa9d44c7, type: 2}
+  - {fileID: 11400000, guid: e5e6fd24d129c7a2198418b9c3a05009, type: 2}
 --- !u!1001 &1952585269
 PrefabInstance:
   m_ObjectHideFlags: 0

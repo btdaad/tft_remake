@@ -12,9 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133422152442b995194a01a5a8a02ebc, type: 3}
   m_Name: Sterak'sGage
   m_EditorClassIdentifier: Assembly-CSharp::CombinedItemSO
-  itemName: 
-  icon: {fileID: 0}
-  destription: 
-  modifiers: []
-  item1: {fileID: 0}
-  item2: {fileID: 0}
+  itemName: Gage de Sterak
+  icon: {fileID: 2800000, guid: f35964086d9db1c3f9ddd63c97dc4dca, type: 3}
+  destription: "Lorsqu'il tombe sous 60% de ses PV, le porteur gagne un bouclier
+    \xE9quivalent \xE0 50% de ses PV max. Ce bouclier se d\xE9sagr\xE8ge rapidement
+    en 4 sec."
+  modifiers:
+  - stat: 0
+    value: 40
+    isFlat: 1
+  - stat: 3
+    value: 300
+    isFlat: 1
+  item1: {fileID: 11400000, guid: 947338cc5e2bcc90f918e6deb1756c93, type: 2}
+  item2: {fileID: 11400000, guid: 4d6ebc02edea0654aa904bbaaa99777f, type: 2}

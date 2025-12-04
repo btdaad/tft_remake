@@ -12,9 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133422152442b995194a01a5a8a02ebc, type: 3}
   m_Name: Bloodthirster
   m_EditorClassIdentifier: Assembly-CSharp::CombinedItemSO
-  itemName: 
-  icon: {fileID: 0}
-  destription: 
-  modifiers: []
-  item1: {fileID: 0}
-  item2: {fileID: 0}
+  itemName: Soif-de-sang
+  icon: {fileID: 2800000, guid: db90808a5d6e8d98287cea5bb86e8353, type: 3}
+  destription: "Une fois par combat, quand le porteur tombe sous 40% de ses PV, il
+    gagne un bouclier de 25% de ses PV max qui dure jusqu'\xE0 5 sec."
+  modifiers:
+  - stat: 0
+    value: 15
+    isFlat: 1
+  - stat: 6
+    value: 15
+    isFlat: 1
+  - stat: 2
+    value: 20
+    isFlat: 1
+  - stat: 7
+    value: 20
+    isFlat: 0
+  item1: {fileID: 11400000, guid: 947338cc5e2bcc90f918e6deb1756c93, type: 2}
+  item2: {fileID: 11400000, guid: c45b13607021961e0a95cb1e28a1a99d, type: 2}
