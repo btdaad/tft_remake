@@ -105,7 +105,8 @@ public class Unit : MonoBehaviour
         _armor_modifier = 0.0f;
         _mr_modifier = 0.0f;
 
-        UpdateHealth(-_pv_modifier);
+        _health -= _pv_modifier;
+        _pv_modifier = 0.0f;
 
         int i = 0;
         while (i < _items.Length && _items[i] != null)
@@ -148,7 +149,7 @@ public class Unit : MonoBehaviour
             i++;
         }
 
-        UpdateHealth(_pv_modifier);
+        _health += _pv_modifier;
     }
 
     public bool SetItem(Item newItem)
