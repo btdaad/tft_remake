@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 383d97453f3af8300b300610d19b9db2, type: 3}
-  m_Name: BFSword
+  m_Name: Base_Giant'sBelt
   m_EditorClassIdentifier: Assembly-CSharp::BaseItemSO
-  itemName: BF Glaive
-  icon: {fileID: 2800000, guid: dde984aa26b1a21769ac81afdd9c8564, type: 3}
+  itemName: "Ceinture du g\xE9ant"
+  icon: {fileID: 2800000, guid: 8e9997f1e2d9c2eb68cd7fdf6e919d21, type: 3}
   destription: 
   modifiers:
-  - stat: 0
-    value: 10
+  - stat: 3
+    value: 150
     isFlat: 1

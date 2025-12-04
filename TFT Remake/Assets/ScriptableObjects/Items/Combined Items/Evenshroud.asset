@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133422152442b995194a01a5a8a02ebc, type: 3}
+  m_Name: Evenshroud
+  m_EditorClassIdentifier: Assembly-CSharp::CombinedItemSO
+  itemName: Linceul de la congruence
+  icon: {fileID: 2800000, guid: 2b489d01c5d5b06e08a89d33516766c5, type: 3}
+  destription: "Le porteur applique 30% de scission sur les ennemis dans un rayon
+    de 2 hexagones. Le porteur gagne +25 armure et r\xE9sistance magique pendant
+    les 15 premi\xE8res secondes de combat.\n\nScission : r\xE9duit l'armure."
+  modifiers:
+  - stat: 3
+    value: 250
+    isFlat: 1
+  - stat: 2
+    value: 20
+    isFlat: 1
+  item1: {fileID: 11400000, guid: c45b13607021961e0a95cb1e28a1a99d, type: 2}
+  item2: {fileID: 11400000, guid: 4d6ebc02edea0654aa904bbaaa99777f, type: 2}

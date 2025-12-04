@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 383d97453f3af8300b300610d19b9db2, type: 3}
-  m_Name: ChainVest
+  m_Name: Base_ChainVest
   m_EditorClassIdentifier: Assembly-CSharp::BaseItemSO
   itemName: Cotte de mailles
   icon: {fileID: 2800000, guid: 4f47955d1369aa9e49648fc82d5d29ee, type: 3}

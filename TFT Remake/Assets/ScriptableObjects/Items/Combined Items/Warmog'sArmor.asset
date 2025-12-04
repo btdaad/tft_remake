@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133422152442b995194a01a5a8a02ebc, type: 3}
+  m_Name: Warmog'sArmor
+  m_EditorClassIdentifier: Assembly-CSharp::CombinedItemSO
+  itemName: Armure de Warmog
+  icon: {fileID: 2800000, guid: 1ba5f881f15e8baf2bc56975c3ce32d5, type: 3}
+  destription: Le porteur gagne 15% de PV max.
+  modifiers:
+  - stat: 3
+    value: 500
+    isFlat: 1
+  item1: {fileID: 11400000, guid: 4d6ebc02edea0654aa904bbaaa99777f, type: 2}
+  item2: {fileID: 11400000, guid: 4d6ebc02edea0654aa904bbaaa99777f, type: 2}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133422152442b995194a01a5a8a02ebc, type: 3}
+  m_Name: GargoyleStoneplate
+  m_EditorClassIdentifier: Assembly-CSharp::CombinedItemSO
+  itemName: Lithoplastron de gargouille
+  icon: {fileID: 2800000, guid: 19f35e01ad32ae0f3a6db2d150339562, type: 3}
+  destription: "Le porteur gagne 10 d'armure et 10 de r\xE9sistance magique pour
+    chaque ennemi qui le cible."
+  modifiers:
+  - stat: 1
+    value: 25
+    isFlat: 1
+  - stat: 3
+    value: 100
+    isFlat: 1
+  - stat: 2
+    value: 25
+    isFlat: 1
+  item1: {fileID: 11400000, guid: 071511a43ba7b36989b5625c96cbb449, type: 2}
+  item2: {fileID: 11400000, guid: c45b13607021961e0a95cb1e28a1a99d, type: 2}
