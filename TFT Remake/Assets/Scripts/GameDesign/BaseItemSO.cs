@@ -9,7 +9,11 @@ public class BaseItemSO : ScriptableObject
         ATK_DMG,
         ARMOR,
         MAGIC_RESIST,
-        PV
+        PV,
+        DAMAGE_AMP,
+        ATK_SPEED,
+        ABILITY_POWER,
+        OMNIVAMP,
     };
 
     [System.Serializable]

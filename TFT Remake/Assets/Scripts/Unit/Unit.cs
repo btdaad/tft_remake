@@ -173,6 +173,11 @@ public class Unit : MonoBehaviour
         return true;
     }
 
+    public Item[] GetItems()
+    {
+        return _items;
+    }
+
     public Star GetStar()
     {
         return _star;

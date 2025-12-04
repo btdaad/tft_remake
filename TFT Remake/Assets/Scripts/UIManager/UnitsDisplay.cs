@@ -41,6 +41,7 @@ public class UnitsDisplay
     private Label _range;
     private Label _dr;
     private Color[] _costColors;
+    private VisualElement[] _items;
 
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -92,6 +93,11 @@ public class UnitsDisplay
         ColorUtility.TryParseHtmlString("#FA9607", out _costColors[2]);
         _costColors[2].a = 0.6f;
 
+        _items = new VisualElement[3];
+        _items[0] = GetUIElement<VisualElement>("Item1");
+        _items[1] = GetUIElement<VisualElement>("Item2");
+        _items[2] = GetUIElement<VisualElement>("Item3");
+
         _unitDisplayBackground.visible = false;
     }
 
@@ -124,6 +130,22 @@ public class UnitsDisplay
                 return "3stars";
             default:
                 return "";
+        }
+    }
+
+    private void DisplayItems(Item[] items)
+    {
+        int i = 0;
+        while (i < items.Length)
+        {
+            if (items[i] == null)
+                _items[i].visible = false;
+            else
+            {
+                _items[i].style.backgroundImage = items[i].baseItemSO.icon;
+                _items[i].visible = true;
+            }
+            i++;
         }
     }
 
@@ -166,6 +188,8 @@ public class UnitsDisplay
         _range.text = $"{unit.GetRange()}";
         _dr.text = $"{unit.GetDurability() * 100.0f}%";
 
+        DisplayItems(unit.GetItems());
+
         // _unitArt.material = unit.GetComponent<Renderer>().material;
         _unitDisplayBackground.visible = true;
     }
@@ -173,6 +197,7 @@ public class UnitsDisplay
     public void HideUnitDisplay()
     {
         UIUtil.HideVisualElements(_traitTextures);
+        UIUtil.HideVisualElements(_items);
         _unitDisplayBackground.visible = false;
     }
 }
