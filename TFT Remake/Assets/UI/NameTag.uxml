@@ -1,4 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/NameTag.uss?fileID=7433441132597879392&amp;guid=e7f8b8a75e9cf54d7a47692eaad10364&amp;type=3#NameTag" />
-    <ui:Label text="NPC" name="NameTag" picking-mode="Ignore" double-click-selects-word="false" />
+    <ui:VisualElement name="NameTag" picking-mode="Ignore" style="flex-grow: 1; background-color: rgb(11, 20, 25); width: 160px; -unity-text-outline-width: initial; font-size: initial; -unity-font-style: normal; color: rgb(255, 255, 255);">
+        <ui:VisualElement name="ItemIcon" picking-mode="Ignore" tabindex="0" style="flex-grow: 1; position: relative; top: 10px; left: 10px; width: 40px; height: 40px;" />
+        <ui:Label text="NPC" name="Text" picking-mode="Ignore" double-click-selects-word="false" style="color: rgb(255, 255, 255); -unity-text-outline-color: rgba(11, 60, 123, 0); -unity-text-outline-width: initial; font-size: 10px; -unity-font-style: normal; top: auto; position: relative; bottom: 0;" />
+    </ui:VisualElement>
 </ui:UXML>
