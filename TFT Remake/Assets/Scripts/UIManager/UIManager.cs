@@ -8,8 +8,8 @@ using System.Linq;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument UIDoc;
-
     private UnitsDisplay UIUnit;
+    [SerializeField] MovingNameTag UIItem;
     private SynergiesDisplay UISynergy;
     private ShopDisplay UIShop;
     private Button _fight;
@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
 
     public void Init()
     {
+        UIItem.InitItemDisplay(GameManager.Instance.GetCamera());
+
         UIUnit = UnitsDisplay.Instance(UIDoc);
         UIUnit.InitUnitDisplay();
         UISynergy = SynergiesDisplay.Instance(UIDoc);
@@ -89,6 +91,18 @@ public class UIManager : MonoBehaviour
         UIUnit.HideUnitDisplay();
     }
 
+    public void ShowItemDisplay(Transform itemTransform)
+    {
+        // Debug.Log("Show item display of " + itemTransform.name);
+        UIItem.ShowItemDisplay(itemTransform);
+    }
+
+    public void HideItemDisplay()
+    {
+        // Debug.Log("Hide item display.");
+        UIItem.HideItemDisplay();
+    }
+
     public void UpdateSellDisplay(bool displayed, int costIndex = -1)
     {
         UIShop.UpdateSellDisplay(displayed, costIndex);
@@ -104,5 +118,6 @@ public class UIManager : MonoBehaviour
         UpdateXP(isPlayer);
         UpdateLevel(isPlayer);
         UpdateShop(isPlayer);
+        UIItem.SetCamera(GameManager.Instance.GetCamera());
     }
 }

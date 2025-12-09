@@ -55,6 +55,12 @@ public class GameManager : MonoBehaviour
 
     void Init()
     {
+        isPlayer = true;
+        _player = new Player();
+        _player.Init();
+        _opponent = new Player();
+        _opponent.Init();
+
         bool findBoardManager = FindManager<BoardManager>(ref _boardManager);
         if (findBoardManager)
             _boardManager.Init();
@@ -78,12 +84,6 @@ public class GameManager : MonoBehaviour
         bool findUIManager = FindManager<UIManager>(ref _uiManager);
         if (findUIManager)
             _uiManager.Init();
-
-        isPlayer = true;
-        _player = new Player();
-        _player.Init();
-        _opponent = new Player();
-        _opponent.Init();
 
         playerCamera = Camera.main;
         playerCamera.enabled = true;
@@ -120,6 +120,12 @@ public class GameManager : MonoBehaviour
     public ShopManager GetShopManager()
     {
         return _shopManager;
+    }
+
+    public Camera GetCamera()
+    {
+        Debug.Log(isPlayer);
+        return isPlayer ? Camera.main : opponentCamera;
     }
 
     public Player GetPlayer(bool isPlayer)

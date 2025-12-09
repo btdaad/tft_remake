@@ -3,17 +3,13 @@ using UnityEngine;
 public class DisplayUnitStats : MonoBehaviour
 {
     [SerializeField] LayerMask mask;
-    GameManager _gameManager;
-    BoardManager _boardManager;
     UIManager _uiManager;
     Camera _camera;
     Transform _unitTransform;
 
     void Start()
     {
-        _gameManager = GameManager.Instance;
-        _boardManager = _gameManager.GetBoardManager();
-        _uiManager = _gameManager.GetUIManager();
+        _uiManager = GameManager.Instance.GetUIManager();
         _camera = gameObject.GetComponent<Camera>();
         _unitTransform = null;
     }
