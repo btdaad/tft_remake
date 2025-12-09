@@ -60,6 +60,16 @@ public class GameManager : MonoBehaviour
         _player.Init();
         _opponent = new Player();
         _opponent.Init();
+        
+        playerCamera = Camera.main;
+        playerCamera.enabled = true;
+        playerCamera.GetComponent<DragAndDrop>().enabled = true;
+        playerCamera.GetComponent<DisplayUnitStats>().enabled = true;
+        playerCamera.GetComponent<DisplayItemInfo>().enabled = true;
+        opponentCamera.enabled = false;
+        opponentCamera.GetComponent<DragAndDrop>().enabled = false;
+        opponentCamera.GetComponent<DisplayUnitStats>().enabled = false;
+        opponentCamera.GetComponent<DisplayItemInfo>().enabled = false;
 
         bool findBoardManager = FindManager<BoardManager>(ref _boardManager);
         if (findBoardManager)
@@ -84,14 +94,6 @@ public class GameManager : MonoBehaviour
         bool findUIManager = FindManager<UIManager>(ref _uiManager);
         if (findUIManager)
             _uiManager.Init();
-
-        playerCamera = Camera.main;
-        playerCamera.enabled = true;
-        playerCamera.GetComponent<DragAndDrop>().enabled = true;
-        playerCamera.GetComponent<DisplayUnitStats>().enabled = true;
-        opponentCamera.enabled = false;
-        opponentCamera.GetComponent<DragAndDrop>().enabled = false;
-        opponentCamera.GetComponent<DisplayUnitStats>().enabled = false;
     }
     public BoardManager GetBoardManager()
     {
@@ -124,8 +126,7 @@ public class GameManager : MonoBehaviour
 
     public Camera GetCamera()
     {
-        Debug.Log(isPlayer);
-        return isPlayer ? Camera.main : opponentCamera;
+        return isPlayer ? playerCamera : opponentCamera;
     }
 
     public Player GetPlayer(bool isPlayer)
@@ -264,11 +265,13 @@ public class GameManager : MonoBehaviour
         if (!_fightOngoing)
             opponentCamera.GetComponent<DragAndDrop>().enabled = !opponentCamera.GetComponent<DragAndDrop>().enabled;
         opponentCamera.GetComponent<DisplayUnitStats>().enabled = !opponentCamera.GetComponent<DisplayUnitStats>().enabled;
+        opponentCamera.GetComponent<DisplayItemInfo>().enabled = !opponentCamera.GetComponent<DisplayItemInfo>().enabled;
 
         playerCamera.enabled = !playerCamera.enabled;
         if (!_fightOngoing)
             playerCamera.GetComponent<DragAndDrop>().enabled = !playerCamera.GetComponent<DragAndDrop>().enabled;
         playerCamera.GetComponent<DisplayUnitStats>().enabled = !playerCamera.GetComponent<DisplayUnitStats>().enabled;
+        playerCamera.GetComponent<DisplayItemInfo>().enabled = !playerCamera.GetComponent<DisplayItemInfo>().enabled;
 
         _uiManager.HideUnitDisplay();
         _uiManager.ChangePlayer(isPlayer);
