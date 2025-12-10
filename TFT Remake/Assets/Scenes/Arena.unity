@@ -4502,8 +4502,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MovingNameTag
   nameTagTemplate: {fileID: 9197481963319205126, guid: c9bc7f562d371ce4fbd3baa6e3c09de9, type: 3}
   baseContainerDocument: {fileID: 1120908096}
-  scaleMultiplier: 0
-  distanceCullingRange: 0
+  scale: 0.8
+  distanceCullingRange: 20
 --- !u!4 &1320516549 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9113513224944391427, guid: 6f8a63f8595c2ed27812d6505bbbe36e, type: 3}

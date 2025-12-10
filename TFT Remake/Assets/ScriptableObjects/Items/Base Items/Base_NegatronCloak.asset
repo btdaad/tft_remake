@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BaseItemSO
   itemName: "Manteau de N\xE9gatron"
   icon: {fileID: 2800000, guid: 8a69300a4568281ac8c1774578e435a1, type: 3}
-  destription: 
+  destription: "+20 r\xE9sistance magique"
   modifiers:
   - stat: 2
     value: 20

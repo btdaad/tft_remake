@@ -118,7 +118,7 @@ public class Unit : MonoBehaviour
             {
                 switch (modifier.stat)
                 {
-                    case BaseItemSO.Stat.ATK_DMG:
+                    case BaseItemSO.Stat.AD:
                         if (modifier.isFlat)
                             _ad += modifier.value;
                         else
@@ -136,19 +136,19 @@ public class Unit : MonoBehaviour
                         else
                             Debug.Log("Do something");
                         break;
-                    case BaseItemSO.Stat.PV:
+                    case BaseItemSO.Stat.HEALTH:
                         if (modifier.isFlat)
                             _pv_modifier += modifier.value;
                         else
                             Debug.Log("Do something");
                         break;
-                    case BaseItemSO.Stat.ABILITY_POWER:
+                    case BaseItemSO.Stat.AP:
                         if (modifier.isFlat)
                             _ap += modifier.value;
                         else
                             Debug.Log("Do something");
                         break;
-                    case BaseItemSO.Stat.ATK_SPEED:
+                    case BaseItemSO.Stat.AS:
                         if (modifier.isFlat)
                             _atk_speed_modifier += modifier.value;
                         else

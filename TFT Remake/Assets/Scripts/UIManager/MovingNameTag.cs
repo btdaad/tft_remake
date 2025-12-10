@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 public class MovingNameTag : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class MovingNameTag : MonoBehaviour
     UIDocument baseContainerDocument;
 
     [SerializeField]
-    float scaleMultiplier;
+    float scale;
 
     [SerializeField]
     float distanceCullingRange;
@@ -28,9 +29,11 @@ public class MovingNameTag : MonoBehaviour
     #region ui-toolkit-content
     private VisualElement _itemIcon;
     private Label _itemName;
+    private VisualElement[] _stats;
     private VisualElement[] _statIcons;
     private Label[] _statValues;
     private Label _description;
+    private Label _descriptionItallic;
     #endregion ui-toolkit-content
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
     {
@@ -38,11 +41,13 @@ public class MovingNameTag : MonoBehaviour
     }
     private void InitStats()
     {
+        _stats = new VisualElement[MAX_STATS_DISPLAYED];
         _statIcons = new VisualElement[MAX_STATS_DISPLAYED];
         _statValues = new Label[MAX_STATS_DISPLAYED];
         for (int i = 0; i < MAX_STATS_DISPLAYED; i++)
         {
             int statIndex = i + 1;
+            _stats[i] = GetUIElement<VisualElement>($"Stat{statIndex}");
             _statIcons[i] = GetUIElement<VisualElement>($"Icon{statIndex}");
             _statValues[i] = GetUIElement<Label>($"Stat{statIndex}");
         }
@@ -60,13 +65,13 @@ public class MovingNameTag : MonoBehaviour
         _npcNameTag.style.position = new StyleEnum<Position>(Position.Absolute);
 
         _itemIcon = GetUIElement<VisualElement>("Icon");
-        _itemIcon = GetUIElement<Label>("ItemName");
+        _itemName = GetUIElement<Label>("ItemName");
         InitStats();
         _description = GetUIElement<Label>("Description");
+        _descriptionItallic = GetUIElement<Label>("ItallicDescription");
+        _descriptionItallic.style.display = DisplayStyle.None; // TODO if someday we want to use the itallic description, it's here
 
         _npcNameTag.visible = false;
-        // _unitDisplayBackground = GetUIElement<VisualElement>("UnitDisplayBackground");
-        // _unitDisplayBackground.visible = false;
     }
 
     void Update()
@@ -79,10 +84,42 @@ public class MovingNameTag : MonoBehaviour
     {
         _camera = camera;
     }
+    
+    private void DisplayStats(List<BaseItemSO.Modifier> modifiers)
+    {
+        int i = 0;
+        while (i < MAX_STATS_DISPLAYED)
+        {
+            if (i < modifiers.Count)
+            {
+                BaseItemSO.Modifier modifier = modifiers[i];
+                _statIcons[i].style.backgroundImage = Resources.Load<Texture2D>(StatUtil.ToTexture(modifier.stat));
+
+                string value = "+" + modifier.value;
+                if (!modifier.isFlat)
+                    value += "%";
+                _statValues[i].text = value;
+
+                _stats[i].visible = true;
+            }
+            else
+                _stats[i].visible = false;
+            i++;
+        }
+    }
 
     public void ShowItemDisplay(Transform itemTransform)
     {
         _itemTransform = itemTransform;
+        Item item = _itemTransform.GetComponent<Item>();
+        BaseItemSO baseItemSO = item.GetItem();
+
+        _itemName.text = baseItemSO.itemName;
+        _itemIcon.style.backgroundImage = baseItemSO.icon;
+        _description.text = baseItemSO.destription;
+
+        DisplayStats(baseItemSO.modifiers);
+
         _isItemDisplayed = true;
         _npcNameTag.visible = true;
     }
@@ -90,10 +127,10 @@ public class MovingNameTag : MonoBehaviour
     public void HideItemDisplay()
     {
         _itemTransform = null;
-        _isItemDisplayed = false;
+
+        UIUtil.HideVisualElements(_stats);
         _npcNameTag.visible = false;
-        // UIUtil.HideVisualElements(_traitTextures);
-        // UIUtil.HideVisualElements(_items);
+        _isItemDisplayed = false;
     }
 
     void SetNameTagPositionAndScale()
@@ -105,9 +142,6 @@ public class MovingNameTag : MonoBehaviour
 
         // Get distance of NPC from camera.
         var distance = Vector3.Distance(_itemTransform.position, _camera.transform.position);
-        
-        // Calculate 1/distance so the name tag get smaller as the distance gets bigger.
-        var scale = 1 / distance * scaleMultiplier;
 
         _npcNameTag.style.scale = new Scale(new Vector2(scale, scale));
         

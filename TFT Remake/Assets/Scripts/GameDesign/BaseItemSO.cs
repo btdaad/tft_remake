@@ -6,14 +6,14 @@ public class BaseItemSO : ScriptableObject
 {
     public enum Stat
     {
-        ATK_DMG, // OK
+        AD, // OK // Attack Damage
         ARMOR, // OK
         MAGIC_RESIST, // OK
-        PV, // OK
-        DAMAGE_AMP, // TODO
-        ATK_SPEED, // OK
-        ABILITY_POWER, // OK
-        OMNIVAMP, // TODO
+        HEALTH, // OK
+        DA, // TODO // Damage Amplification
+        AS, // OK // Attack Speed
+        AP, // OK // Ability Power
+        OMNIVAMP, // TODO // https://wiki.leagueoflegends.com/en-us/Vamp // is is omnivamp or spell vamp ?
     };
 
     [System.Serializable]
