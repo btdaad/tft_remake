@@ -2235,7 +2235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3958282914313110424, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
       propertyPath: m_Name
-      value: BF Sword 5
+      value: Bloodthirster
       objectReference: {fileID: 0}
     - target: {fileID: 3958282914313110424, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
       propertyPath: m_IsActive
@@ -2248,7 +2248,15 @@ PrefabInstance:
     - target: {fileID: 7582131662690666331, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
       propertyPath: baseItemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 947338cc5e2bcc90f918e6deb1756c93, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582131662690666331, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
+      propertyPath: combinedItemSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 9d319044ee28aafa4804cac5b53c3302, type: 2}
+    - target: {fileID: 7582131662690666331, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
+      propertyPath: isCombinedItem
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7992410276196959012, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.63
@@ -4500,8 +4508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ddee01ddda6a91518a6eef29fe70a0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovingNameTag
-  nameTagTemplate: {fileID: 9197481963319205126, guid: c9bc7f562d371ce4fbd3baa6e3c09de9, type: 3}
-  baseContainerDocument: {fileID: 1120908096}
+  itemInfoTemplate: {fileID: 9197481963319205126, guid: c9bc7f562d371ce4fbd3baa6e3c09de9, type: 3}
+  itemInfoContainerDocument: {fileID: 1120908096}
   scale: 0.8
   distanceCullingRange: 20
 --- !u!4 &1320516549 stripped

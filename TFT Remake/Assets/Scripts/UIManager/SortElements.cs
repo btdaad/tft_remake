@@ -14,7 +14,7 @@ public class SortElements : MonoBehaviour
     void Start()
     {
         m_MovingNameTags = FindObjectsByType<MovingNameTag>(FindObjectsSortMode.None);
-        m_BaseContainer = m_MovingElements.rootVisualElement.Q<VisualElement>("BaseContainer");
+        m_BaseContainer = m_MovingElements.rootVisualElement.Q<VisualElement>("ItemInfoContainer");
     }
 
     void Update()

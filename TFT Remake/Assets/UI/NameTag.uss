@@ -1,5 +1,0 @@
- #NameTag {
-     position: absolute;
-     translate: 40px -20px;
- }
-

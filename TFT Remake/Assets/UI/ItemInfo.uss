@@ -1,0 +1,6 @@
+ #ItemInfo {
+     /* This sets the position of the Label element to be absolute, rather than relative to the parent container. */
+     position: absolute;
+     /* This ensures that the pivot point of the Label element is centered, rather than in the top left corner.*/
+     translate: 30px -20px;
+ }
