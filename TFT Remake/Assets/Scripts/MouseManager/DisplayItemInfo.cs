@@ -26,7 +26,7 @@ public class DisplayItemInfo : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 100, mask))
             {
                 // display item info
-                _uiManager.ShowItemDisplay(hit.transform);
+                _uiManager.ShowItemDisplayInWorldView(hit.transform);
                 _isItemDisplayed = true;
             }
             else if (_isItemDisplayed)
@@ -48,7 +48,5 @@ public class DisplayItemInfo : MonoBehaviour
 
             _isMouseButtonPressed = !(Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1));
         }
-
-        // TODO : Handle item is dropped ?
     }
 }

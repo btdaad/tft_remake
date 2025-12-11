@@ -20,6 +20,7 @@ public class UnitsDisplay
     }
     
     private int MAX_TRAITS_DISPLAYED = 3;
+    private Unit _unit;
     private VisualElement _unitDisplayBackground;
     private VisualElement _star;
     private VisualElement _unitImage;
@@ -62,6 +63,7 @@ public class UnitsDisplay
 
     public void InitUnitDisplay()
     {
+        _unit = null;
         _unitDisplayBackground = GetUIElement<VisualElement>("UnitDisplayBackground");
 
         _star = GetUIElement<VisualElement>("StarLogo");
@@ -95,10 +97,29 @@ public class UnitsDisplay
 
         _items = new VisualElement[3];
         _items[0] = GetUIElement<VisualElement>("Item1");
+        _items[0].RegisterCallback<MouseOverEvent, int>(TestOver, 0);
+        _items[0].RegisterCallback<MouseOutEvent, int>(TestOut, 0);
         _items[1] = GetUIElement<VisualElement>("Item2");
+        _items[1].RegisterCallback<MouseOverEvent, int>(TestOver, 1);
+        _items[1].RegisterCallback<MouseOutEvent, int>(TestOut, 1);
         _items[2] = GetUIElement<VisualElement>("Item3");
+        _items[2].RegisterCallback<MouseOverEvent, int>(TestOver, 2);
+        _items[2].RegisterCallback<MouseOutEvent, int>(TestOut, 2);
 
         _unitDisplayBackground.visible = false;
+    }
+
+    private void TestOver(MouseOverEvent _, int i)
+    {
+        Vector2 screenPos = _items[i].worldBound.position;
+        Debug.Log("Slot pos: " + screenPos);
+        BaseItemSO baseItemSO = _unit.GetItemSO(i);
+        GameManager.Instance.GetUIManager().ShowItemDisplayAtScreenPoint(screenPos, baseItemSO);
+    }
+
+    private void TestOut(MouseOutEvent _, int i)
+    {
+        GameManager.Instance.GetUIManager().HideItemDisplay();
     }
 
     private void DisplayTraits(VisualElement[] visualElements, Label[] labels, Trait[] traits)
@@ -151,44 +172,44 @@ public class UnitsDisplay
 
     public void ShowUnitDisplay(Transform unitTransform)
     {
-        Unit unit = unitTransform.GetComponent<Unit>();
-        UnitStats stats = unit.stats;
+        _unit = unitTransform.GetComponent<Unit>();
+        UnitStats stats = _unit.stats;
 
         DisplayTraits(_traitTextures, _traitLabels, stats.traits);
 
-        _star.style.backgroundImage = Resources.Load<Texture2D>($"{GetStarImageName(unit.GetStar())}");
+        _star.style.backgroundImage = Resources.Load<Texture2D>($"{GetStarImageName(_unit.GetStar())}");
         _unitImage.style.backgroundImage = Resources.Load<Texture2D>($"{stats.type.ToString()}");
         _name.text = stats.type.ToString();
         _name.style.backgroundColor = _costColors[(int)stats.cost];
 
-        float shield = unit.GetShield();
-        float maxHealth = unit.GetMaxHealth() + shield;
+        float shield = _unit.GetShield();
+        float maxHealth = _unit.GetMaxHealth() + shield;
 
-        float shieldRatio = (unit.GetHealth() + shield) / maxHealth;
+        float shieldRatio = (_unit.GetHealth() + shield) / maxHealth;
         float shieldPercent = Mathf.Lerp(0, 100, shieldRatio);
         _shieldBarMask.style.width = Length.Percent(shieldPercent);
 
-        _healthLabel.text = $"{Mathf.Round(unit.GetHealth())}/{Mathf.Round(unit.GetMaxHealth())}";
-        float healthRatio = unit.GetHealth() / maxHealth;
+        _healthLabel.text = $"{Mathf.Round(_unit.GetHealth())}/{Mathf.Round(_unit.GetMaxHealth())}";
+        float healthRatio = _unit.GetHealth() / maxHealth;
         float healthPercent = Mathf.Lerp(0, 100, healthRatio);
         _healthBarMask.style.width = Length.Percent(healthPercent);
 
-        _manaLabel.text = $"{Mathf.Round(unit.GetMana())}/{stats.mana[1]}";
-        float manaRatio = unit.GetMana() / stats.mana[1];
+        _manaLabel.text = $"{Mathf.Round(_unit.GetMana())}/{stats.mana[1]}";
+        float manaRatio = _unit.GetMana() / stats.mana[1];
         float manaPercent = Mathf.Lerp(0, 100, manaRatio);
         _manaBarMask.style.width = Length.Percent(manaPercent);
 
-        _ap.text = $"{unit.GetAP()}%";
-        _ad.text = $"{unit.GetAD()}%";
-        _baseDamage.text = $"{stats.attackDamage[(int)unit.GetStar()]}";
-        _armor.text = $"{unit.GetArmor()}";
-        _mr.text = $"{unit.GetMR()}";
-        _atkSpeed.text = $"{Mathf.Round(unit.GetAS() * 100f) / 100f}"; // round to 2 digits
-        _crit.text = $"{unit.GetCritChance()}%";
-        _range.text = $"{unit.GetRange()}";
-        _dr.text = $"{unit.GetDurability() * 100.0f}%";
+        _ap.text = $"{_unit.GetAP()}%";
+        _ad.text = $"{_unit.GetAD()}%";
+        _baseDamage.text = $"{stats.attackDamage[(int)_unit.GetStar()]}";
+        _armor.text = $"{_unit.GetArmor()}";
+        _mr.text = $"{_unit.GetMR()}";
+        _atkSpeed.text = $"{Mathf.Round(_unit.GetAS() * 100f) / 100f}"; // round to 2 digits
+        _crit.text = $"{_unit.GetCritChance()}%";
+        _range.text = $"{_unit.GetRange()}";
+        _dr.text = $"{_unit.GetDurability() * 100.0f}%";
 
-        DisplayItems(unit.GetItems());
+        DisplayItems(_unit.GetItems());
 
         // _unitArt.material = unit.GetComponent<Renderer>().material;
         _unitDisplayBackground.visible = true;
@@ -196,6 +217,8 @@ public class UnitsDisplay
 
     public void HideUnitDisplay()
     {
+        _unit = null;
+
         UIUtil.HideVisualElements(_traitTextures);
         UIUtil.HideVisualElements(_items);
         _unitDisplayBackground.visible = false;

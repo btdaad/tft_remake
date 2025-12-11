@@ -207,6 +207,13 @@ public class Unit : MonoBehaviour
         return _items;
     }
 
+    public BaseItemSO GetItemSO(int i)
+    {
+        if (i > _items.Length || _items[i] == null)
+            return null;
+        return _items[i].GetItem();
+    }
+
     public Star GetStar()
     {
         return _star;

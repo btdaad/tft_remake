@@ -5,27 +5,27 @@ using UnityEngine.UIElements;
 public class SortElements : MonoBehaviour
 {
     [SerializeField]
-    UIDocument m_MovingElements;
+    UIDocument movingElements;
 
-    VisualElement m_BaseContainer;
+    VisualElement baseContainer;
 
-    MovingNameTag[] m_MovingNameTags;
+    ItemsDynamicDisplay[] itemsDynamicDisplays;
     
     void Start()
     {
-        m_MovingNameTags = FindObjectsByType<MovingNameTag>(FindObjectsSortMode.None);
-        m_BaseContainer = m_MovingElements.rootVisualElement.Q<VisualElement>("ItemInfoContainer");
+        itemsDynamicDisplays = FindObjectsByType<ItemsDynamicDisplay>(FindObjectsSortMode.None);
+        baseContainer = movingElements.rootVisualElement.Q<VisualElement>("ItemInfoContainer");
     }
 
     void Update()
     {
-        m_BaseContainer.Sort(CompareOrder);
+        baseContainer.Sort(CompareOrder);
     }
 
     static int CompareOrder(VisualElement x, VisualElement y)
     {
         // Compare the scale of the visual elements in the base container, which is
-        // determined by the distance of the object it follows in the MovingNameTag component
+        // determined by the distance of the object it follows in the ItemsDynamicDisplay component
         return x.style.scale.value.value.x.CompareTo(y.style.scale.value.value.x);
     }
 }

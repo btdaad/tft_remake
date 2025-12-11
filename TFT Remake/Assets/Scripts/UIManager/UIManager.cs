@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument UIDoc;
     private UnitsDisplay UIUnit;
-    [SerializeField] MovingNameTag UIItem;
+    [SerializeField] ItemsDynamicDisplay UIItemDynamic;
     private SynergiesDisplay UISynergy;
     private ShopDisplay UIShop;
     private Button _fight;
@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
 
     public void Init()
     {
-        UIItem.InitItemDisplay(GameManager.Instance.GetCamera());
+        UIItemDynamic.InitItemDisplay(GameManager.Instance.GetCamera());
 
         UIUnit = UnitsDisplay.Instance(UIDoc);
         UIUnit.InitUnitDisplay();
@@ -91,16 +91,21 @@ public class UIManager : MonoBehaviour
         UIUnit.HideUnitDisplay();
     }
 
-    public void ShowItemDisplay(Transform itemTransform)
+    public void ShowItemDisplayInWorldView(Transform itemTransform)
     {
         // Debug.Log("Show item display of " + itemTransform.name);
-        UIItem.ShowItemDisplay(itemTransform);
+        UIItemDynamic.ShowItemDisplayInWorldView(itemTransform);
     }
 
     public void HideItemDisplay()
     {
         // Debug.Log("Hide item display.");
-        UIItem.HideItemDisplay();
+        UIItemDynamic.HideItemDisplay();
+    }
+
+    public void ShowItemDisplayAtScreenPoint(Vector2 screenPos, BaseItemSO baseItemSO)
+    {
+        UIItemDynamic.ShowItemDisplayAtScreenPoint(screenPos, baseItemSO);
     }
 
     public void UpdateSellDisplay(bool displayed, int costIndex = -1)
@@ -118,6 +123,6 @@ public class UIManager : MonoBehaviour
         UpdateXP(isPlayer);
         UpdateLevel(isPlayer);
         UpdateShop(isPlayer);
-        UIItem.SetCamera(GameManager.Instance.GetCamera());
+        UIItemDynamic.SetCamera(GameManager.Instance.GetCamera());
     }
 }

@@ -30,7 +30,7 @@ public class ItemsDisplay
         // _unitDisplayBackground.visible = false;
     }
 
-    public void ShowItemDisplay(Transform itemTransform)
+    public void ShowItemDisplayInWorldView(Transform itemTransform)
     {
         Item item = itemTransform.GetComponent<Item>();
         // _unitDisplayBackground.visible = true;

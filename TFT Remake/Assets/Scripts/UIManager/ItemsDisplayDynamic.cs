@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 
-public class MovingNameTag : MonoBehaviour
+public class ItemsDynamicDisplay : MonoBehaviour
 {
     [SerializeField]
     VisualTreeAsset itemInfoTemplate;
@@ -22,7 +22,9 @@ public class MovingNameTag : MonoBehaviour
     
     private Camera _camera;
     private Transform _itemTransform;
+    private Vector2 _screenPos;
     private bool _isItemDisplayed;
+    private bool _screenSpaceMode; // is the item coordinates in 3D for physical items or 2D for UI items in the unit display
 
     private int MAX_STATS_DISPLAYED = 4; // only 4 slots created on the UI
 
@@ -57,6 +59,7 @@ public class MovingNameTag : MonoBehaviour
     {
         SetCamera(camera);
         _itemTransform = null;
+        _screenPos = Vector2.zero;
         _isItemDisplayed = false;
         _itemInfo = itemInfoTemplate.Instantiate();
         _itemInfoContainer = itemInfoContainerDocument.rootVisualElement.Q<VisualElement>("ItemInfoContainer");
@@ -71,20 +74,21 @@ public class MovingNameTag : MonoBehaviour
         _descriptionItallic = GetUIElement<Label>("ItallicDescription");
         _descriptionItallic.style.display = DisplayStyle.None; // TODO if someday we want to use the itallic description, it's here
 
-        _itemInfo.visible = false;
+        _screenSpaceMode = false;
+        _itemInfo.style.visibility = Visibility.Hidden;
     }
 
     void Update()
     {
         if (_isItemDisplayed)
-            SetNameTagPositionAndScale();
+            SetItemInfoPositionAndScale();
     }
 
     public void SetCamera(Camera camera)
     {
         _camera = camera;
     }
-    
+
     private void DisplayStats(List<BaseItemSO.Modifier> modifiers)
     {
         if (MAX_STATS_DISPLAYED < modifiers.Count)
@@ -92,31 +96,43 @@ public class MovingNameTag : MonoBehaviour
 
         int i = 0;
         while (i < MAX_STATS_DISPLAYED)
+        {
+            if (i < modifiers.Count)
             {
-                if (i < modifiers.Count)
-                {
-                    BaseItemSO.Modifier modifier = modifiers[i];
-                    _statIcons[i].style.backgroundImage = Resources.Load<Texture2D>(StatUtil.ToTexture(modifier.stat));
+                BaseItemSO.Modifier modifier = modifiers[i];
+                _statIcons[i].style.backgroundImage = Resources.Load<Texture2D>(StatUtil.ToTexture(modifier.stat));
 
-                    string value = "+" + modifier.value;
-                    if (!modifier.isFlat)
-                        value += "%";
-                    _statValues[i].text = value;
+                string value = "+" + modifier.value;
+                if (!modifier.isFlat)
+                    value += "%";
+                _statValues[i].text = value;
 
-                    _stats[i].visible = true;
-                }
-                else
-                    _stats[i].visible = false;
-                i++;
+                _stats[i].visible = true;
             }
+            else
+                _stats[i].visible = false;
+            i++;
+        }
     }
 
-    public void ShowItemDisplay(Transform itemTransform)
+    public void ShowItemDisplayInWorldView(Transform itemTransform)
     {
         _itemTransform = itemTransform;
         Item item = _itemTransform.GetComponent<Item>();
-        BaseItemSO baseItemSO = item.GetItem();
 
+        ShowItemDisplay(item.GetItem());
+    }
+
+    public void ShowItemDisplayAtScreenPoint(Vector2 screenPos, BaseItemSO baseItemSO)
+    {
+        _screenSpaceMode = true;
+        _screenPos = _itemInfoContainer.WorldToLocal(screenPos);
+
+        ShowItemDisplay(baseItemSO);
+    }
+
+    private void ShowItemDisplay(BaseItemSO baseItemSO)
+    {
         _itemName.text = baseItemSO.itemName;
         _itemIcon.style.backgroundImage = baseItemSO.icon;
         _description.text = baseItemSO.destription;
@@ -124,39 +140,51 @@ public class MovingNameTag : MonoBehaviour
         DisplayStats(baseItemSO.modifiers);
 
         _isItemDisplayed = true;
-        _itemInfo.visible = true;
+        _itemInfo.style.visibility = Visibility.Visible;
     }
 
     public void HideItemDisplay()
     {
         _itemTransform = null;
+        _screenPos = Vector2.zero;
+        _screenSpaceMode = false;
 
         UIUtil.HideVisualElements(_stats);
-        _itemInfo.visible = false;
+        _itemInfo.style.visibility = Visibility.Hidden;
         _isItemDisplayed = false;
     }
 
-    void SetNameTagPositionAndScale()
+    void SetItemInfoPositionAndScale()
     {
-        var cameraSpaceLocation = GetCameraSpaceLocation(_itemTransform);
-        
-        // Use style.translate to set the position of the name tag.
-        _itemInfo.style.translate = new Translate(cameraSpaceLocation.x, cameraSpaceLocation.y);
-
-        // Get distance of NPC from camera.
-        var distance = Vector3.Distance(_itemTransform.position, _camera.transform.position);
-
-        _itemInfo.style.scale = new Scale(new Vector2(scale, scale));
-        
-        // Display name tag based on whether it's in front of the camera and within culling range.
-        if (cameraSpaceLocation.z < 0 || distance > distanceCullingRange)
+        if (!_screenSpaceMode)
         {
-            _itemInfo.style.display = DisplayStyle.None;
+            var cameraSpaceLocation = GetCameraSpaceLocation(_itemTransform);
+
+            // Use style.translate to set the position of the name tag.
+            _itemInfo.style.translate = new Translate(cameraSpaceLocation.x, cameraSpaceLocation.y);
+
+            // Get distance of NPC from camera.
+            var distance = Vector3.Distance(_itemTransform.position, _camera.transform.position);
+
+            // Display name tag based on whether it's in front of the camera and within culling range.
+            if (cameraSpaceLocation.z < 0 || distance > distanceCullingRange)
+            {
+                _itemInfo.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                _itemInfo.style.display = DisplayStyle.Flex;
+            }
         }
         else
         {
             _itemInfo.style.display = DisplayStyle.Flex;
+            _itemInfo.style.translate = new Translate(_screenPos.x - 250f, _screenPos.y - 10f);
+            // _itemInfo.style.translate = new Translate(1000, 0);
+            Debug.Log($"Tooltip at: ({_screenPos.x}, {_screenPos.y})");
         }
+            
+        _itemInfo.style.scale = new Scale(new Vector2(scale, scale));
     }
 
     Vector3 GetCameraSpaceLocation(Transform itemTransform)
