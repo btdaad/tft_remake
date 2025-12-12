@@ -112,7 +112,6 @@ public class UnitsDisplay
     private void TestOver(MouseOverEvent _, int i)
     {
         Vector2 screenPos = _items[i].worldBound.position;
-        Debug.Log("Slot pos: " + screenPos);
         BaseItemSO baseItemSO = _unit.GetItemSO(i);
         GameManager.Instance.GetUIManager().ShowItemDisplayAtScreenPoint(screenPos, baseItemSO);
     }
