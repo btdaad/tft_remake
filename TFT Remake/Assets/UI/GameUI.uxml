@@ -341,4 +341,7 @@
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="ItemInfoContainer" picking-mode="Ignore" style="flex-grow: 1; position: absolute; width: 100%; height: 100%;" />
+    <ui:Button text="New item :" name="NewItem" enabled="true" style="bottom: 0; position: absolute; left: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 180px; height: 108px; background-color: rgba(29, 29, 29, 0.64); -unity-font-style: bold; color: rgb(255, 255, 255); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; font-size: 16px; border-left-color: rgb(110, 110, 110); border-right-color: rgb(110, 110, 110); border-top-color: rgb(110, 110, 110); border-bottom-color: rgb(110, 110, 110); top: auto; -unity-text-align: upper-center; padding-top: 25px;">
+        <ui:TextField placeholder-text="item name" name="NewItemName" style="-unity-font-style: normal; font-size: 12px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; height: 32px; position: relative; top: 30px; left: 0; -unity-text-align: middle-left; color: rgb(0, 0, 0);" />
+    </ui:Button>
 </ui:UXML>

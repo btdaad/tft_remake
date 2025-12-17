@@ -156,7 +156,7 @@ public class ItemsDynamicDisplay : MonoBehaviour
     {
         _itemName.text = baseItemSO.itemName;
         _itemIcon.style.backgroundImage = baseItemSO.icon;
-        _description.text = baseItemSO.destription;
+        _description.text = baseItemSO.description;
 
         DisplayStats(baseItemSO.modifiers);
 

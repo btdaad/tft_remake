@@ -1,25 +1,25 @@
 [
   {
     "itemName": "BF Glaive",
-    "icon": "Item_BFSword",
+    "iconName": "Item_BFSword",
     "description": "+10% dégâts d'attaque",
     "modifiers": [ {"stat": "AD", "value": 10, "isFlat": true} ]
   },
   {
     "itemName": "Cotte de maille",
-    "icon": "Item_ChainVest",
+    "iconName": "Item_ChainVest",
     "description": "+20 armure",
     "modifiers": [ {"stat": "ARMOR", "value": 20, "isFlat": true} ]
   },
   {
     "itemName": "Ceinture du géant",
-    "icon": "Item_GiantsBelt",
+    "iconName": "Item_GiantsBelt",
     "description": "+150 PV",
     "modifiers": [ {"stat": "HEALTH", "value": 150, "isFlat": true} ]
   },
   {
     "itemName": "Manteau de Négatron",
-    "icon": "Item_NegatronCloak",
+    "iconName": "Item_NegatronCloak",
     "description": "+20 résistance magique",
     "modifiers": [ {"stat": "MAGIC_RESIST", "value": 20, "isFlat": true} ]
   }

@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     private SynergiesDisplay UISynergy;
     private ShopDisplay UIShop;
     private Button _fight;
+    private Button _newItem;
+    private TextField _newItemName;
     private Button _changePlayer;
     
     private T GetUIElement<T>(string name) where T : UnityEngine.UIElements.VisualElement
@@ -35,6 +37,9 @@ public class UIManager : MonoBehaviour
         _fight.clickable.clicked += () => { GameManager.Instance.Fight(); };
         _changePlayer = GetUIElement<Button>("ChangePlayer");
         _changePlayer.clickable.clicked += () => { GameManager.Instance.ChangePlayer(); };
+        _newItemName = GetUIElement<TextField>("NewItemName");
+        _newItem = GetUIElement<Button>("NewItem");
+        _newItem.clickable.clicked += () => { GameManager.Instance.CreateItem(_newItemName.text); };
         Button dumpButton = GetUIElement<Button>("Dump");
         dumpButton.clickable.clicked += () => { GameManager.Instance.Dump(); };
     }
@@ -93,13 +98,11 @@ public class UIManager : MonoBehaviour
 
     public void ShowItemDisplayInWorldView(Transform itemTransform)
     {
-        // Debug.Log("Show item display of " + itemTransform.name);
         UIItemDynamic.ShowItemDisplayInWorldView(itemTransform);
     }
 
     public void HideItemDisplay()
     {
-        // Debug.Log("Hide item display.");
         UIItemDynamic.HideItemDisplay();
     }
 

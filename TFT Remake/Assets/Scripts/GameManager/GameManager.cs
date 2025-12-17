@@ -212,6 +212,12 @@ public class GameManager : MonoBehaviour
         _uiManager.UpdateSynergyDisplay(isPlayer ? _playerSynergies : _opponentSynergies, traits);
     }
 
+    public void CreateItem(string itemName)
+    {
+        ItemDatabase itemDatabase = (ItemDatabase) GameObject.FindFirstObjectByType(typeof(ItemDatabase));
+        itemDatabase.CreateItem(itemName); 
+    } 
+
     public void Fight()
     {
         _fightOngoing = true;
