@@ -1,0 +1,108 @@
+[
+  {
+    "itemName": "Soif-de-sang",
+    "icon": "Item_Bloodthirster",
+    "description": "Une fois par combat, quand le porteur tombe sous 40% de ses PV, il gagne un bouclier de 25% de ses PV max qui dure jusqu'à 5 sec.",
+    "modifiers": [
+      {"stat": "AD",           "value": 15, "isFlat": true },
+      {"stat": "AP",           "value": 15, "isFlat": true },
+      {"stat": "MAGIC_RESIST", "value": 20, "isFlat": true },
+      {"stat": "OMNIVAMP",     "value": 20, "isFlat": false}
+    ],
+    "item1": "BF Glaive",
+    "item2": "Manteau de Négatron"
+  },
+  {
+    "itemName": "Armure roncière",
+    "icon": "Item_BrambleVest",
+    "description": "Le porteur gagne +9% de PV max.\n Les attaques lui infligent 5% de dégâts en moins. Quand le porteur est touché par ",
+    "modifiers": [ {"stat": "ARMOR", "value": 65, "isFlat": true} ],
+    "item1": "Cotte de maille",
+    "item2": "Cotte de maille"
+  },
+  {
+    "itemName": "Lame funeste",
+    "icon": "Item_Deathblade",
+    "description": "Elle procure un sentiment de paix à son porteur... et à ses victimes.",
+    "modifiers": [
+      {"stat": "AD", "value": 55, "isFlat": true },
+      {"stat": "DA", "value": 10, "isFlat": false}
+    ],
+    "item1": "BF Glaive",
+    "item2": "BF Glaive"
+  },
+  {
+    "itemName": "Griffe de dragon",
+    "icon": "Item_DragonsClaw",
+    "description": "Le porteur gagne +9% de PV max.\n Toutes les 2 sec, il récupère 2.5% de ses PV max.",
+    "modifiers": [ {"stat": "MAGIC_RESIST", "value": 75, "isFlat": true} ],
+    "item1": "Manteau de Négatron",
+    "item2": "Manteau de Négatron"
+  },
+  {
+    "itemName": "Manteau de la nuit",
+    "icon": "Item_EdgeOfNight",
+    "description": "Quand le porteur tombe à 60% de ses PV, il devient brièvement impossible à cibler et dissipe les effets négatifs qui l'affectent.",
+    "modifiers": [
+      {"stat": "ARMOR", "value": 20, "isFlat": true },
+      {"stat": "AD",    "value": 10, "isFlat": true },
+      {"stat": "AS",    "value": 15, "isFlat": false},
+      {"stat": "AP",    "value": 10, "isFlat": true }
+    ],
+    "item1": "BF Glaive",
+    "item2": "Cotte de maille"
+  },
+  {
+    "itemName": "Linceul de la congruence",
+    "icon": "Item_Evenshroud",
+    "description": "Le porteur applique 30% de scission sur les ennemis dans un rayon de 2 hexagones. Le porteur gagne +25 armure et résistance magique pendant les 15 premières secondes de combat.\n Scission : réduit l'armure.",
+    "modifiers": [
+      {"stat": "HEALTH",       "value": 250, "isFlat": true},
+      {"stat": "MAGIC_RESIST", "value":  20, "isFlat": true}
+    ],
+    "item1": "Manteau de Négatron",
+    "item2": "Ceinture du géant"
+  },
+  {
+    "itemName": "Lithoplastron de gargouille",
+    "icon": "Item_GargoyleStoneplate",
+    "description": "Le porteur gagne 10 d'armure et 10 de résistance magique pour chaque ennemi qui le cible.",
+    "modifiers": [
+      {"stat": "ARMOR",        "value":  25, "isFlat": true},
+      {"stat": "HEALTH",       "value": 100, "isFlat": true},
+      {"stat": "MAGIC_RESIST", "value":  25, "isFlat": true}
+    ],
+    "item1": "Cotte de maille",
+    "item2": "Manteau de Négatron"
+  },
+  {
+    "itemName": "Gage de Sterak",
+    "icon": "Item_SteraksGage",
+    "description": "Lorsqu'il tombe sous 60% de ses PV, le porteur gagne un bouclier équivalent à 50% de ses PV max. Ce bouclier se désagrège rapidement en 4 sec.",
+    "modifiers": [
+      {"stat": "AD",     "value":  40, "isFlat": true},
+      {"stat": "HEALTH", "value": 300, "isFlat": true}
+    ],
+    "item1": "BF Glaive",
+    "item2": "Ceinture du géant"
+  },
+  {
+    "itemName": "Cape solaire",
+    "icon": "Item_SunfireCape",
+    "description": "Le porteur gagne 8% de PV max.\n Toutes les 2 sec, le porteur applique 1% de brûlure et 33% d'hémorragie pendant 10 sec sur un ennemi dans un rayon de 2 hexagones.\n Brûlure : inflige chaque seconde des dégâts bruts équivalents à un pourcentage des PV max de la cible.\n Hémorragie : réduit les soins reçus.",
+    "modifiers": [
+      {"stat": "ARMOR",  "value":  20, "isFlat": true},
+      {"stat": "HEALTH", "value": 150, "isFlat": true}
+    ],
+    "item1": "Cotte de maille",
+    "item2": "Ceinture du géant"
+  },
+  {
+    "itemName": "Armure de Warmog",
+    "icon": "Item_WarmogsArmor",
+    "description": "Le porteur gagne 15% de PV max.",
+    "modifiers": [ {"stat": "HEALTH", "value": 500, "isFlat": true} ],
+    "item1": "Ceinture du géant",
+    "item2": "Ceinture du géant"
+  }
+]

@@ -1,0 +1,21 @@
+Bloodthirster Soif-de-sang
+Une fois par combat, quand le porteur tombe sous 40% de ses PV, il gagne un bouclier de 25% de ses PV max qui dure jusqu'à 5 sec.
+AD 15 AP 15 MR 20 OMV 20%
+BF + Neg
+
+BrambleVest Armure roncière 
+Le porteur gagne +9% de PV max.
+
+Les attaques lui infligent 5% de dégâts en moins. Quand le porteur est touché par une attaque, il inflige 100 pts de dégâts magiques à tous les ennemis adjacents.
+
+Délai de récupération : 2 sec.
+Armor 65
+CV + CV
+
+Deathblade Lame funeste
+Elle procure un sentiment de paix à son porteur... et à ses victimes.
+
+AD 55 DA 10%
+BF + BF
+
+Dragon's Claw

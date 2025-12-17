@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class ItemDatabase : MonoBehaviour
 {
     [SerializeField] public List<CombinedItemSO> combinedItems;
+    [SerializeField] public List<CombinedItemSOTest> combinedItemsTest;
     private Dictionary<(BaseItemSO, BaseItemSO), CombinedItemSO> _itemCombinations;
     void Awake()
     {
@@ -21,12 +22,17 @@ public class ItemDatabase : MonoBehaviour
             _itemCombinations[key2] = combinedItemSO;
         }
     }
-    
+
     public CombinedItemSO GetCombined(BaseItemSO item1, BaseItemSO item2)
     {
         if (_itemCombinations.TryGetValue((item1, item2), out var combinedItemSO))
             return combinedItemSO;
 
         return null;
+    }
+
+    public void SetCombinedItemSOTest(List<CombinedItemSOTest> list)
+    {
+        this.combinedItemsTest = list;
     }
 }
