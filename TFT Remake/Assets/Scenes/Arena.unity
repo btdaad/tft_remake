@@ -4725,7 +4725,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemDatabase
   baseItemsFilename: base_items.json
   combinedItemsFilename: combined_items.json
+  consumableItemsFilename: consumable_items.json
   combinedItems: []
+  consumableItems: []
   itemPrefab: {fileID: 3958282914313110424, guid: 0dd53a57a9274d7c5abaedc8575833f9, type: 3}
 --- !u!1001 &1983031280
 PrefabInstance:

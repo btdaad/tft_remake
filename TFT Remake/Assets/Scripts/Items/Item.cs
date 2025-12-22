@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    [SerializeField] public BaseItemSO baseItemSO;
-    [SerializeField] public CombinedItemSO combinedItemSO = null;
+    [SerializeField] public ItemSO itemSO;
     [SerializeField] public bool isCombinedItem = false;
+    [SerializeField] public bool isConsumableItem = false;
 
     public void Dematerialize()
     {
@@ -13,14 +13,19 @@ public class Item : MonoBehaviour
 
     public void BecomesCombined(CombinedItemSO combinedItemSO)
     {
-        this.baseItemSO = null;
-        this.combinedItemSO = combinedItemSO;
+        if (isConsumableItem)
+        {
+            Debug.LogError("A consumable item cannot be combined.");
+            return;
+        }
+
+        this.itemSO = combinedItemSO;
         isCombinedItem = true;
     }
 
-    public BaseItemSO GetItem()
+    public (ItemSO, bool, bool) GetItem()
     {
-        return isCombinedItem ? combinedItemSO : baseItemSO;
+        return (itemSO, isCombinedItem, isConsumableItem);
     }
 
     // TODO : implement passive

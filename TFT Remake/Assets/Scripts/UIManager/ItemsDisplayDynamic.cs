@@ -122,17 +122,20 @@ public class ItemsDynamicDisplay : MonoBehaviour
     {
         _itemTransform = itemTransform;
         Item item = _itemTransform.GetComponent<Item>();
+        (ItemSO itemSO, bool _, bool isConsumableItem) = item.GetItem();
 
-        ShowItemDisplay(item.GetItem());
+        ShowItemDisplay(itemSO, isConsumableItem);
     }
 
     private bool _pendingPositionUpdate = false;
+    // logically, as a consumable item cannot be equipped, the item in the unit equipment is at least a BaseItemSO
     public void ShowItemDisplayAtScreenPoint(Vector2 screenPos, BaseItemSO baseItemSO)
     {
         _screenSpaceMode = true;
         _screenPos = RuntimePanelUtils.ScreenToPanel(itemInfoContainerDocument.rootVisualElement.panel, screenPos);
 
-        ShowItemDisplay(baseItemSO);
+        bool isConsumableItem = false;
+        ShowItemDisplay(baseItemSO, isConsumableItem);
 
         _description.RegisterCallback<GeometryChangedEvent>(OnTooltipGeometryChanged);
         _pendingPositionUpdate = true;
@@ -152,13 +155,14 @@ public class ItemsDynamicDisplay : MonoBehaviour
         _pendingPositionUpdate = false;
     }
 
-    private void ShowItemDisplay(BaseItemSO baseItemSO)
+    private void ShowItemDisplay(ItemSO itemSO, bool isConsumableItem)
     {
-        _itemName.text = baseItemSO.itemName;
-        _itemIcon.style.backgroundImage = baseItemSO.icon;
-        _description.text = baseItemSO.description;
+        _itemName.text = itemSO.itemName;
+        _itemIcon.style.backgroundImage = itemSO.icon;
+        _description.text = itemSO.description;
 
-        DisplayStats(baseItemSO.modifiers);
+        if (!isConsumableItem)
+            DisplayStats((itemSO as BaseItemSO).modifiers);
 
         _isItemDisplayed = true;
         _itemInfo.style.display = DisplayStyle.Flex;

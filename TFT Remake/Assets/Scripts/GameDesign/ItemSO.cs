@@ -5,5 +5,14 @@ using System.Collections.Generic;
 public abstract class ItemSO : ScriptableObject
 {
     public string itemName;
+    public string iconName;
     public Texture2D icon;
+
+    [TextArea]
+    public string description;
+
+    public void LoadIconTexture()
+    {
+        icon = Resources.Load<Texture2D>(iconName);
+    }
 }

@@ -162,7 +162,8 @@ public class UnitsDisplay
                 _items[i].visible = false;
             else
             {
-                _items[i].style.backgroundImage = items[i].GetItem().icon;
+                (ItemSO itemSO, bool _, bool _) = items[i].GetItem();
+                _items[i].style.backgroundImage = itemSO.icon;
                 _items[i].visible = true;
             }
             i++;

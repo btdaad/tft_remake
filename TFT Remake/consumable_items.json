@@ -1,0 +1,14 @@
+[
+  {
+    "itemName": "Magnetic Remover",
+    "iconName": "Item_Remover",
+    "type" : "REMOVER",
+    "description": "Use on a champion to unequip all items."
+  },
+  {
+    "itemName": "Reforger",
+    "iconName": "Item_Reforger",
+    "type" : "REFORGER",
+    "description": "Unequip all items and randomly transform them into new ones of a similar type and quality."
+  }
+]

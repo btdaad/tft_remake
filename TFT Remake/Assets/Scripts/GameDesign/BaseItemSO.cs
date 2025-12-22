@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "BaseItemSO", menuName = "Scriptable Objects/BaseItem")]
-public class BaseItemSO : ScriptableObject
+public class BaseItemSO : ItemSO 
 {
     public enum Stat
     {
@@ -30,16 +30,5 @@ public class BaseItemSO : ScriptableObject
         }
     }
 
-    public string itemName;
-    public string iconName;
-    public Texture2D icon;
-
-    [TextArea]
-    public string description;
     [SerializeField] public List<Modifier> modifiers;
-
-    public void LoadIconTexture()
-    {
-        icon = Resources.Load<Texture2D>(iconName);
-    }
 }

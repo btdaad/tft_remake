@@ -7,8 +7,10 @@ public class ItemDatabase : MonoBehaviour
 {
     [SerializeField] public string baseItemsFilename;
     [SerializeField] public string combinedItemsFilename;
+    [SerializeField] public string consumableItemsFilename;
     private Dictionary<string, BaseItemSO> _baseItemDictionary;
     public List<CombinedItemSO> combinedItems;
+    public List<ConsumableItemSO> consumableItems;
     private Dictionary<(BaseItemSO, BaseItemSO), CombinedItemSO> _itemCombinations;
     [SerializeField] public GameObject itemPrefab;
     void LoadJSONFile()
@@ -34,6 +36,14 @@ public class ItemDatabase : MonoBehaviour
                 combinedItem.LoadIconTexture();
                 combinedItem.SetItemCombination(_baseItemDictionary[combinedItem.item1Name], _baseItemDictionary[combinedItem.item2Name]);
             }
+        }
+        
+        using (StreamReader r = new StreamReader(consumableItemsFilename))
+        {
+            string json = r.ReadToEnd();
+            consumableItems = JsonConvert.DeserializeObject<List<ConsumableItemSO>>(json);
+            foreach (ConsumableItemSO consumableItem in consumableItems)
+                consumableItem.LoadIconTexture();
         }
     }
 
@@ -68,15 +78,37 @@ public class ItemDatabase : MonoBehaviour
         if (_baseItemDictionary.ContainsKey(itemName))
         {
             GameObject itemGO = Instantiate(itemPrefab, new Vector3(-1.63f, 0.23f, -1.34f), itemPrefab.transform.rotation);
-            itemGO.layer = LayerMask.NameToLayer("Item"); 
+            itemGO.layer = LayerMask.NameToLayer("Item");
 
             Item item = itemGO.GetComponent<Item>();
-            item.baseItemSO = _baseItemDictionary[itemName];
+            item.itemSO = _baseItemDictionary[itemName];
 
             Renderer renderer = itemGO.GetComponent<Renderer>();
 
             Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-            Texture2D icon = item.baseItemSO.icon;
+            Texture2D icon = item.itemSO.icon;
+            mat.mainTexture = icon;
+            mat.SetFloat("_Smoothness", 0f);
+
+            renderer.material = mat;
+        }
+        else if (itemName == "Reforger" || itemName == "Remover")
+        {
+            ConsumableItemSO consumableItemSO = consumableItems.Find(item => item.type == ConsumableItemSO.ConsumableType.REMOVER);
+            if (itemName == "Reforger")
+                consumableItemSO = consumableItems.Find(item => item.type == ConsumableItemSO.ConsumableType.REFORGER);
+
+            GameObject itemGO = Instantiate(itemPrefab, new Vector3(-1.63f, 0.23f, -1.34f), itemPrefab.transform.rotation);
+            itemGO.layer = LayerMask.NameToLayer("Item");
+
+            Item item = itemGO.GetComponent<Item>();
+            item.itemSO = consumableItemSO;
+            item.isConsumableItem = true;
+
+            Renderer renderer = itemGO.GetComponent<Renderer>();
+
+            Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            Texture2D icon = item.itemSO.icon;
             mat.mainTexture = icon;
             mat.SetFloat("_Smoothness", 0f);
 

@@ -113,8 +113,16 @@ public class Unit : MonoBehaviour
         int i = 0;
         while (i < _items.Length && _items[i] != null)
         {
-            BaseItemSO baseItemSO = _items[i].GetItem();
-            foreach (BaseItemSO.Modifier modifier in baseItemSO.modifiers)
+            (ItemSO itemSO, bool _, bool isConsumableItem) = _items[i].GetItem();
+
+            if (isConsumableItem)
+            {
+                Debug.LogError("A consummable item has been equipped. It cannot be.");
+                return;
+            }
+            
+            
+            foreach (BaseItemSO.Modifier modifier in (itemSO as BaseItemSO).modifiers)
             {
                 switch (modifier.stat)
                 {
@@ -166,8 +174,22 @@ public class Unit : MonoBehaviour
         _health += _pv_modifier;
     }
 
+    public bool ConsumeItem(ConsumableItemSO consumableItemSO)
+    {
+        Debug.Log("Code behavior for " + consumableItemSO.itemName);
+        return true;
+    }
+
     public bool SetItem(Item newItem)
     {
+        if (newItem.isConsumableItem)
+        {
+            bool successful = ConsumeItem(newItem.itemSO as ConsumableItemSO);
+            if (successful)
+                newItem.Dematerialize();
+            return successful;            
+        }
+
         int i = 0;
         while (i < _items.Length)
         {
@@ -175,7 +197,7 @@ public class Unit : MonoBehaviour
                 && _items[i] != null
                 && !_items[i].isCombinedItem)
             {
-                CombinedItemSO combinedItemSO = _itemDatabase.GetCombined(_items[i].baseItemSO, newItem.baseItemSO);
+                CombinedItemSO combinedItemSO = _itemDatabase.GetCombined(_items[i].itemSO as BaseItemSO, newItem.itemSO as BaseItemSO);
                 if (combinedItemSO == null)
                 {
                     Debug.Log("These items does not combine");
@@ -211,7 +233,15 @@ public class Unit : MonoBehaviour
     {
         if (i > _items.Length || _items[i] == null)
             return null;
-        return _items[i].GetItem();
+        
+        (ItemSO itemSO, bool _, bool isConsumableItem) = _items[i].GetItem();
+        if (isConsumableItem)
+        {
+            Debug.LogError("A consumale item has beem equip. It should not happen.");
+            return null;
+        }
+
+        return itemSO as BaseItemSO;
     }
 
     public Star GetStar()
