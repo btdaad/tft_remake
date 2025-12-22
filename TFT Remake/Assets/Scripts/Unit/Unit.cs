@@ -31,7 +31,6 @@ public class Unit : MonoBehaviour
     private float _mr_modifier;
     private float _pv_modifier;
     private float _atk_speed_modifier;
-    private ItemDatabase _itemDatabase;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -53,9 +52,6 @@ public class Unit : MonoBehaviour
         _lastAbility = 0.0f;
         _manaOverflow = 0.0f;
         
-        _itemDatabase = (ItemDatabase) GameObject.FindFirstObjectByType (typeof(ItemDatabase));
-        if (_itemDatabase == null)
-            Debug.Log("Could not find the item database.");
         _pv_modifier = 0.0f;
         UpdateModifiers();
     }
@@ -113,14 +109,13 @@ public class Unit : MonoBehaviour
         int i = 0;
         while (i < _items.Length && _items[i] != null)
         {
-            (ItemSO itemSO, bool _, bool isConsumableItem) = _items[i].GetItem();
+            (ItemSO itemSO, bool isConsumableItem) = _items[i].GetItem();
 
             if (isConsumableItem)
             {
                 Debug.LogError("A consummable item has been equipped. It cannot be.");
                 return;
             }
-            
             
             foreach (BaseItemSO.Modifier modifier in (itemSO as BaseItemSO).modifiers)
             {
@@ -174,19 +169,17 @@ public class Unit : MonoBehaviour
         _health += _pv_modifier;
     }
 
-    public bool ConsumeItem(ConsumableItemSO consumableItemSO)
-    {
-        Debug.Log("Code behavior for " + consumableItemSO.itemName);
-        return true;
-    }
-
+    // TODO : rewrite it from the item manager to prevent a unit to directly call the game manager
     public bool SetItem(Item newItem)
     {
         if (newItem.isConsumableItem)
         {
-            bool successful = ConsumeItem(newItem.itemSO as ConsumableItemSO);
+            bool successful = newItem.ApplyEffects(_items);;
             if (successful)
+            {
                 newItem.Dematerialize();
+                UpdateModifiers();
+            }
             return successful;            
         }
 
@@ -197,7 +190,7 @@ public class Unit : MonoBehaviour
                 && _items[i] != null
                 && !_items[i].isCombinedItem)
             {
-                CombinedItemSO combinedItemSO = _itemDatabase.GetCombined(_items[i].itemSO as BaseItemSO, newItem.itemSO as BaseItemSO);
+                CombinedItemSO combinedItemSO = GameManager.Instance.GetItemManager().GetCombined(_items[i].itemSO as BaseItemSO, newItem.itemSO as BaseItemSO);
                 if (combinedItemSO == null)
                 {
                     Debug.Log("These items does not combine");
@@ -234,7 +227,7 @@ public class Unit : MonoBehaviour
         if (i > _items.Length || _items[i] == null)
             return null;
         
-        (ItemSO itemSO, bool _, bool isConsumableItem) = _items[i].GetItem();
+        (ItemSO itemSO, bool isConsumableItem) = _items[i].GetItem();
         if (isConsumableItem)
         {
             Debug.LogError("A consumale item has beem equip. It should not happen.");

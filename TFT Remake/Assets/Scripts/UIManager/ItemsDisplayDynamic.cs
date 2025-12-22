@@ -122,13 +122,14 @@ public class ItemsDynamicDisplay : MonoBehaviour
     {
         _itemTransform = itemTransform;
         Item item = _itemTransform.GetComponent<Item>();
-        (ItemSO itemSO, bool _, bool isConsumableItem) = item.GetItem();
+        (ItemSO itemSO, bool isConsumableItem) = item.GetItem();
 
         ShowItemDisplay(itemSO, isConsumableItem);
     }
 
     private bool _pendingPositionUpdate = false;
-    // logically, as a consumable item cannot be equipped, the item in the unit equipment is at least a BaseItemSO
+    // It makes sense that, as a consumable item cannot be equipped,
+    // the item in the unit equipment is at least a BaseItemSO (from an inhreitance point of view)
     public void ShowItemDisplayAtScreenPoint(Vector2 screenPos, BaseItemSO baseItemSO)
     {
         _screenSpaceMode = true;

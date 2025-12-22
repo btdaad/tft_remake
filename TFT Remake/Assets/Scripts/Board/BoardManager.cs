@@ -21,6 +21,25 @@ public class BoardManager : MonoBehaviour
     private static Transform[][] _saveBattlefieldGrid = null;
     private static List<GameObject> _saveUnits = null;
     private static PathFindingInfo[][] _pathFindingInfo = null;
+     
+    // BEGIN TEST ZONE
+    private static Dictionary<Vector3Int, Transform> _occupiedItemTiles = null;
+
+    public Transform GetItemAt(Vector3Int cellPos)
+    {
+        if (_occupiedItemTiles.TryGetValue(cellPos, out Transform itemTransform))
+            return itemTransform;
+        return null;
+    }
+
+    public void SetItemAt(Vector3Int cellPos, Transform itemTransform)
+    {
+        if (itemTransform == null)
+            _occupiedItemTiles.Remove(cellPos);
+        else
+            _occupiedItemTiles[cellPos] = itemTransform;
+    }
+    // END TEST ZONE
 
     // To be called by PlayerBoardManager
     // Init boards
@@ -37,19 +56,30 @@ public class BoardManager : MonoBehaviour
 
     // To be called by the ItemBoardManager
     // Init item boards
+    /*
     public static BoardManager GetInstanceAndInit(Tilemap itemTilemap)
     {
         if (_itemGrid == null)
             _itemGrid = JaggedArrayUtil.InitJaggedArray<Transform>(18, 23, () => null); // empirically found dimensions
         return _instance;
+    }*/
+    public static BoardManager GetInstanceAndInit(Tilemap itemTilemap)
+    {
+        if (_occupiedItemTiles == null)
+            _occupiedItemTiles = new Dictionary<Vector3Int, Transform>();
+        return _instance;
     }
 
     private PlayerBoardManager _playerBoardManager;
     private PlayerBoardManager _opponentBoardManager;
-    private ItemBoardManager _playerItemBoardManager;
-    private ItemBoardManager _opponentItemBoardManager;
+    private ItemBenchManager _playerItemBenchManager;
+    private ItemBenchManager _opponentItemBenchManager;
     public event EventHandler MoveUnit = delegate { };
     [SerializeField] GameObject arrowHelperPrefab;
+    [SerializeField] Material blue;
+    [SerializeField] Material red;
+    [SerializeField] Material purple;
+    [SerializeField] GameObject ballPrefab;
 
     public void Init()
     {
@@ -63,8 +93,8 @@ public class BoardManager : MonoBehaviour
 
         _playerBoardManager = new PlayerBoardManager("Player", this);
         _opponentBoardManager = new PlayerBoardManager("Opponent", this);
-        _playerItemBoardManager = new ItemBoardManager("Player", this);
-        _opponentItemBoardManager = new ItemBoardManager("Opponent", this);
+        _playerItemBenchManager = new ItemBenchManager("Player", this);
+        _opponentItemBenchManager = new ItemBenchManager("Opponent", this);
         MoveUnit = GameManager.Instance.UpdateSynergies; // add UpdateSynergies to the subscribers
     }
 
@@ -84,7 +114,7 @@ public class BoardManager : MonoBehaviour
         }
 
         return teamSize == GameManager.Instance.GetPlayer(affiliation).GetLevel(); // max team size == player level
-    }    
+    }
 
     public bool OnDragUnit(bool isPlayer, Transform unitTransform)
     {
@@ -100,20 +130,20 @@ public class BoardManager : MonoBehaviour
         else
             _opponentBoardManager.OnDropUnit(unitTransform);
     }
-    
+
     public bool OnDragItem(bool isPlayer, Transform itemTransform)
     {
         if (isPlayer)
-            return _playerItemBoardManager.OnDragItem(itemTransform);
+            return _playerItemBenchManager.OnDragItem(itemTransform);
         else
-            return _opponentItemBoardManager.OnDragItem(itemTransform);
+            return _opponentItemBenchManager.OnDragItem(itemTransform);
     }
     public void OnDropItem(bool isPlayer, Transform itemTransform)
     {
         if (isPlayer)
-            _playerItemBoardManager.OnDropItem(itemTransform);
+            _playerItemBenchManager.OnDropItem(itemTransform);
         else
-            _opponentItemBoardManager.OnDropItem(itemTransform);
+            _opponentItemBenchManager.OnDropItem(itemTransform);
     }
 
     // Implemented only for battlefield units
@@ -135,7 +165,7 @@ public class BoardManager : MonoBehaviour
         else
             return _benchGrid[yPos][xPos];
     }
-    
+
     public void SetUnitAt(int xPos, int yPos, Transform unitTransform, bool isBattlefield)
     {
         if (isBattlefield)
@@ -241,14 +271,14 @@ public class BoardManager : MonoBehaviour
         MoveUnitEventArgs moveUnitEventArgs = new MoveUnitEventArgs(sameLevelUnits[1], MoveUnitEventArgs.Zone.Bench);
         CallMoveUnit(null, moveUnitEventArgs);
 
-        RemoveUnitAt(isPlayer, sameLevelUnits[1].position); 
+        RemoveUnitAt(isPlayer, sameLevelUnits[1].position);
         Destroy(sameLevelUnits[1].gameObject);
 
         // Triggers the update of synergies for this UnitType specifically
         moveUnitEventArgs = new MoveUnitEventArgs(sameLevelUnits[2], MoveUnitEventArgs.Zone.Bench);
         CallMoveUnit(null, moveUnitEventArgs);
 
-        RemoveUnitAt(isPlayer, sameLevelUnits[2].position); 
+        RemoveUnitAt(isPlayer, sameLevelUnits[2].position);
         Destroy(sameLevelUnits[2].gameObject);
     }
 
@@ -305,6 +335,22 @@ public class BoardManager : MonoBehaviour
         return _opponentBoardManager.ToBenchPosition(index, isPlayer, out benchPosition); // it might be out of the tilemap
     }
 
+    public bool GetItemBenchEmptySpot(bool isPlayer, out Vector3 itemBenchPosition)
+    {
+        _playerItemBenchManager.GetFirstEmptyTile(blue, ballPrefab);
+        _opponentItemBenchManager.GetFirstEmptyTile(red, ballPrefab);
+        itemBenchPosition = Vector3.zero;
+        Debug.Log("TODO");
+        return true;
+        // for (int i = 0; i < _itemGrid.Length; i++)
+        // {
+        //     for (int j = 0; j < _itemGrid[i].Length; j++)
+        //     {
+        //         Instantiate(arrowHelperPrefab, fromCellCenter, Quaternion.Euler(0, 90, 0) * Quaternion.LookRotation(direction, Vector3.up));
+        //     }
+        // }
+    }
+
     private Vector3Int CoordsToTilemapCell(Coords coords)
     {
         return new Vector3Int(coords.y - 1, coords.x, 0);
@@ -337,10 +383,10 @@ public class BoardManager : MonoBehaviour
     {
         return _playerBoardManager.ToBattlefieldCoord(position); // using the playerBoard or the opponentBoard is equivalent
     }
-    
+
     public (int, int) ToItemCoord(Vector3 position)
     {
-        return _playerItemBoardManager.ToItemCoord(position); // using the playerBoard or the opponentBoard is equivalent
+        return _playerItemBenchManager.ToItemCoord(position); // using the playerBoard or the opponentBoard is equivalent
     }
 
     public (int, int) ToBenchCoord(Vector3 position)
@@ -369,11 +415,20 @@ public class BoardManager : MonoBehaviour
         _saveUnits.Add(deadUnit.gameObject);
     }
 
-    public void RemoveItem(bool isPlayer, Transform givenItem)
+    /*public void RemoveItem(bool isPlayer, Transform givenItem)
     {
-        Vector3 initItemPos = isPlayer ? _playerItemBoardManager.GetInitItemPos() : _opponentItemBoardManager.GetInitItemPos();
+        Vector3 initItemPos = isPlayer ? _playerItemBenchManager.GetInitItemPos() : _opponentItemBenchManager.GetInitItemPos();
         (int xPos, int yPos) = ToItemCoord(givenItem.position);
         _itemGrid[yPos][xPos] = null;
+    }*/
+    public void RemoveItem(bool isPlayer, Transform givenItem)
+    {
+        Vector3Int initItemCellPos = isPlayer ? _playerItemBenchManager.GetInitItemCellPos() : _opponentItemBenchManager.GetInitItemCellPos();
+        _occupiedItemTiles.Remove(initItemCellPos);
+        if (isPlayer)
+            _playerItemBenchManager.RemoveItemAt(initItemCellPos);
+        else
+            _opponentItemBenchManager.RemoveItemAt(initItemCellPos);
     }
 
     // Does not destroy the corresponding GameObject
@@ -474,5 +529,11 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void Dump()
+    {
+        _playerItemBenchManager.Dump(blue, purple, ballPrefab);
+        _opponentItemBenchManager.Dump(red, purple, ballPrefab);
     }
 }

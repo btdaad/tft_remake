@@ -23,9 +23,30 @@ public class Item : MonoBehaviour
         isCombinedItem = true;
     }
 
-    public (ItemSO, bool, bool) GetItem()
+    public bool ApplyEffects(Item[] items)
     {
-        return (itemSO, isCombinedItem, isConsumableItem);
+        if (!isConsumableItem)
+        {
+            Debug.LogError("Trying to apply effet from a basic item.");
+            return false;
+        }
+
+        if (items[0] == null // no item to remove or reforge
+            || GameManager.Instance.IsFightOngoing()) // cannot reforge or remove items if the fight has started 
+            return false;
+
+        bool reforgeItems = false;
+        if ((itemSO as ConsumableItemSO).type == ConsumableItemSO.ConsumableType.REFORGER)
+            reforgeItems = true;
+
+        GameManager.Instance.GetItemManager().RemoveItems(items, reforgeItems);
+
+        return true;
+    }
+
+    public (ItemSO, bool) GetItem()
+    {
+        return (itemSO, isConsumableItem);
     }
 
     // TODO : implement passive

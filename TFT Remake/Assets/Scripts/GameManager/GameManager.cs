@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     GoldManager _goldManager;
     XPManager _xpManager;
     ShopManager _shopManager;
+    ItemManager _itemManager;
     public bool isPlayer;
     Dictionary<Trait, List<Transform>> _playerSynergies = new Dictionary<Trait, List<Transform>>();
     Dictionary<Trait, List<Transform>> _opponentSynergies = new Dictionary<Trait, List<Transform>>();
@@ -94,6 +95,10 @@ public class GameManager : MonoBehaviour
         bool findUIManager = FindManager<UIManager>(ref _uiManager);
         if (findUIManager)
             _uiManager.Init();
+        
+        bool findItemManager = FindManager<ItemManager>(ref _itemManager);
+        if (findItemManager)
+            _itemManager.Init();
     }
     public BoardManager GetBoardManager()
     {
@@ -122,6 +127,11 @@ public class GameManager : MonoBehaviour
     public ShopManager GetShopManager()
     {
         return _shopManager;
+    }
+
+    public ItemManager GetItemManager()
+    {
+        return _itemManager;
     }
 
     public Camera GetCamera()
@@ -214,9 +224,13 @@ public class GameManager : MonoBehaviour
 
     public void CreateItem(string itemName)
     {
-        ItemDatabase itemDatabase = (ItemDatabase) GameObject.FindFirstObjectByType(typeof(ItemDatabase));
-        itemDatabase.CreateItem(itemName); 
-    } 
+        _itemManager.CreateItem(itemName);
+    }
+
+    public bool IsFightOngoing()
+    {
+        return _fightOngoing;
+    }
 
     public void Fight()
     {
@@ -258,9 +272,10 @@ public class GameManager : MonoBehaviour
 
     public void Dump()
     {
-        JaggedArrayUtil.Dump<Transform>(_boardManager.GetBattlefield());
-        JaggedArrayUtil.Dump<int>(_boardManager.GetDistances()[0][1].GetDistances());
-        _boardManager.DisplayPath(new Coords(0, 1));
+        _boardManager.Dump();
+        // JaggedArrayUtil.Dump<Transform>(_boardManager.GetBattlefield());
+        // JaggedArrayUtil.Dump<int>(_boardManager.GetDistances()[0][1].GetDistances());
+        // _boardManager.DisplayPath(new Coords(0, 1));
     }
 
     public void ChangePlayer()
@@ -306,6 +321,11 @@ public class GameManager : MonoBehaviour
     private bool GetBenchEmptySpot(out Vector3 benchPosition)
     {
         return _boardManager.GetBenchEmptySpot(isPlayer, out benchPosition);   
+    }
+    
+    public bool GetItemBenchEmptySpot(out Vector3 benchPosition)
+    {
+        return _boardManager.GetItemBenchEmptySpot(isPlayer, out benchPosition);   
     }
 
     public void BuyUnit(int i)
