@@ -328,6 +328,11 @@ public class GameManager : MonoBehaviour
         return _boardManager.GetItemBenchEmptySpot(isPlayer, out benchPosition);   
     }
 
+    public void PlaceItemAt(Transform itemTransform, Vector3 benchPosition)
+    {
+        _boardManager.PlaceItemAt(isPlayer, itemTransform, benchPosition);
+    }
+
     public void BuyUnit(int i)
     {
         // check for money

@@ -17,29 +17,10 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
     private static Transform[][] _battlefieldGrid = null;
     private static Transform[][] _benchGrid = null;
-    private static Transform[][] _itemGrid = null;
+    private static Dictionary<Vector3Int, Transform> _occupiedItemTiles = null;
     private static Transform[][] _saveBattlefieldGrid = null;
     private static List<GameObject> _saveUnits = null;
     private static PathFindingInfo[][] _pathFindingInfo = null;
-     
-    // BEGIN TEST ZONE
-    private static Dictionary<Vector3Int, Transform> _occupiedItemTiles = null;
-
-    public Transform GetItemAt(Vector3Int cellPos)
-    {
-        if (_occupiedItemTiles.TryGetValue(cellPos, out Transform itemTransform))
-            return itemTransform;
-        return null;
-    }
-
-    public void SetItemAt(Vector3Int cellPos, Transform itemTransform)
-    {
-        if (itemTransform == null)
-            _occupiedItemTiles.Remove(cellPos);
-        else
-            _occupiedItemTiles[cellPos] = itemTransform;
-    }
-    // END TEST ZONE
 
     // To be called by PlayerBoardManager
     // Init boards
@@ -56,14 +37,7 @@ public class BoardManager : MonoBehaviour
 
     // To be called by the ItemBoardManager
     // Init item boards
-    /*
-    public static BoardManager GetInstanceAndInit(Tilemap itemTilemap)
-    {
-        if (_itemGrid == null)
-            _itemGrid = JaggedArrayUtil.InitJaggedArray<Transform>(18, 23, () => null); // empirically found dimensions
-        return _instance;
-    }*/
-    public static BoardManager GetInstanceAndInit(Tilemap itemTilemap)
+    public static BoardManager GetInstanceAndInit()
     {
         if (_occupiedItemTiles == null)
             _occupiedItemTiles = new Dictionary<Vector3Int, Transform>();
@@ -178,14 +152,19 @@ public class BoardManager : MonoBehaviour
     {
         MoveUnit(sender, moveUnitEventArgs);
     }
-
-    public Transform GetItemAt(int xPos, int yPos)
+    public Transform GetItemAt(Vector3Int cellPos)
     {
-        return _itemGrid[yPos][xPos];
+        if (_occupiedItemTiles.TryGetValue(cellPos, out Transform itemTransform))
+            return itemTransform;
+        return null;
     }
-    public void SetItemAt(int xPos, int yPos, Transform itemTransform)
+
+    public void SetItemAt(Vector3Int cellPos, Transform itemTransform)
     {
-        _itemGrid[yPos][xPos] = itemTransform;
+        if (itemTransform == null)
+            _occupiedItemTiles.Remove(cellPos);
+        else
+            _occupiedItemTiles[cellPos] = itemTransform;
     }
 
     public Transform[][] GetBattlefield()
@@ -335,20 +314,12 @@ public class BoardManager : MonoBehaviour
         return _opponentBoardManager.ToBenchPosition(index, isPlayer, out benchPosition); // it might be out of the tilemap
     }
 
+    // Returns whether or not an empty tile has been found. If it's true, then the itemBenchPosition passed as parameter is set to its world coordinates.
     public bool GetItemBenchEmptySpot(bool isPlayer, out Vector3 itemBenchPosition)
     {
-        _playerItemBenchManager.GetFirstEmptyTile(blue, ballPrefab);
-        _opponentItemBenchManager.GetFirstEmptyTile(red, ballPrefab);
-        itemBenchPosition = Vector3.zero;
-        Debug.Log("TODO");
-        return true;
-        // for (int i = 0; i < _itemGrid.Length; i++)
-        // {
-        //     for (int j = 0; j < _itemGrid[i].Length; j++)
-        //     {
-        //         Instantiate(arrowHelperPrefab, fromCellCenter, Quaternion.Euler(0, 90, 0) * Quaternion.LookRotation(direction, Vector3.up));
-        //     }
-        // }
+        if (isPlayer)
+            return _playerItemBenchManager.GetFirstEmptyTile(out itemBenchPosition);
+        return _opponentItemBenchManager.GetFirstEmptyTile(out itemBenchPosition);
     }
 
     private Vector3Int CoordsToTilemapCell(Coords coords)
@@ -415,12 +386,6 @@ public class BoardManager : MonoBehaviour
         _saveUnits.Add(deadUnit.gameObject);
     }
 
-    /*public void RemoveItem(bool isPlayer, Transform givenItem)
-    {
-        Vector3 initItemPos = isPlayer ? _playerItemBenchManager.GetInitItemPos() : _opponentItemBenchManager.GetInitItemPos();
-        (int xPos, int yPos) = ToItemCoord(givenItem.position);
-        _itemGrid[yPos][xPos] = null;
-    }*/
     public void RemoveItem(bool isPlayer, Transform givenItem)
     {
         Vector3Int initItemCellPos = isPlayer ? _playerItemBenchManager.GetInitItemCellPos() : _opponentItemBenchManager.GetInitItemCellPos();
@@ -429,6 +394,16 @@ public class BoardManager : MonoBehaviour
             _playerItemBenchManager.RemoveItemAt(initItemCellPos);
         else
             _opponentItemBenchManager.RemoveItemAt(initItemCellPos);
+    }
+
+    public void PlaceItemAt(bool isPlayer, Transform itemTransform, Vector3 benchPosition)
+    {
+        Vector3Int cellPos = _playerItemBenchManager.WorldToCell(benchPosition);
+        if (isPlayer)
+            _playerItemBenchManager.AddItemAt(cellPos);
+        else
+            _opponentItemBenchManager.AddItemAt(cellPos);
+        _occupiedItemTiles[cellPos] = itemTransform;
     }
 
     // Does not destroy the corresponding GameObject

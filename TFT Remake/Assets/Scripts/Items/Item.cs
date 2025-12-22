@@ -11,6 +11,11 @@ public class Item : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void Materialize()
+    {
+        gameObject.SetActive(true);
+    }
+
     public void BecomesCombined(CombinedItemSO combinedItemSO)
     {
         if (isConsumableItem)

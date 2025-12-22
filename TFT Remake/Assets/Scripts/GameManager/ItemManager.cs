@@ -23,20 +23,20 @@ public class ItemManager : MonoBehaviour
     public void CreateItem(string itemName)
     {
         if (_itemDatabase.BaseItemsContains(itemName))
-            CreateItem(_itemDatabase.GetBaseItem(itemName), false);
+            CreateItem(_itemDatabase.GetBaseItem(itemName), false, new Vector3(-1.63f, 0.23f, -1.34f));
         else if (itemName == "Reforger" || itemName == "Remover")
         {
             ConsumableItemSO consumableItemSO = _itemDatabase.GetConsumableItem(ConsumableItemSO.ConsumableType.REMOVER);
             if (itemName == "Reforger")
                 consumableItemSO = _itemDatabase.GetConsumableItem(ConsumableItemSO.ConsumableType.REFORGER);
 
-            CreateItem(consumableItemSO, true);
+            CreateItem(consumableItemSO, true, new Vector3(-1.63f, 0.23f, -1.34f));
         }
     }
 
-    private void CreateItem(ItemSO itemSO, bool isConsumableItem)
+    private Transform CreateItem(ItemSO itemSO, bool isConsumableItem, Vector3 position)
     {
-        GameObject itemGO = Instantiate(itemPrefab, new Vector3(-1.63f, 0.23f, -1.34f), itemPrefab.transform.rotation);
+        GameObject itemGO = Instantiate(itemPrefab, position, itemPrefab.transform.rotation);
         itemGO.layer = LayerMask.NameToLayer("Item");
 
         Item item = itemGO.GetComponent<Item>();
@@ -51,16 +51,21 @@ public class ItemManager : MonoBehaviour
         mat.SetFloat("_Smoothness", 0f);
 
         renderer.material = mat;
+
+        return itemGO.transform;
     }
 
     public void RemoveItems(Item[] items, bool reforgeItems)
     {
-        GameManager.Instance.GetItemBenchEmptySpot(out Vector3 benchPosition);
         for (int i = 0; i < items.Length; i++)
         {
             Item item = items[i];
-
-
+            bool successful = GameManager.Instance.GetItemBenchEmptySpot(out Vector3 benchPosition);
+            if (successful)
+            {
+                item.Materialize();
+                GameManager.Instance.PlaceItemAt(item.gameObject.transform, benchPosition);
+            }
             items[i] = null;
         }
     }

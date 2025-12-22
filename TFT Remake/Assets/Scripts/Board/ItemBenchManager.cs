@@ -8,12 +8,8 @@ public class ItemBenchManager
     private BoardManager _boardManager;
     private Vector3 _initItemPos;
     private Tilemap _itemTilemap; // Bounds : (-4, -2, 0) to (14, 5, 1)
-    
-
-    // BEGIN TEST ZONE
     private List<Vector3Int> _validTiles;
     private HashSet<Vector3Int> _occupiedTiles;
-    // END TEST ZONE
 
     // @param side : can be either "Player" or "Opponent"
     public ItemBenchManager(string side, BoardManager boardManager)
@@ -30,10 +26,8 @@ public class ItemBenchManager
         if (_itemTilemap == null)
             Debug.LogError("Could not find every the item board");
 
-        _boardManager = BoardManager.GetInstanceAndInit(_itemTilemap);
+        _boardManager = BoardManager.GetInstanceAndInit();
 
-
-        // BEGIN TEST ZONE
         _validTiles = new List<Vector3Int>();
 
         BoundsInt bounds = _itemTilemap.cellBounds;
@@ -44,24 +38,21 @@ public class ItemBenchManager
         }
 
         _occupiedTiles = new HashSet<Vector3Int>();
-        // END TEST ZONE
     }
 
-    // BEGIN TEST ZONE
-    public Vector3Int? GetFirstEmptyTile(Material mat, GameObject prefab)
+    // Returns whether or not an empty tile has been found. If it's true, then the cellPos passed as parameter is set to its world coordinates.
+    public bool GetFirstEmptyTile(out Vector3 cellPos)
     {
         foreach (Vector3Int cell in _validTiles)
         {
             if (!_occupiedTiles.Contains(cell))
             {
-                Vector3 place = _itemTilemap.CellToWorld(cell);
-                GameObject ballGO = GameObject.Instantiate(prefab, place, Quaternion.identity) as GameObject;
-                ballGO.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-                ballGO.GetComponent<Renderer>().material = mat;
-                return cell;
+                cellPos = _itemTilemap.GetCellCenterWorld(cell);
+                return true;
             }
         }
-        return null;
+        cellPos = Vector3.zero;
+        return false;
     }
 
     public void RemoveItemAt(Vector3Int cellPos)
@@ -69,7 +60,10 @@ public class ItemBenchManager
         _occupiedTiles.Remove(cellPos);
     }
 
-    // END TEST ZONE
+    public void AddItemAt(Vector3Int cellPos)
+    {
+        _occupiedTiles.Add(cellPos); 
+    }
 
     public Vector3 GetInitItemPos()
     {
@@ -103,6 +97,11 @@ public class ItemBenchManager
     public Vector3 GetCellCenterWorldItemBench(Vector3Int cellPos)
     {
         return _itemTilemap.GetCellCenterWorld(cellPos);
+    }
+
+    public Vector3Int WorldToCell(Vector3 cellPos)
+    {
+        return _itemTilemap.WorldToCell(cellPos);
     }
 
     private bool DropOnZone(Transform itemTransform, Vector3 unitPos, Tilemap boardZone)
@@ -150,29 +149,7 @@ public class ItemBenchManager
         }
         else
             _occupiedTiles.Remove(initUnitCell);
-
-        string str = "";
-        foreach (Vector3Int v3i in _occupiedTiles)
-            str += v3i + " ";
-        Debug.Log($"{str}");
     }
-
-    /*
-    private void PlaceItemOnZone(Transform itemTransform, Vector3Int cellPos)
-    {
-        // get cell coords of the init position of the dropped item
-        Vector3Int initUnitCell = _itemTilemap.WorldToCell(_initItemPos);
-        (int xInitCellPos, int yInitCellPos) = ToItemCoord(initUnitCell);
-
-        (int xPos, int yPos) = ToItemCoord(cellPos); // get grid coordinates for drop cell
-        Transform swapItemTransform = _boardManager.GetItemAt(xPos, yPos); // get the item on the drop cell
-
-        _boardManager.SetItemAt(xInitCellPos, yInitCellPos, swapItemTransform); // set grid init cell to swap item
-        _boardManager.SetItemAt(xPos, yPos, itemTransform); // set grid drop cell to item 
-
-        if (swapItemTransform != null)
-            swapItemTransform.position = new Vector3(_initItemPos.x, swapItemTransform.position.y, _initItemPos.z); // if the swap item exists, move its position
-    }*/
 
     public void Dump(Material inMat, Material outMat, GameObject prefab)
     {
