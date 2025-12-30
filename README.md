@@ -30,7 +30,7 @@ Remake with Unity of Teamfight Tactics, an autobattler game produced by Riot. Th
 
 ### Items et synergies
 - [x] Ajout et affichage des items de base (4/10)
-- [ ] Equipement et déséquipement des items
+- [x] Equipement et déséquipement des items
 - [x] Prise en compte des items sur les stastiques (sauf damage amp et
   omnivamp)
 - [ ] Prise en compte des synergies sur les statistiques

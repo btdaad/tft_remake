@@ -1,6 +1,8 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 public class ItemDatabase
@@ -89,6 +91,31 @@ public class ItemDatabase
     public BaseItemSO GetBaseItem(string itemName)
     {
         return _baseItemDictionary[itemName];
+    }
+    public BaseItemSO GetRandomBaseItem(string itemName)
+    {
+        System.Random rand = new System.Random();
+
+        List<BaseItemSO> baseItemList = Enumerable.ToList(_baseItemDictionary.Values);
+        int size = _baseItemDictionary.Count;
+        BaseItemSO baseItemSO;
+        do
+        {
+            baseItemSO = baseItemList[rand.Next(size)];
+        } while (String.Compare(baseItemSO.itemName, itemName) == 0);
+        return baseItemSO;
+    }
+    public BaseItemSO GetRandomCombinedItem(string itemName)
+    {
+        System.Random rand = new System.Random();
+
+        int size = combinedItems.Count;
+        CombinedItemSO combinedItemSO;
+        do
+        {
+            combinedItemSO = combinedItems[rand.Next(size)];
+        } while (String.Compare(combinedItemSO.itemName, itemName) == 0);
+        return (BaseItemSO) combinedItemSO;
     }
 
     public ConsumableItemSO GetConsumableItem(ConsumableItemSO.ConsumableType type)

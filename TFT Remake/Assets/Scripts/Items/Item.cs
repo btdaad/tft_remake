@@ -6,9 +6,12 @@ public class Item : MonoBehaviour
     [SerializeField] public bool isCombinedItem = false;
     [SerializeField] public bool isConsumableItem = false;
 
-    public void Dematerialize()
+    public void Dematerialize(bool destroy)
     {
-        gameObject.SetActive(false);
+        if (destroy)
+            GameObject.Destroy(gameObject);
+        else
+            gameObject.SetActive(false);
     }
 
     public void Materialize()
@@ -37,7 +40,7 @@ public class Item : MonoBehaviour
         isCombinedItem = true;
     }
 
-    public bool ApplyEffects(Item[] items)
+    public bool Use(Item[] items)
     {
         if (!isConsumableItem)
         {
@@ -53,6 +56,8 @@ public class Item : MonoBehaviour
         if ((itemSO as ConsumableItemSO).type == ConsumableItemSO.ConsumableType.REFORGER)
             reforgeItems = true;
 
+        // TODO : remove item from the grid ; already done through DragAndDrop but it is done after the removing
+        // so, the first empty position found on the item bench does not take the remover cell into account
         GameManager.Instance.GetItemManager().RemoveItems(items, reforgeItems);
 
         return true;

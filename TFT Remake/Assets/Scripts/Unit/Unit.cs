@@ -174,16 +174,17 @@ public class Unit : MonoBehaviour
     {
         if (newItem.isConsumableItem)
         {
-            bool successful = newItem.ApplyEffects(_items);;
+            bool successful = newItem.Use(_items);;
             if (successful)
             {
-                newItem.Dematerialize();
+                newItem.Dematerialize(true);
                 UpdateModifiers();
             }
             return successful;            
         }
 
         int i = 0;
+        bool combineItems = false;
         while (i < _items.Length)
         {
             if (!newItem.isCombinedItem
@@ -197,6 +198,7 @@ public class Unit : MonoBehaviour
                     return false;
                 }
                 _items[i].BecomesCombined(combinedItemSO);
+                combineItems = true;
                 break;
             }
             else if (_items[i] == null) // implies either newItem is combined or not, it does not matter
@@ -210,7 +212,7 @@ public class Unit : MonoBehaviour
         if (i == _items.Length)
             return false; // item was not given to unit
 
-        newItem.Dematerialize();
+        newItem.Dematerialize(combineItems);
 
         UpdateModifiers();
 

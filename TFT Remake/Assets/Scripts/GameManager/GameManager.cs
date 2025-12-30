@@ -224,7 +224,13 @@ public class GameManager : MonoBehaviour
 
     public void CreateItem(string itemName)
     {
-        _itemManager.CreateItem(itemName);
+        Transform itemTransform = _itemManager.CreateItem(itemName);
+        if (itemTransform != null)
+        {
+            Vector3 position;
+            GetItemBenchEmptySpot(out position);
+            PlaceItemAt(itemTransform, position);
+        }
     }
 
     public bool IsFightOngoing()
@@ -331,6 +337,11 @@ public class GameManager : MonoBehaviour
     public void PlaceItemAt(Transform itemTransform, Vector3 benchPosition)
     {
         _boardManager.PlaceItemAt(isPlayer, itemTransform, benchPosition);
+    }
+
+    public void RemoveItem(Transform givenItem)
+    {
+        _boardManager.RemoveItem(isPlayer, givenItem);
     }
 
     public void BuyUnit(int i)
