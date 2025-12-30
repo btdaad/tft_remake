@@ -57,7 +57,7 @@ public class ItemManager : MonoBehaviour
 
     public void RemoveItems(Item[] items, bool reforgeItems)
     {
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Length && items[i] != null; i++)
         {
             Item item = items[i];
             bool successful = GameManager.Instance.GetItemBenchEmptySpot(out Vector3 benchPosition);

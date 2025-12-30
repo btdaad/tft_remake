@@ -13,6 +13,15 @@ public class Item : MonoBehaviour
 
     public void Materialize()
     {
+        Renderer renderer = gameObject.GetComponent<Renderer>();
+
+        Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        Texture2D icon = itemSO.icon;
+        mat.mainTexture = icon;
+        mat.SetFloat("_Smoothness", 0f);
+
+        renderer.material = mat;
+
         gameObject.SetActive(true);
     }
 

@@ -404,6 +404,9 @@ public class BoardManager : MonoBehaviour
         else
             _opponentItemBenchManager.AddItemAt(cellPos);
         _occupiedItemTiles[cellPos] = itemTransform;
+
+        benchPosition.y = 0.23f;
+        itemTransform.position = benchPosition;
     }
 
     // Does not destroy the corresponding GameObject
