@@ -1,6 +1,10 @@
 # tft_remake
 Remake with Unity of Teamfight Tactics, an autobattler game produced by Riot. The goal is to reproduce the principal mechanics and work on an IA opponent to battle against.
 
+
+https://github.com/user-attachments/assets/96012a03-642b-4a34-a0e9-46c1528f32bd
+
+
 # Phases de création
 ### Core
 - [x] Affichage de la grille hexagonale
